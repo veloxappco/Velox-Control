@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
-import { ClipboardList, Phone, Truck, CreditCard, Clock, User } from "lucide-react";
+import { ClipboardList, Phone, Truck, CreditCard, Check, X } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
@@ -128,21 +128,22 @@ export function OrdersModule({ orders }: { orders: OrderListItem[] }) {
       <Sheet open={selected !== null} onOpenChange={(open) => !open && setSelected(null)}>
         <SheetContent side="bottom" className="max-h-[85vh] overflow-y-auto">
           {selected && (
-            <div className="flex min-w-0 flex-col gap-4 p-5 pt-8">
+            <div className="flex min-w-0 flex-col gap-5 p-5 pt-8">
               <div className="min-w-0">
-                <p className="text-xs text-muted-foreground">Pedido</p>
-                <h3 className="truncate text-lg font-semibold">{selected.order_number}</h3>
+                <p className="text-xs text-muted-foreground">
+                  Pedido {selected.order_number}
+                </p>
+                <h3 className="truncate text-2xl font-semibold tracking-tight">
+                  {selected.customer_name ?? "Cliente sin nombre"}
+                </h3>
                 <Badge variant={orderStatusVariant(selected.status)} className="mt-2">
                   {orderStatusLabel(selected.status)}
                 </Badge>
               </div>
 
+              <OrderTimeline order={selected} />
+
               <div className="flex flex-col gap-3 rounded-lg border border-border/60 p-4">
-                <DetailRow
-                  icon={User}
-                  label="Cliente"
-                  value={selected.customer_name ?? "Sin nombre"}
-                />
                 {selected.customer_phone && (
                   <DetailRow icon={Phone} label="Teléfono" value={selected.customer_phone} />
                 )}
@@ -156,21 +157,6 @@ export function OrdersModule({ orders }: { orders: OrderListItem[] }) {
                   label="Pago"
                   value={selected.payment_method ? paymentMethodLabel(selected.payment_method) : "—"}
                 />
-                <DetailRow icon={Clock} label="Creado" value={formatDateTime(selected.created_at)} />
-                {selected.confirmed_at && (
-                  <DetailRow
-                    icon={Clock}
-                    label="Confirmado"
-                    value={formatDateTime(selected.confirmed_at)}
-                  />
-                )}
-                {selected.completed_at && (
-                  <DetailRow
-                    icon={Clock}
-                    label="Completado"
-                    value={formatDateTime(selected.completed_at)}
-                  />
-                )}
               </div>
 
               <div className="flex items-center justify-between rounded-lg bg-secondary/40 px-4 py-3">
@@ -193,6 +179,67 @@ function DetailRow({ icon: Icon, label, value }: { icon: LucideIcon; label: stri
         <p className="text-xs text-muted-foreground">{label}</p>
         <p className="truncate text-sm font-medium">{value}</p>
       </div>
+    </div>
+  );
+}
+
+function OrderTimeline({ order }: { order: OrderListItem }) {
+  const isCancelled = orderStatusLabel(order.status) === "Cancelado";
+
+  const steps = [
+    { label: "Creado", at: order.created_at as string | null, cancelled: false },
+    { label: "Confirmado", at: order.confirmed_at, cancelled: false },
+    { label: isCancelled ? "Cancelado" : "Entregado", at: order.completed_at, cancelled: isCancelled },
+  ];
+
+  return (
+    <div className="flex min-w-0 flex-col rounded-lg border border-border/60 p-4">
+      {steps.map((step, index) => {
+        const done = Boolean(step.at) && !step.cancelled;
+        const isLast = index === steps.length - 1;
+        return (
+          <div key={step.label} className="flex min-w-0 gap-3">
+            <div className="flex flex-col items-center">
+              <span
+                className={cn(
+                  "flex size-5 shrink-0 items-center justify-center rounded-full border-2",
+                  step.cancelled
+                    ? "border-destructive bg-destructive text-white"
+                    : done
+                      ? "border-primary bg-primary text-white"
+                      : "border-border bg-secondary text-muted-foreground"
+                )}
+              >
+                {step.cancelled ? (
+                  <X className="size-3" />
+                ) : done ? (
+                  <Check className="size-3" />
+                ) : (
+                  <span className="size-1.5 rounded-full bg-current" />
+                )}
+              </span>
+              {!isLast && (
+                <span
+                  className={cn("my-0.5 w-px flex-1", done ? "bg-primary/40" : "bg-border")}
+                />
+              )}
+            </div>
+            <div className={cn("min-w-0", isLast ? "pb-0" : "pb-4")}>
+              <p
+                className={cn(
+                  "text-sm font-medium",
+                  !done && !step.cancelled && "text-muted-foreground"
+                )}
+              >
+                {step.label}
+              </p>
+              <p className="truncate text-xs text-muted-foreground">
+                {step.at ? formatDateTime(step.at) : step.cancelled ? "—" : "Pendiente"}
+              </p>
+            </div>
+          </div>
+        );
+      })}
     </div>
   );
 }

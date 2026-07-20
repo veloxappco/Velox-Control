@@ -7,7 +7,7 @@ import { TopProductsPodium } from "@/components/dashboard/top-products-podium";
 import { DateRangeFilter } from "@/components/shared/date-range-filter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getDashboardSummary, getOrdersRecent, getReportsTopProducts } from "@/lib/api/queries";
-import { todayISO } from "@/lib/format";
+import { isoDateOnly, todayISO } from "@/lib/format";
 
 interface PageProps {
   searchParams: Promise<{ from?: string; to?: string }>;
@@ -40,9 +40,16 @@ export default async function IngresosPage({ searchParams }: PageProps) {
 async function IngresosContent({ from, to }: { from: string; to: string }) {
   const [summary, orders, topProducts] = await Promise.all([
     getDashboardSummary({ from, to }),
+    // /orders/recent no acepta from/to (solo limit), así que traemos los 100
+    // más recientes (el máximo que permite la API) y filtramos por fecha acá.
     getOrdersRecent({ limit: 100 }),
     getReportsTopProducts({ from, to, limit: 20 }),
   ]);
+
+  const ordersInRange = orders.data.filter((order) => {
+    const orderDate = isoDateOnly(order.created_at);
+    return orderDate >= from && orderDate <= to;
+  });
 
   return (
     <div className="flex min-w-0 flex-col gap-6">
@@ -55,7 +62,7 @@ async function IngresosContent({ from, to }: { from: string; to: string }) {
           </CardTitle>
         </CardHeader>
         <div className="px-5 pb-5">
-          <OrdersModule orders={orders.data} />
+          <OrdersModule orders={ordersInRange} />
         </div>
       </Card>
 

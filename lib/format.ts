@@ -62,6 +62,13 @@ export function daysAgoISO(days: number, timeZone: string = DEFAULT_TIMEZONE) {
   return dateInTimeZone(d, timeZone);
 }
 
+/** Fecha (YYYY-MM-DD) de un timestamp ISO, en la zona horaria del negocio.
+ * Útil para filtrar listas que la API no deja filtrar por fecha (p. ej.
+ * /orders/recent) comparando contra el rango elegido en el filtro. */
+export function isoDateOnly(value: string, timeZone: string = DEFAULT_TIMEZONE) {
+  return dateInTimeZone(new Date(value), timeZone);
+}
+
 function dateInTimeZone(date: Date, timeZone: string) {
   // en-CA formatea como YYYY-MM-DD, exactamente lo que espera la API.
   return new Intl.DateTimeFormat("en-CA", {
