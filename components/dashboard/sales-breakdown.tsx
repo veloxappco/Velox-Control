@@ -4,7 +4,13 @@ import { cn } from "@/lib/utils";
 import { formatMoney, formatNumber } from "@/lib/format";
 import type { DashboardSummary } from "@/lib/api/types";
 
-export function SalesBreakdown({ sales }: { sales: DashboardSummary["sales"] }) {
+export function SalesBreakdown({
+  sales,
+  title = "Ventas por canal",
+}: {
+  sales: DashboardSummary["sales"];
+  title?: string;
+}) {
   const total = sales.total || 0;
   const onlineTotal = sales.online.total || 0;
   const posTotal = sales.pos.total || 0;
@@ -15,7 +21,7 @@ export function SalesBreakdown({ sales }: { sales: DashboardSummary["sales"] }) 
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Ventas por canal</CardTitle>
+        <CardTitle>{title}</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-5">
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">

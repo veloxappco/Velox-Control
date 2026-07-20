@@ -1,6 +1,6 @@
 import {
   LayoutDashboard,
-  ClipboardList,
+  TrendingUp,
   Receipt,
   PackageSearch,
   Wallet,
@@ -16,7 +16,7 @@ export interface NavItem {
 
 export const NAV_ITEMS: NavItem[] = [
   { href: "/dashboard", label: "Resumen", icon: LayoutDashboard },
-  { href: "/pedidos", label: "Pedidos", icon: ClipboardList },
+  { href: "/ingresos", label: "Ingresos", icon: TrendingUp },
   { href: "/egresos", label: "Egresos", icon: Receipt },
   { href: "/inventario", label: "Inventario", icon: PackageSearch },
   { href: "/caja", label: "Caja", icon: Wallet },

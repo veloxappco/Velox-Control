@@ -72,33 +72,58 @@ function dateInTimeZone(date: Date, timeZone: string) {
   }).format(date);
 }
 
-const ORDER_STATUS_LABELS: Record<string, string> = {
+// El negocio maneja 5 estados de pedido nada más. Agrupamos los estados
+// finos que puede devolver la API (accepted, confirmed, on_the_way, etc.)
+// en estos 5 baldes para que la interfaz sea simple y consistente.
+export const ORDER_STATUS_GROUPS = [
+  "Pendiente",
+  "En Preparación",
+  "Listo",
+  "Entregado",
+  "Cancelado",
+] as const;
+
+export type OrderStatusGroup = (typeof ORDER_STATUS_GROUPS)[number];
+
+const ORDER_STATUS_TO_GROUP: Record<string, OrderStatusGroup> = {
   pending: "Pendiente",
-  accepted: "Aceptado",
-  confirmed: "Confirmado",
-  preparing: "Preparando",
+  accepted: "Pendiente",
+  confirmed: "Pendiente",
+  preparing: "En Preparación",
   ready: "Listo",
-  on_the_way: "En camino",
-  completed: "Completado",
+  on_the_way: "Listo",
+  completed: "Entregado",
   delivered: "Entregado",
   cancelled: "Cancelado",
   canceled: "Cancelado",
-  unknown: "Sin estado",
 };
 
-export function orderStatusLabel(status: string) {
-  return ORDER_STATUS_LABELS[status] ?? status;
+export function orderStatusLabel(status: string): OrderStatusGroup {
+  return ORDER_STATUS_TO_GROUP[status] ?? "Pendiente";
 }
 
-type BadgeVariant = "default" | "secondary" | "success" | "warning" | "destructive" | "outline";
+type BadgeVariant =
+  | "default"
+  | "secondary"
+  | "success"
+  | "warning"
+  | "destructive"
+  | "accent"
+  | "outline";
 
 export function orderStatusVariant(status: string): BadgeVariant {
-  if (["completed", "delivered"].includes(status)) return "success";
-  if (["cancelled", "canceled"].includes(status)) return "destructive";
-  if (["pending"].includes(status)) return "warning";
-  if (["accepted", "confirmed", "preparing", "ready", "on_the_way"].includes(status))
-    return "default";
-  return "outline";
+  switch (orderStatusLabel(status)) {
+    case "Entregado":
+      return "success";
+    case "Cancelado":
+      return "destructive";
+    case "Pendiente":
+      return "warning";
+    case "En Preparación":
+      return "accent";
+    case "Listo":
+      return "default";
+  }
 }
 
 // Palabras que en español van en minúscula dentro de un título, salvo que
@@ -143,9 +168,21 @@ const PAYMENT_METHOD_LABELS: Record<string, string> = {
   nequi: "Nequi",
   daviplata: "Daviplata",
   transfer: "Transferencia",
+  bank_transfer: "Transferencia",
   other: "Otro",
 };
 
 export function paymentMethodLabel(method: string) {
   return PAYMENT_METHOD_LABELS[method] ?? method;
+}
+
+const DELIVERY_TYPE_LABELS: Record<string, string> = {
+  delivery: "Domicilio",
+  pickup: "Recoger en tienda",
+  dine_in: "En el local",
+};
+
+export function deliveryTypeLabel(type: string | null | undefined) {
+  if (!type) return "—";
+  return DELIVERY_TYPE_LABELS[type] ?? toTitleCase(type);
 }
