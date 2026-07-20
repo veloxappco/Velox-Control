@@ -37,7 +37,7 @@ export default async function InventarioPage({ searchParams }: PageProps) {
             Stock bajo, negativos y consumo de insumos.
           </p>
         </div>
-        <DateRangeFilter />
+        <DateRangeFilter defaultFrom={from} defaultTo={to} />
       </div>
 
       <Suspense key={`${from}-${to}`} fallback={<Skeleton className="h-96 rounded-xl" />}>
@@ -55,7 +55,7 @@ async function InventarioContent({ from, to }: { from: string; to: string }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Productos bajo stock"
           value={formatNumber(alerts.summary.low_stock_products)}

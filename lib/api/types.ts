@@ -205,7 +205,9 @@ export interface CashSessionDetailResponse {
 // combinando /cash/sessions (para saber qué sesiones tuvieron egresos en el
 // rango) con /cash/sessions/{id}/summary (que sí trae cada movimiento con
 // su categoría y descripción). Ver lib/api/queries.ts -> getExpensesReport.
-export interface ExpenseMovement extends CashMovement {
+export interface ExpenseMovement extends Omit<CashMovement, "category"> {
+  /** Ya normalizada a Tipo Título en getExpensesReport, nunca null. */
+  category: string;
   session_id: number;
 }
 

@@ -43,7 +43,7 @@ export default async function PedidosPage({ searchParams }: PageProps) {
           <h1 className="text-xl font-semibold tracking-tight">Pedidos</h1>
           <p className="text-sm text-muted-foreground">Pedidos en línea y su estado.</p>
         </div>
-        <DateRangeFilter />
+        <DateRangeFilter defaultFrom={from} defaultTo={to} />
       </div>
 
       <Suspense key={`${from}-${to}`} fallback={<Skeleton className="h-96 rounded-xl" />}>
@@ -62,7 +62,7 @@ async function PedidosContent({ from, to }: { from: string; to: string }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Total pedidos"
           value={formatNumber(summary.summary.count)}

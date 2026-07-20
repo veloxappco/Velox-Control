@@ -43,7 +43,7 @@ export default async function DashboardPage({ searchParams }: PageProps) {
             Vista general del negocio en el periodo seleccionado.
           </p>
         </div>
-        <DateRangeFilter />
+        <DateRangeFilter defaultFrom={from} defaultTo={to} />
       </div>
 
       <Suspense key={`${from}-${to}`} fallback={<DashboardSkeleton />}>
@@ -64,7 +64,7 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 md:gap-4">
         <StatCard
           label="Ventas totales"
           value={formatMoney(summary.sales.total)}
@@ -190,7 +190,7 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
 function DashboardSkeleton() {
   return (
     <div className="flex flex-col gap-6">
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4 md:gap-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 md:gap-4">
         {Array.from({ length: 4 }).map((_, i) => (
           <Skeleton key={i} className="h-[104px] rounded-xl" />
         ))}

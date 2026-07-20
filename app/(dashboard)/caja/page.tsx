@@ -34,7 +34,7 @@ export default async function CajaPage({ searchParams }: PageProps) {
           <h1 className="text-xl font-semibold tracking-tight">Caja</h1>
           <p className="text-sm text-muted-foreground">Sesiones de caja e ingresos/egresos.</p>
         </div>
-        <DateRangeFilter />
+        <DateRangeFilter defaultFrom={from} defaultTo={to} />
       </div>
 
       <Suspense key={`${from}-${to}`} fallback={<Skeleton className="h-96 rounded-xl" />}>
@@ -66,7 +66,7 @@ async function CajaContent({ from, to }: { from: string; to: string }) {
           {!current.data ? (
             <EmptyState icon={Wallet} title="No hay una caja abierta en este momento" />
           ) : (
-            <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
               <MiniStat label="Apertura" value={formatMoney(current.data.opening_amount)} />
               <MiniStat
                 label="Ingresos"
@@ -96,7 +96,7 @@ async function CajaContent({ from, to }: { from: string; to: string }) {
         )}
       </Card>
 
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Sesiones en el periodo"
           value={String(sessions.data.length)}

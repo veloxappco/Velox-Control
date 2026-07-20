@@ -13,14 +13,23 @@ const PRESETS = [
   { label: "30 días", days: 30 },
 ];
 
-export function DateRangeFilter() {
+export function DateRangeFilter({
+  defaultFrom,
+  defaultTo,
+}: {
+  /** Debe ser el mismo valor por defecto que usa la página para pedir los
+   * datos al servidor (p. ej. `from ?? todayISO()`). Si no coincide, el
+   * filtro muestra una fecha distinta a la que realmente se consultó. */
+  defaultFrom?: string;
+  defaultTo?: string;
+} = {}) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [, startTransition] = useTransition();
 
-  const [from, setFrom] = useState(searchParams.get("from") ?? todayISO());
-  const [to, setTo] = useState(searchParams.get("to") ?? todayISO());
+  const [from, setFrom] = useState(searchParams.get("from") ?? defaultFrom ?? todayISO());
+  const [to, setTo] = useState(searchParams.get("to") ?? defaultTo ?? todayISO());
 
   function apply(nextFrom: string, nextTo: string) {
     setFrom(nextFrom);

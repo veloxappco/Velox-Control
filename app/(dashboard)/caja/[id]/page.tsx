@@ -43,7 +43,7 @@ export default async function CajaSessionPage({ params }: PageProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
         <Metric label="Apertura" value={formatMoney(session.opening_amount)} />
         <Metric label="Ingresos" value={formatMoney(session.income_total)} tone="success" />
         <Metric label="Egresos" value={formatMoney(session.expense_total)} tone="destructive" />

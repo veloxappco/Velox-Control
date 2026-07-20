@@ -1,6 +1,7 @@
 import "server-only";
 import { apiFetch } from "./server";
 import { ENDPOINTS } from "./config";
+import { toTitleCase } from "@/lib/format";
 import type {
   DashboardSummary,
   DateRangeParams,
@@ -77,21 +78,26 @@ export async function getExpensesReport({
     sessionsWithExpenses.map((s) => getCashSessionDetail(s.id))
   );
 
+  // Normalizamos la categoría acá (Tipo Título) para que "LECHE DE TINA" y
+  // "leche de tina" se muestren igual y se agrupen como una sola categoría.
   const movements: ExpenseMovement[] = details.flatMap((detail) =>
     (detail.data.movements ?? [])
       .filter((m) => m.type === "expense")
-      .map((m) => ({ ...m, session_id: detail.data.id }))
+      .map((m) => ({
+        ...m,
+        category: toTitleCase(m.category) || "Sin categoría",
+        session_id: detail.data.id,
+      }))
   );
 
   movements.sort((a, b) => (a.created_at < b.created_at ? 1 : -1));
 
   const categoryTotals = new Map<string, { count: number; total: number }>();
   for (const m of movements) {
-    const key = m.category?.trim() || "Sin categoría";
-    const entry = categoryTotals.get(key) ?? { count: 0, total: 0 };
+    const entry = categoryTotals.get(m.category) ?? { count: 0, total: 0 };
     entry.count += 1;
     entry.total += m.amount;
-    categoryTotals.set(key, entry);
+    categoryTotals.set(m.category, entry);
   }
 
   const categories: CashExpenseCategoryBreakdown[] = Array.from(categoryTotals.entries())

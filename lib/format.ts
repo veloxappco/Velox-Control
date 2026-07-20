@@ -101,6 +101,42 @@ export function orderStatusVariant(status: string): BadgeVariant {
   return "outline";
 }
 
+// Palabras que en español van en minúscula dentro de un título, salvo que
+// sean la primera palabra (p. ej. "Leche de Tina", no "Leche De Tina").
+const TITLE_CASE_MINOR_WORDS = new Set([
+  "de",
+  "del",
+  "la",
+  "las",
+  "el",
+  "los",
+  "y",
+  "o",
+  "en",
+  "a",
+  "al",
+  "con",
+  "sin",
+  "por",
+  "para",
+  "un",
+  "una",
+]);
+
+/** "LECHE DE TINA" / "leche de tina" -> "Leche de Tina" */
+export function toTitleCase(value: string | null | undefined) {
+  const trimmed = value?.trim();
+  if (!trimmed) return "";
+  return trimmed
+    .toLowerCase()
+    .split(/\s+/)
+    .map((word, index) => {
+      if (index > 0 && TITLE_CASE_MINOR_WORDS.has(word)) return word;
+      return word.charAt(0).toUpperCase() + word.slice(1);
+    })
+    .join(" ");
+}
+
 const PAYMENT_METHOD_LABELS: Record<string, string> = {
   cash: "Efectivo",
   card: "Tarjeta",
