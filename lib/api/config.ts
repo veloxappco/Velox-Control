@@ -1,15 +1,15 @@
-// Configuración central de la API de Velox.
-// Si las rutas reales en routes/api.php son distintas, este es el único
-// archivo que hay que tocar — todo el resto del proyecto usa estas constantes.
+// Configuración central de la API de VeloxAdmin.
+// Basado en el `route:list` real de Laravel (grupo Api\Admin\*).
+// Si algo cambia en routes/api.php, este es el único archivo que hay que tocar.
 
 export const API_BASE_URL =
-  process.env.VELOX_API_BASE_URL ?? "http://localhost:8000/api/admin";
+  process.env.VELOX_API_BASE_URL ?? "https://veloxpedidos.co/api/v1/admin";
 
 export const ENDPOINTS = {
   auth: {
-    login: "/auth/login",
-    me: "/auth/me",
-    logout: "/auth/logout",
+    login: "/login",
+    me: "/me",
+    logout: "/logout",
   },
   dashboard: {
     summary: "/dashboard/summary",
@@ -21,12 +21,14 @@ export const ENDPOINTS = {
   },
   inventory: {
     alerts: "/inventory/alerts",
-    ingredientConsumption: "/inventory/ingredient-consumption",
+    // Ruta real: top-consumed-ingredients (antes asumida como ingredient-consumption)
+    ingredientConsumption: "/inventory/top-consumed-ingredients",
   },
   cash: {
     current: "/cash/current",
     sessions: "/cash/sessions",
-    sessionDetail: (id: number | string) => `/cash/sessions/${id}`,
+    // Ruta real: /cash/sessions/{sessionId}/summary
+    sessionDetail: (id: number | string) => `/cash/sessions/${id}/summary`,
   },
   reports: {
     sales: "/reports/sales",

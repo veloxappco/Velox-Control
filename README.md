@@ -19,12 +19,11 @@ npm run dev
 
 Abre http://localhost:3000 — te va a redirigir a `/login`.
 
-## ⚠️ Antes de usarlo: revisa las rutas de la API
+## Configuración de la API
 
-No tenía `routes/api.php`, así que **asumí** un prefijo de rutas
-(`/api/admin/...`) basado en el namespace `App\Http\Controllers\Api\Admin`
-de tus controllers. Si las rutas reales son distintas, el único archivo que
-hay que tocar es:
+Ya conectado contra las rutas reales (`api/v1/admin/...`) en
+`https://veloxpedidos.co`, confirmadas con `route:list`. Si algo cambia,
+el único archivo que hay que tocar es:
 
 ```
 lib/api/config.ts
@@ -32,7 +31,14 @@ lib/api/config.ts
 
 Ahí están listados los 16 endpoints, uno por método de `AuthController`,
 `DashboardController`, `OrdersController`, `InventoryController`,
-`CashController` y `ReportsController`.
+`CashController` y `ReportsController`. Dos rutas terminaron siendo
+distintas a lo que se había asumido inicialmente:
+
+- Login/logout/me van sin el prefijo `/auth` (`/login`, `/logout`, `/me`).
+- El detalle de una sesión de caja es `/cash/sessions/{id}/summary`
+  (no `/cash/sessions/{id}`).
+- El consumo de insumos es `/inventory/top-consumed-ingredients`
+  (no `/inventory/ingredient-consumption`).
 
 ## Estructura del proyecto (para aprender Next.js)
 
