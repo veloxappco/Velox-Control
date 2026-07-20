@@ -19,6 +19,7 @@ import { WhatsappIcon } from "@/components/icons/whatsapp-icon";
 import { getInventoryAlerts, getIngredientConsumption } from "@/lib/api/queries";
 import type { InventoryAlertItem, IngredientConsumptionItem } from "@/lib/api/types";
 import { daysAgoISO, formatMoney, formatNumber, todayISO } from "@/lib/format";
+import { resolveDateRange } from "@/lib/get-date-range";
 
 interface PageProps {
   searchParams: Promise<{ from?: string; to?: string }>;
@@ -26,8 +27,7 @@ interface PageProps {
 
 export default async function InventarioPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const from = params.from ?? daysAgoISO(7);
-  const to = params.to ?? todayISO();
+  const { from, to } = await resolveDateRange(params, { from: daysAgoISO(7), to: todayISO() });
 
   return (
     <div className="flex min-w-0 flex-col gap-6">

@@ -6,6 +6,7 @@ import { DateRangeFilter } from "@/components/shared/date-range-filter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getExpensesReport } from "@/lib/api/queries";
 import { formatMoney, formatNumber, todayISO } from "@/lib/format";
+import { resolveDateRange } from "@/lib/get-date-range";
 
 interface PageProps {
   searchParams: Promise<{ from?: string; to?: string }>;
@@ -14,8 +15,7 @@ interface PageProps {
 export default async function EgresosPage({ searchParams }: PageProps) {
   const params = await searchParams;
   // Por defecto filtra solo el día de hoy (no un rango) — igual que Resumen y Pedidos.
-  const from = params.from ?? todayISO();
-  const to = params.to ?? todayISO();
+  const { from, to } = await resolveDateRange(params, { from: todayISO(), to: todayISO() });
 
   return (
     <div className="flex min-w-0 flex-col gap-6">

@@ -8,6 +8,7 @@ import { DateRangeFilter } from "@/components/shared/date-range-filter";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getDashboardSummary, getOrdersRecent, getReportsTopProducts } from "@/lib/api/queries";
 import { isoDateOnly, todayISO } from "@/lib/format";
+import { resolveDateRange } from "@/lib/get-date-range";
 
 interface PageProps {
   searchParams: Promise<{ from?: string; to?: string }>;
@@ -15,8 +16,7 @@ interface PageProps {
 
 export default async function IngresosPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const from = params.from ?? todayISO();
-  const to = params.to ?? todayISO();
+  const { from, to } = await resolveDateRange(params, { from: todayISO(), to: todayISO() });
 
   return (
     <div className="flex min-w-0 flex-col gap-6">

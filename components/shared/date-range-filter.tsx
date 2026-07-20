@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { daysAgoISO, todayISO } from "@/lib/format";
+import { persistDateRange } from "@/lib/date-range-cookie";
 
 const PRESETS = [
   { label: "Hoy", days: 0 },
@@ -35,6 +36,9 @@ export function DateRangeFilter({
   function apply(nextFrom: string, nextTo: string) {
     setFrom(nextFrom);
     setTo(nextTo);
+    // Se guarda en cookie para que el filtro quede puesto al entrar a otro
+    // módulo (Dashboard, Ingresos, Egresos...), no solo en esta pantalla.
+    persistDateRange(nextFrom, nextTo);
     const params = new URLSearchParams(searchParams.toString());
     params.set("from", nextFrom);
     params.set("to", nextTo);

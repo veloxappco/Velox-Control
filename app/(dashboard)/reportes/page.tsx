@@ -23,6 +23,7 @@ import {
   getReportsProfit,
 } from "@/lib/api/queries";
 import { daysAgoISO, formatMoney, formatNumber, paymentMethodLabel, todayISO } from "@/lib/format";
+import { resolveDateRange } from "@/lib/get-date-range";
 
 interface PageProps {
   searchParams: Promise<{ from?: string; to?: string }>;
@@ -30,8 +31,7 @@ interface PageProps {
 
 export default async function ReportesPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const from = params.from ?? daysAgoISO(7);
-  const to = params.to ?? todayISO();
+  const { from, to } = await resolveDateRange(params, { from: daysAgoISO(7), to: todayISO() });
 
   return (
     <div className="flex flex-col gap-6">

@@ -17,6 +17,7 @@ import { EmptyState } from "@/components/shared/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCashCurrent, getCashSessions } from "@/lib/api/queries";
 import { daysAgoISO, formatDateTime, formatMoney, todayISO } from "@/lib/format";
+import { resolveDateRange } from "@/lib/get-date-range";
 
 interface PageProps {
   searchParams: Promise<{ from?: string; to?: string }>;
@@ -24,8 +25,7 @@ interface PageProps {
 
 export default async function CajaPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const from = params.from ?? daysAgoISO(14);
-  const to = params.to ?? todayISO();
+  const { from, to } = await resolveDateRange(params, { from: daysAgoISO(14), to: todayISO() });
 
   return (
     <div className="flex flex-col gap-6">
