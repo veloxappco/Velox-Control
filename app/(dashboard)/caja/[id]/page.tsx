@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowDownRight, ArrowUpRight, CreditCard, Tag } from "lucide-react";
+import { ArrowLeft, CreditCard, Tag } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -11,8 +11,10 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { EmptyState } from "@/components/shared/empty-state";
+import { CashMovementsList } from "@/components/dashboard/cash-movements-list";
 import { getCashSessionDetail } from "@/lib/api/queries";
 import { formatDateTime, formatMoney, paymentMethodLabel } from "@/lib/format";
+import { computeExpectedCash } from "@/lib/cash";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -47,12 +49,10 @@ export default async function CajaSessionPage({ params }: PageProps) {
         <Metric label="Apertura" value={formatMoney(session.opening_amount)} />
         <Metric label="Ingresos" value={formatMoney(session.income_total)} tone="success" />
         <Metric label="Egresos" value={formatMoney(session.expense_total)} tone="destructive" />
-        <Metric
-          label="Esperado / Cierre"
-          value={`${formatMoney(session.expected_amount)}${
-            session.closing_amount !== null ? ` / ${formatMoney(session.closing_amount)}` : ""
-          }`}
-        />
+        <Metric label="Efectivo esperado" value={formatMoney(computeExpectedCash(session))} />
+        {session.closing_amount !== null && (
+          <Metric label="Cierre real" value={formatMoney(session.closing_amount)} />
+        )}
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
@@ -135,51 +135,10 @@ export default async function CajaSessionPage({ params }: PageProps) {
         <CardHeader>
           <CardTitle>Movimientos</CardTitle>
         </CardHeader>
-        <CardContent className="p-0">
-          {!session.movements || session.movements.length === 0 ? (
-            <div className="p-5">
-              <EmptyState icon={ArrowUpRight} title="Sin movimientos registrados" />
-            </div>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Tipo</TableHead>
-                  <TableHead>Categoría</TableHead>
-                  <TableHead>Descripción</TableHead>
-                  <TableHead>Método</TableHead>
-                  <TableHead className="text-right">Monto</TableHead>
-                  <TableHead>Fecha</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {session.movements.map((m) => (
-                  <TableRow key={m.id}>
-                    <TableCell>
-                      {m.type === "income" ? (
-                        <span className="flex items-center gap-1 text-success">
-                          <ArrowUpRight className="size-3.5" /> Ingreso
-                        </span>
-                      ) : (
-                        <span className="flex items-center gap-1 text-destructive">
-                          <ArrowDownRight className="size-3.5" /> Egreso
-                        </span>
-                      )}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">{m.category ?? "—"}</TableCell>
-                    <TableCell className="text-muted-foreground">{m.description ?? "—"}</TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {m.payment_method ? paymentMethodLabel(m.payment_method) : "—"}
-                    </TableCell>
-                    <TableCell className="text-right font-medium">{formatMoney(m.amount)}</TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {formatDateTime(m.created_at)}
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
+        <CardContent
+          className={!session.movements || session.movements.length === 0 ? undefined : "p-0"}
+        >
+          <CashMovementsList movements={session.movements ?? []} />
         </CardContent>
       </Card>
     </div>

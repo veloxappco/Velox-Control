@@ -18,6 +18,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getCashCurrent, getCashSessions } from "@/lib/api/queries";
 import { daysAgoISO, formatDateTime, formatMoney, todayISO } from "@/lib/format";
 import { resolveDateRange } from "@/lib/get-date-range";
+import { computeExpectedCash } from "@/lib/cash";
+import type { CashSession } from "@/lib/api/types";
 
 interface PageProps {
   searchParams: Promise<{ from?: string; to?: string }>;
@@ -80,7 +82,7 @@ async function CajaContent({ from, to }: { from: string; to: string }) {
                 icon={ArrowDownRight}
                 tone="destructive"
               />
-              <MiniStat label="Esperado" value={formatMoney(current.data.expected_amount)} />
+              <MiniStat label="Efectivo esperado" value={formatMoney(computeExpectedCash(current.data))} />
             </div>
           )}
         </CardContent>
@@ -128,58 +130,108 @@ async function CajaContent({ from, to }: { from: string; to: string }) {
         <CardHeader>
           <CardTitle>Historial de sesiones</CardTitle>
         </CardHeader>
-        <CardContent className="p-0">
-          {sessions.data.length === 0 ? (
-            <div className="p-5">
-              <EmptyState icon={Wallet} title="Sin sesiones de caja en este periodo" />
-            </div>
-          ) : (
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Estado</TableHead>
-                  <TableHead>Apertura</TableHead>
-                  <TableHead>Cierre</TableHead>
-                  <TableHead className="text-right">Ingresos</TableHead>
-                  <TableHead className="text-right">Egresos</TableHead>
-                  <TableHead className="text-right">Diferencia</TableHead>
-                  <TableHead />
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {sessions.data.map((session) => (
-                  <TableRow key={session.id}>
-                    <TableCell>
-                      <Badge variant={session.status === "open" ? "success" : "secondary"}>
-                        {session.status === "open" ? "Abierta" : "Cerrada"}
-                      </Badge>
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {formatDateTime(session.opened_at)}
-                    </TableCell>
-                    <TableCell className="text-muted-foreground">
-                      {formatDateTime(session.closed_at)}
-                    </TableCell>
-                    <TableCell className="text-right">{formatMoney(session.income_total)}</TableCell>
-                    <TableCell className="text-right">{formatMoney(session.expense_total)}</TableCell>
-                    <TableCell className="text-right">
-                      {session.difference_amount === null ? "—" : formatMoney(session.difference_amount)}
-                    </TableCell>
-                    <TableCell>
-                      <Link
-                        href={`/caja/${session.id}`}
-                        className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
-                      >
-                        Ver <ChevronRight className="size-3.5" />
-                      </Link>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          )}
+        <CardContent className={sessions.data.length === 0 ? undefined : "p-0"}>
+          <SessionsHistory sessions={sessions.data} />
         </CardContent>
       </Card>
+    </div>
+  );
+}
+
+// ---------- Historial de sesiones — MF (Mobile First): tarjetas en mobile, tabla desde md ----------
+function SessionsHistory({ sessions }: { sessions: CashSession[] }) {
+  if (sessions.length === 0) {
+    return <EmptyState icon={Wallet} title="Sin sesiones de caja en este periodo" />;
+  }
+
+  return (
+    <div className="flex min-w-0 flex-col gap-2">
+      {/* Mobile: tarjetas apiladas, cero scroll horizontal */}
+      <div className="flex min-w-0 flex-col gap-2 md:hidden">
+        {sessions.map((session) => (
+          <Link
+            key={session.id}
+            href={`/caja/${session.id}`}
+            className="min-w-0 rounded-xl border border-border bg-card p-3.5 shadow-sm transition-colors hover:bg-secondary/30 active:bg-secondary/50"
+          >
+            <div className="flex min-w-0 items-start justify-between gap-3">
+              <div className="min-w-0">
+                <Badge variant={session.status === "open" ? "success" : "secondary"}>
+                  {session.status === "open" ? "Abierta" : "Cerrada"}
+                </Badge>
+                <p className="mt-1.5 truncate text-xs text-muted-foreground">
+                  {formatDateTime(session.opened_at)}
+                  {session.closed_at ? ` → ${formatDateTime(session.closed_at)}` : ""}
+                </p>
+              </div>
+              <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
+            </div>
+            <div className="mt-2 flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+              <span>
+                Ingresos:{" "}
+                <span className="font-medium text-success">{formatMoney(session.income_total)}</span>
+              </span>
+              <span>
+                Egresos:{" "}
+                <span className="font-medium text-destructive">
+                  {formatMoney(session.expense_total)}
+                </span>
+              </span>
+              <span>
+                Diferencia:{" "}
+                <span className="font-medium text-foreground">
+                  {session.difference_amount === null ? "—" : formatMoney(session.difference_amount)}
+                </span>
+              </span>
+            </div>
+          </Link>
+        ))}
+      </div>
+
+      {/* Desktop: tabla completa */}
+      <Table className="hidden md:table">
+        <TableHeader>
+          <TableRow>
+            <TableHead>Estado</TableHead>
+            <TableHead>Apertura</TableHead>
+            <TableHead>Cierre</TableHead>
+            <TableHead className="text-right">Ingresos</TableHead>
+            <TableHead className="text-right">Egresos</TableHead>
+            <TableHead className="text-right">Diferencia</TableHead>
+            <TableHead />
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {sessions.map((session) => (
+            <TableRow key={session.id}>
+              <TableCell>
+                <Badge variant={session.status === "open" ? "success" : "secondary"}>
+                  {session.status === "open" ? "Abierta" : "Cerrada"}
+                </Badge>
+              </TableCell>
+              <TableCell className="text-muted-foreground">
+                {formatDateTime(session.opened_at)}
+              </TableCell>
+              <TableCell className="text-muted-foreground">
+                {formatDateTime(session.closed_at)}
+              </TableCell>
+              <TableCell className="text-right">{formatMoney(session.income_total)}</TableCell>
+              <TableCell className="text-right">{formatMoney(session.expense_total)}</TableCell>
+              <TableCell className="text-right">
+                {session.difference_amount === null ? "—" : formatMoney(session.difference_amount)}
+              </TableCell>
+              <TableCell>
+                <Link
+                  href={`/caja/${session.id}`}
+                  className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                >
+                  Ver <ChevronRight className="size-3.5" />
+                </Link>
+              </TableCell>
+            </TableRow>
+          ))}
+        </TableBody>
+      </Table>
     </div>
   );
 }
