@@ -10,6 +10,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { StatCard } from "@/components/dashboard/stat-card";
+import { SalesBreakdown } from "@/components/dashboard/sales-breakdown";
 import { SalesAreaChart } from "@/components/dashboard/sales-area-chart";
 import { HourlyBarChart } from "@/components/dashboard/hourly-bar-chart";
 import { DateRangeFilter } from "@/components/shared/date-range-filter";
@@ -95,6 +96,8 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
           accent="warning"
         />
       </div>
+
+      <SalesBreakdown sales={summary.sales} />
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
         <Card className="lg:col-span-3">
