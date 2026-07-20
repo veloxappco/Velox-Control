@@ -1,9 +1,10 @@
 "use client";
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import { ClipboardList, Phone, Truck, CreditCard, Check, X } from "lucide-react";
+import { useMemo, useState } from "react";
+import { ChevronDown, ClipboardList, Phone, Truck, CreditCard, Check, X } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EmptyState } from "@/components/shared/empty-state";
 import { cn } from "@/lib/utils";
@@ -25,7 +26,6 @@ export function OrdersModule({ orders }: { orders: OrderListItem[] }) {
   const [statusFilter, setStatusFilter] = useState<(typeof FILTERS)[number]>("Todas");
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [selected, setSelected] = useState<OrderListItem | null>(null);
-  const sentinelRef = useRef<HTMLDivElement | null>(null);
 
   const filtered = useMemo(() => {
     if (statusFilter === "Todas") return orders;
@@ -43,24 +43,7 @@ export function OrdersModule({ orders }: { orders: OrderListItem[] }) {
 
   const visible = filtered.slice(0, visibleCount);
   const hasMore = visibleCount < filtered.length;
-
-  // Lazy load: revela 10 pedidos más cuando el "centinela" entra en pantalla,
-  // en vez de renderizar los cientos de pedidos de una sola vez.
-  useEffect(() => {
-    if (!hasMore) return;
-    const node = sentinelRef.current;
-    if (!node) return;
-    const observer = new IntersectionObserver(
-      (entries) => {
-        if (entries[0]?.isIntersecting) {
-          setVisibleCount((c) => c + PAGE_SIZE);
-        }
-      },
-      { rootMargin: "250px" }
-    );
-    observer.observe(node);
-    return () => observer.disconnect();
-  }, [hasMore]);
+  const remaining = filtered.length - visibleCount;
 
   return (
     <div className="flex min-w-0 flex-col gap-3">
@@ -118,9 +101,16 @@ export function OrdersModule({ orders }: { orders: OrderListItem[] }) {
           ))}
 
           {hasMore && (
-            <div ref={sentinelRef} className="flex justify-center py-2">
-              <span className="text-xs text-muted-foreground">Cargando más pedidos…</span>
-            </div>
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
+              className="mt-1 self-center"
+            >
+              <ChevronDown className="size-4" />
+              Cargar {Math.min(PAGE_SIZE, remaining)} más ({remaining} restantes)
+            </Button>
           )}
         </div>
       )}
