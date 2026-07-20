@@ -62,7 +62,7 @@ function LoginForm() {
           </div>
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-gradient-brand">
-              Velox Control
+              VeloxAdmin
             </h1>
             <p className="mt-1 text-sm text-muted-foreground">
               Panel para propietarios de negocios gastronómicos
@@ -119,7 +119,7 @@ function LoginForm() {
         </div>
 
         <p className="mt-6 text-center text-xs text-muted-foreground">
-          Velox © {new Date().getFullYear()} — hecho para tu negocio
+          VeloxAdmin © {new Date().getFullYear()} — hecho para tu negocio
         </p>
       </div>
     </main>

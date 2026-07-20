@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
   try {
     const result = await apiFetch<LoginResponse>(ENDPOINTS.auth.login, {
       method: "POST",
-      body: JSON.stringify({ username, password, device_name: "Velox Web" }),
+      body: JSON.stringify({ username, password, device_name: "VeloxAdmin Web" }),
       withAuth: false,
     });
 

@@ -16,7 +16,7 @@ export function Sidebar() {
           <ChefHat className="size-5 text-white" />
         </div>
         <span className="text-lg font-semibold tracking-tight text-gradient-brand">
-          Velox Control
+          VeloxAdmin
         </span>
       </div>
 
@@ -43,7 +43,7 @@ export function Sidebar() {
       </nav>
 
       <div className="px-6 py-5 text-xs text-sidebar-foreground/40">
-        Velox © {new Date().getFullYear()}
+        VeloxAdmin © {new Date().getFullYear()}
       </div>
     </aside>
   );

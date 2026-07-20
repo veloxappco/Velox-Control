@@ -1,4 +1,4 @@
-# Velox Control
+# VeloxAdmin
 
 Panel de administración (web, mobile-first) para propietarios de negocios
 gastronómicos dentro de Velox: pedidos, ventas POS, caja, inventario y

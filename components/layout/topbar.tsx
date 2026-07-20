@@ -46,7 +46,7 @@ export function Topbar({
         <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-brand">
           <ChefHat className="size-4 text-white" />
         </div>
-        <span className="font-semibold text-gradient-brand">Velox</span>
+        <span className="font-semibold text-gradient-brand">VeloxAdmin</span>
       </div>
 
       <div className="hidden flex-col md:flex">

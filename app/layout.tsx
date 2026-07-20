@@ -2,8 +2,8 @@ import type { Metadata, Viewport } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "Velox Control",
-  description: "Panel de control para negocios gastronómicos — Velox",
+  title: "VeloxAdmin",
+  description: "Panel de control para negocios gastronómicos — VeloxAdmin",
 };
 
 export const viewport: Viewport = {
