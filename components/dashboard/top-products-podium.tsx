@@ -11,12 +11,12 @@ import type { TopProductItem } from "@/lib/api/types";
 
 // Orden visual del podio: 2° a la izquierda, 1° al centro (más alto),
 // 3° a la derecha — con `order-*` reacomodamos el orden del DOM.
-// Colores del podio tomados de la paleta de marca (wild willow, monte carlo,
-// rajah): verde para el 1°, azul/verde-agua para el 2°, naranja para el 3°.
+// Colores sólidos del sistema de Badges: verde (success) para el 1°, azul
+// (accent) para el 2°, naranja (warning) para el 3°, letras blancas.
 const PODIUM = [
-  { rank: 1, visualOrder: "order-2", height: "h-24", medal: "🥇", badge: "bg-gradient-to-b from-[#c4da8e] to-[#adc865] text-[#3f4b1d]" },
-  { rank: 2, visualOrder: "order-1", height: "h-16", medal: "🥈", badge: "bg-gradient-to-b from-[#b7e4db] to-[#89d5c9] text-[#0f4a44]" },
-  { rank: 3, visualOrder: "order-3", height: "h-12", medal: "🥉", badge: "bg-gradient-to-b from-[#fcd9a8] to-[#fac172] text-[#7a4a0a]" },
+  { rank: 1, visualOrder: "order-2", height: "h-24", medal: "🥇", badge: "bg-success text-white" },
+  { rank: 2, visualOrder: "order-1", height: "h-16", medal: "🥈", badge: "bg-accent text-white" },
+  { rank: 3, visualOrder: "order-3", height: "h-12", medal: "🥉", badge: "bg-warning text-white" },
 ] as const;
 
 const REVEAL_CHUNK = 20;
