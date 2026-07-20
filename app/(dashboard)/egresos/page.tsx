@@ -1,5 +1,5 @@
 import { Suspense } from "react";
-import { Receipt, ListChecks, Tags, Calculator } from "lucide-react";
+import { Receipt, ListChecks, Tags } from "lucide-react";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { CategoryBreakdown } from "@/components/dashboard/category-breakdown";
 import { DateRangeFilter } from "@/components/shared/date-range-filter";
@@ -42,20 +42,21 @@ async function EgresosContent({ from, to }: { from: string; to: string }) {
 
   return (
     <div className="flex min-w-0 flex-col gap-6">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
         <StatCard
           label="Total egresos"
           value={formatMoney(report.total)}
           icon={Receipt}
           accent="warning"
           variant="solid"
+          className="col-span-2 sm:col-span-1"
         />
         <StatCard
           label="Movimientos"
           value={formatNumber(report.count)}
           icon={ListChecks}
           accent="warning"
-          variant="solid"
+          size="compact"
         />
         <StatCard
           label="Categoría principal"
@@ -63,14 +64,7 @@ async function EgresosContent({ from, to }: { from: string; to: string }) {
           sub={topCategory ? formatMoney(topCategory.total) : undefined}
           icon={Tags}
           accent="warning"
-          variant="solid"
-        />
-        <StatCard
-          label="Promedio por egreso"
-          value={formatMoney(report.count > 0 ? report.total / report.count : 0)}
-          icon={Calculator}
-          accent="warning"
-          variant="solid"
+          size="compact"
         />
       </div>
 

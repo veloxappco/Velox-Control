@@ -165,7 +165,7 @@ function Metric({
   return (
     <Card className="p-4">
       <p className="text-xs text-muted-foreground">{label}</p>
-      <p className={`mt-1 font-display text-lg font-black ${toneClass}`}>{value}</p>
+      <p className={`mt-1 font-display text-lg font-extrabold ${toneClass}`}>{value}</p>
     </Card>
   );
 }
