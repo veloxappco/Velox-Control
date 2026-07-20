@@ -220,6 +220,14 @@ export function paymentMethodLabel(method: string) {
   return PAYMENT_METHOD_LABELS[method] ?? method;
 }
 
+/** Color del badge según el método de pago: Efectivo en azul, Transferencia
+ * (o bank_transfer) en verde. El resto queda neutro. */
+export function paymentMethodBadgeVariant(method: string): "accent" | "success" | "outline" {
+  if (method === "cash") return "accent";
+  if (method === "transfer" || method === "bank_transfer") return "success";
+  return "outline";
+}
+
 const DELIVERY_TYPE_LABELS: Record<string, string> = {
   delivery: "Domicilio",
   pickup: "Recoger en tienda",

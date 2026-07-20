@@ -6,7 +6,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EmptyState } from "@/components/shared/empty-state";
-import { formatDateTime, formatMoney, paymentMethodLabel } from "@/lib/format";
+import { formatDateTime, formatMoney, paymentMethodBadgeVariant, paymentMethodLabel } from "@/lib/format";
 import type { CashExpenseCategoryBreakdown, ExpenseMovement } from "@/lib/api/types";
 
 export function CategoryBreakdown({
@@ -109,7 +109,7 @@ export function CategoryBreakdown({
                       </span>
                     </div>
                     {m.payment_method && (
-                      <Badge variant="outline" className="mt-2">
+                      <Badge variant={paymentMethodBadgeVariant(m.payment_method)} className="mt-2">
                         {paymentMethodLabel(m.payment_method)}
                       </Badge>
                     )}
