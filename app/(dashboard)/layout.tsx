@@ -23,9 +23,11 @@ export default async function DashboardLayout({
   return (
     <div className="flex min-h-screen">
       <Sidebar />
-      <div className="flex min-h-screen flex-1 flex-col">
+      <div className="flex min-h-screen min-w-0 flex-1 flex-col">
         <Topbar business={me.business} user={me.user} />
-        <main className="flex-1 px-4 pb-24 pt-5 md:px-6 md:pb-8">{children}</main>
+        <main className="min-w-0 flex-1 overflow-x-hidden px-4 pb-24 pt-5 md:px-6 md:pb-8">
+          {children}
+        </main>
       </div>
       <MobileNav />
     </div>
