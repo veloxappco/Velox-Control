@@ -9,14 +9,14 @@ import {
   Tooltip,
   ResponsiveContainer,
 } from "recharts";
-import { formatMoney } from "@/lib/format";
+import { formatMoney, parseDateOnly } from "@/lib/format";
 import type { SalesSeriesDay } from "@/lib/api/types";
 
 export function SalesAreaChart({ data }: { data: SalesSeriesDay[] }) {
   const chartData = data.map((d) => ({
     ...d,
     label: new Intl.DateTimeFormat("es-CO", { day: "2-digit", month: "short" }).format(
-      new Date(d.date)
+      parseDateOnly(d.date)
     ),
   }));
 

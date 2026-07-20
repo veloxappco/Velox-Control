@@ -69,6 +69,21 @@ export function isoDateOnly(value: string, timeZone: string = DEFAULT_TIMEZONE) 
   return dateInTimeZone(new Date(value), timeZone);
 }
 
+/**
+ * Convierte un string "YYYY-MM-DD" (sin hora, como el que devuelven los
+ * reportes por día) en un Date de medianoche LOCAL.
+ *
+ * Ojo: `new Date("2026-07-19")` NO sirve para esto — por spec de JS, una
+ * fecha sin hora siempre se interpreta como medianoche UTC. Al formatearla
+ * después en un navegador con zona horaria detrás de UTC (como Bogotá,
+ * UTC-5), el día se corre uno hacia atrás (19 se muestra como 18). Por eso
+ * acá se arma el Date a mano con los componentes locales.
+ */
+export function parseDateOnly(value: string) {
+  const [year, month, day] = value.split("-").map(Number);
+  return new Date(year, (month ?? 1) - 1, day ?? 1);
+}
+
 function dateInTimeZone(date: Date, timeZone: string) {
   // en-CA formatea como YYYY-MM-DD, exactamente lo que espera la API.
   return new Intl.DateTimeFormat("en-CA", {
