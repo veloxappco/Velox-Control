@@ -35,6 +35,28 @@ export function formatDate(value: string | null | undefined) {
   }
 }
 
+/** "19 jul · 08:21 AM – 05:55 PM" — para tarjetas compactas (historial de
+ * turnos de caja), donde no cabe repetir el día completo en cada extremo. */
+export function formatShiftRange(openedAt: string, closedAt: string | null) {
+  const dayLabel = new Intl.DateTimeFormat("es-CO", {
+    timeZone: DEFAULT_TIMEZONE,
+    day: "2-digit",
+    month: "short",
+  }).format(new Date(openedAt));
+
+  const timeFormatter = new Intl.DateTimeFormat("en-US", {
+    timeZone: DEFAULT_TIMEZONE,
+    hour: "2-digit",
+    minute: "2-digit",
+    hour12: true,
+  });
+
+  const openTime = timeFormatter.format(new Date(openedAt));
+  const closeTime = closedAt ? timeFormatter.format(new Date(closedAt)) : "en curso";
+
+  return `${dayLabel} · ${openTime} – ${closeTime}`;
+}
+
 export function formatDateTime(value: string | null | undefined) {
   if (!value) return "—";
   try {

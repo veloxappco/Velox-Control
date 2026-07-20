@@ -16,9 +16,10 @@ import { DateRangeFilter } from "@/components/shared/date-range-filter";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getCashCurrent, getCashSessions } from "@/lib/api/queries";
-import { daysAgoISO, formatDateTime, formatMoney, todayISO } from "@/lib/format";
+import { daysAgoISO, formatDateTime, formatMoney, formatShiftRange, todayISO } from "@/lib/format";
 import { resolveDateRange } from "@/lib/get-date-range";
 import { computeExpectedCash } from "@/lib/cash";
+import { cn } from "@/lib/utils";
 import type { CashSession } from "@/lib/api/types";
 
 interface PageProps {
@@ -148,44 +149,50 @@ function SessionsHistory({ sessions }: { sessions: CashSession[] }) {
     <div className="flex min-w-0 flex-col gap-2">
       {/* Mobile: tarjetas apiladas, cero scroll horizontal */}
       <div className="flex min-w-0 flex-col gap-2 md:hidden">
-        {sessions.map((session) => (
-          <Link
-            key={session.id}
-            href={`/caja/${session.id}`}
-            className="min-w-0 rounded-xl border border-border bg-card p-3.5 shadow-sm transition-colors hover:bg-secondary/30 active:bg-secondary/50"
-          >
-            <div className="flex min-w-0 items-start justify-between gap-3">
-              <div className="min-w-0">
+        {sessions.map((session) => {
+          const diff = session.difference_amount;
+          const diffTone = diff === null ? "text-foreground" : diff < 0 ? "text-destructive" : "text-success";
+          const diffLabel = diff === null ? "—" : `${diff > 0 ? "+ " : ""}${formatMoney(diff)}`;
+
+          return (
+            <Link
+              key={session.id}
+              href={`/caja/${session.id}`}
+              className="min-w-0 rounded-xl border border-border bg-card p-4 shadow-sm transition-colors hover:bg-secondary/30 active:bg-secondary/50"
+            >
+              <div className="flex min-w-0 items-center justify-between gap-3">
                 <Badge variant={session.status === "open" ? "success" : "secondary"}>
                   {session.status === "open" ? "Abierta" : "Cerrada"}
                 </Badge>
-                <p className="mt-1.5 truncate text-xs text-muted-foreground">
-                  {formatDateTime(session.opened_at)}
-                  {session.closed_at ? ` → ${formatDateTime(session.closed_at)}` : ""}
-                </p>
+                <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
               </div>
-              <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
-            </div>
-            <div className="mt-2 flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
-              <span>
-                Ingresos:{" "}
-                <span className="font-medium text-success">{formatMoney(session.income_total)}</span>
-              </span>
-              <span>
-                Egresos:{" "}
-                <span className="font-medium text-destructive">
-                  {formatMoney(session.expense_total)}
-                </span>
-              </span>
-              <span>
-                Diferencia:{" "}
-                <span className="font-medium text-foreground">
-                  {session.difference_amount === null ? "—" : formatMoney(session.difference_amount)}
-                </span>
-              </span>
-            </div>
-          </Link>
-        ))}
+
+              <p className="mt-2 truncate text-xs text-muted-foreground">
+                {formatShiftRange(session.opened_at, session.closed_at)}
+              </p>
+
+              <div className="mt-3 grid grid-cols-2 gap-3">
+                <div className="min-w-0">
+                  <p className="text-[11px] text-muted-foreground">Ingresos</p>
+                  <p className="mt-0.5 truncate text-sm font-semibold text-success">
+                    {formatMoney(session.income_total)}
+                  </p>
+                </div>
+                <div className="min-w-0">
+                  <p className="text-[11px] text-muted-foreground">Egresos</p>
+                  <p className="mt-0.5 truncate text-sm font-semibold text-destructive">
+                    {formatMoney(session.expense_total)}
+                  </p>
+                </div>
+              </div>
+
+              <div className="mt-3 border-t border-border/60 pt-3">
+                <p className="text-[11px] text-muted-foreground">Balance del turno</p>
+                <p className={cn("mt-0.5 truncate text-base font-semibold", diffTone)}>{diffLabel}</p>
+              </div>
+            </Link>
+          );
+        })}
       </div>
 
       {/* Desktop: tabla completa */}
