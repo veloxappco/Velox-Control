@@ -1,17 +1,25 @@
 import type { CashSession } from "@/lib/api/types";
 
 /**
- * Efectivo Esperado — cuánto dinero físico debería haber en la caja, no el
- * total general de la sesión (que mezcla tarjeta, transferencia, etc.):
+ * Desglose del "cuadre de caja": la caja física solo se mueve con Efectivo
+ * (tarjeta, Nequi, transferencia, etc. no pasan por el cajón), así que todo
+ * acá se calcula filtrando `payment_methods` a la fila "cash" únicamente —
+ * nunca se suma Transferencia ni otros métodos.
  *
- *   Base inicial + Ingresos en efectivo (Venta POS + Pedidos) - Egresos en efectivo
- *
- * El desglose por método de pago (`payment_methods`) ya viene separado por
- * la API, así que solo se toma la fila "cash" de ahí.
+ *   Esperado = Base inicial + Ingresos en efectivo (Venta POS + Pedidos)
+ *              - Egresos en efectivo
  */
-export function computeExpectedCash(session: CashSession): number {
+export function getCashBreakdown(session: CashSession) {
   const cash = session.payment_methods.find((m) => m.payment_method === "cash");
-  const cashIncome = cash?.income_total ?? 0;
-  const cashExpense = cash?.expense_total ?? 0;
-  return session.opening_amount + cashIncome - cashExpense;
+  const income = cash?.income_total ?? 0;
+  const expense = cash?.expense_total ?? 0;
+  const expected = session.opening_amount + income - expense;
+  const diff = session.closing_amount !== null ? session.closing_amount - expected : null;
+
+  return { income, expense, expected, diff };
+}
+
+/** Solo el "Efectivo esperado" (ver getCashBreakdown para el detalle completo). */
+export function computeExpectedCash(session: CashSession): number {
+  return getCashBreakdown(session).expected;
 }

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, CreditCard, Tag } from "lucide-react";
+import { ArrowLeft, Calculator, CreditCard, Tag } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -12,9 +12,9 @@ import {
 } from "@/components/ui/table";
 import { EmptyState } from "@/components/shared/empty-state";
 import { CashMovementsList } from "@/components/dashboard/cash-movements-list";
+import { CashReconciliation } from "@/components/dashboard/cash-reconciliation";
 import { getCashSessionDetail } from "@/lib/api/queries";
 import { formatDateTime, formatMoney, paymentMethodLabel } from "@/lib/format";
-import { computeExpectedCash } from "@/lib/cash";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -45,15 +45,22 @@ export default async function CajaSessionPage({ params }: PageProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         <Metric label="Apertura" value={formatMoney(session.opening_amount)} />
-        <Metric label="Ingresos" value={formatMoney(session.income_total)} tone="success" />
-        <Metric label="Egresos" value={formatMoney(session.expense_total)} tone="destructive" />
-        <Metric label="Efectivo esperado" value={formatMoney(computeExpectedCash(session))} />
-        {session.closing_amount !== null && (
-          <Metric label="Cierre real" value={formatMoney(session.closing_amount)} />
-        )}
+        <Metric label="Ingresos totales" value={formatMoney(session.income_total)} tone="success" />
+        <Metric label="Egresos totales" value={formatMoney(session.expense_total)} tone="destructive" />
       </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Calculator className="size-4" /> Cuadre de caja (efectivo)
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <CashReconciliation session={session} />
+        </CardContent>
+      </Card>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card>
