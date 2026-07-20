@@ -50,35 +50,39 @@ export function Topbar({
       </div>
 
       <div className="hidden flex-col md:flex">
-        <span className="text-sm font-medium">{business.name}</span>
         <span className="text-xs text-muted-foreground">
           {business.city ? `${business.city} · ` : ""}
           {business.timezone}
         </span>
       </div>
 
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <button className="flex items-center gap-2 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring/40">
-            <Avatar>
-              <AvatarFallback>{initials(user?.name ?? business.name)}</AvatarFallback>
-            </Avatar>
-          </button>
-        </DropdownMenuTrigger>
-        <DropdownMenuContent align="end">
-          <DropdownMenuLabel>
-            <div className="flex flex-col">
-              <span className="font-medium text-foreground">{user?.name ?? business.name}</span>
-              <span className="text-xs text-muted-foreground">{user?.email ?? business.email}</span>
-            </div>
-          </DropdownMenuLabel>
-          <DropdownMenuSeparator />
-          <DropdownMenuItem onSelect={handleLogout} disabled={loggingOut}>
-            <LogOut className="size-4" />
-            {loggingOut ? "Cerrando sesión..." : "Cerrar sesión"}
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+      <div className="ml-auto flex items-center gap-2 md:ml-0">
+        <span className="hidden text-sm text-muted-foreground sm:inline">
+          Hola, <span className="font-medium text-foreground">{business.name}</span>
+        </span>
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="flex items-center gap-2 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring/40">
+              <Avatar>
+                <AvatarFallback>{initials(user?.name ?? business.name)}</AvatarFallback>
+              </Avatar>
+            </button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuLabel>
+              <div className="flex flex-col">
+                <span className="font-medium text-foreground">{user?.name ?? business.name}</span>
+                <span className="text-xs text-muted-foreground">{user?.email ?? business.email}</span>
+              </div>
+            </DropdownMenuLabel>
+            <DropdownMenuSeparator />
+            <DropdownMenuItem onSelect={handleLogout} disabled={loggingOut}>
+              <LogOut className="size-4" />
+              {loggingOut ? "Cerrando sesión..." : "Cerrar sesión"}
+            </DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
     </header>
   );
 }
