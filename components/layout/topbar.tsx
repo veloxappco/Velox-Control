@@ -41,48 +41,49 @@ export function Topbar({
   }
 
   return (
-    <header className="sticky top-0 z-30 flex items-center justify-between border-b border-border/60 bg-background/80 px-4 py-3 backdrop-blur-lg md:px-6">
-      <div className="flex items-center gap-2 md:hidden">
+    <header className="sticky top-0 z-30 flex items-center gap-2 border-b border-border/60 bg-background/80 px-4 py-3 backdrop-blur-lg md:px-6 md:gap-3">
+      <div className="flex shrink-0 items-center gap-2 md:hidden">
         <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-brand">
           <ChefHat className="size-4 text-white" />
         </div>
         <span className="font-semibold text-gradient-brand">VeloxAdmin</span>
       </div>
 
-      <div className="hidden flex-col md:flex">
+      <div className="hidden shrink-0 flex-col md:flex">
         <span className="text-xs text-muted-foreground">
           {business.city ? `${business.city} · ` : ""}
           {business.timezone}
         </span>
       </div>
 
-      <div className="ml-auto flex items-center gap-2 md:ml-0">
-        <span className="hidden text-sm text-muted-foreground sm:inline">
+      <div className="min-w-0 flex-1 text-right md:text-left">
+        <span className="block truncate text-sm text-muted-foreground">
           Hola, <span className="font-medium text-foreground">{business.name}</span>
         </span>
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <button className="flex items-center gap-2 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring/40">
-              <Avatar>
-                <AvatarFallback>{initials(user?.name ?? business.name)}</AvatarFallback>
-              </Avatar>
-            </button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>
-              <div className="flex flex-col">
-                <span className="font-medium text-foreground">{user?.name ?? business.name}</span>
-                <span className="text-xs text-muted-foreground">{user?.email ?? business.email}</span>
-              </div>
-            </DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem onSelect={handleLogout} disabled={loggingOut}>
-              <LogOut className="size-4" />
-              {loggingOut ? "Cerrando sesión..." : "Cerrar sesión"}
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
       </div>
+
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <button className="flex shrink-0 items-center gap-2 rounded-full outline-none focus-visible:ring-2 focus-visible:ring-ring/40">
+            <Avatar>
+              <AvatarFallback>{initials(user?.name ?? business.name)}</AvatarFallback>
+            </Avatar>
+          </button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent align="end">
+          <DropdownMenuLabel>
+            <div className="flex flex-col">
+              <span className="font-medium text-foreground">{user?.name ?? business.name}</span>
+              <span className="text-xs text-muted-foreground">{user?.email ?? business.email}</span>
+            </div>
+          </DropdownMenuLabel>
+          <DropdownMenuSeparator />
+          <DropdownMenuItem onSelect={handleLogout} disabled={loggingOut}>
+            <LogOut className="size-4" />
+            {loggingOut ? "Cerrando sesión..." : "Cerrar sesión"}
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     </header>
   );
 }
