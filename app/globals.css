@@ -1,3 +1,10 @@
+/* Tipografía de titulares/KPIs. Se carga como @import de CSS (no next/font)
+ * a propósito: next/font/google necesita descargar la fuente durante
+ * `next build`, lo cual falla en este sandbox por la red restringida. Un
+ * @import normal lo resuelve el navegador del usuario en producción, sin
+ * tocar el build. Debe ir antes que cualquier otra regla, incluido
+ * @import "tailwindcss". */
+@import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
@@ -103,6 +110,10 @@
 
   --font-sans: ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, "Helvetica Neue", Arial, sans-serif;
   --font-mono: ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
+
+  /* Titulares y cifras de KPI: Plus Jakarta Sans en Bold/Black, con el mismo
+   * stack de sistema como respaldo mientras carga o si falla la red. */
+  --font-display: "Plus Jakarta Sans", ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 * {

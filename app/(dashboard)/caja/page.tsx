@@ -259,7 +259,7 @@ function MiniStat({
   return (
     <div className="rounded-lg border border-border/60 bg-secondary/30 p-3">
       <p className="text-xs text-muted-foreground">{label}</p>
-      <p className={`mt-1 flex items-center gap-1 text-lg font-semibold ${toneClass}`}>
+      <p className={`mt-1 flex items-center gap-1 font-display text-lg font-black ${toneClass}`}>
         {Icon && <Icon className="size-4" />}
         {value}
       </p>
