@@ -47,13 +47,15 @@ async function EgresosContent({ from, to }: { from: string; to: string }) {
           label="Total egresos"
           value={formatMoney(report.total)}
           icon={Receipt}
-          accent="destructive"
+          accent="warning"
+          variant="solid"
         />
         <StatCard
           label="Movimientos"
           value={formatNumber(report.count)}
           icon={ListChecks}
-          accent="accent"
+          accent="warning"
+          variant="solid"
         />
         <StatCard
           label="Categoría principal"
@@ -61,12 +63,14 @@ async function EgresosContent({ from, to }: { from: string; to: string }) {
           sub={topCategory ? formatMoney(topCategory.total) : undefined}
           icon={Tags}
           accent="warning"
+          variant="solid"
         />
         <StatCard
           label="Promedio por egreso"
           value={formatMoney(report.count > 0 ? report.total / report.count : 0)}
           icon={Calculator}
-          accent="primary"
+          accent="warning"
+          variant="solid"
         />
       </div>
 
