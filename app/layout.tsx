@@ -7,7 +7,7 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#0a0a13",
+  themeColor: "#f6f7fb",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -19,7 +19,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="es" className="dark h-full antialiased">
+    <html lang="es" className="h-full antialiased">
       <body className="min-h-full flex flex-col">{children}</body>
     </html>
   );

@@ -50,11 +50,11 @@ function LoginForm() {
         className="pointer-events-none absolute inset-0 -z-10"
         style={{
           background:
-            "radial-gradient(50% 40% at 50% 0%, rgba(139,92,246,0.35) 0%, rgba(59,130,246,0.12) 45%, transparent 75%)",
+            "radial-gradient(50% 40% at 50% 0%, rgba(124,58,237,0.14) 0%, rgba(37,99,235,0.06) 45%, transparent 75%)",
         }}
       />
-      <div className="pointer-events-none absolute -left-32 top-1/3 -z-10 size-72 rounded-full bg-primary/20 blur-[100px]" />
-      <div className="pointer-events-none absolute -right-24 bottom-10 -z-10 size-72 rounded-full bg-accent/20 blur-[100px]" />
+      <div className="pointer-events-none absolute -left-32 top-1/3 -z-10 size-72 rounded-full bg-primary/10 blur-[100px]" />
+      <div className="pointer-events-none absolute -right-24 bottom-10 -z-10 size-72 rounded-full bg-accent/10 blur-[100px]" />
 
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center gap-3 text-center">
@@ -71,7 +71,7 @@ function LoginForm() {
           </div>
         </div>
 
-        <div className="glass-panel rounded-2xl p-6 shadow-2xl shadow-black/40">
+        <div className="glass-panel rounded-2xl p-6 shadow-2xl shadow-slate-900/10">
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             <div className="flex flex-col gap-1.5">
               <Label htmlFor="username">Usuario o correo</Label>
