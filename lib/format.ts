@@ -1,3 +1,10 @@
+// Zona horaria del negocio. La API (Laravel, config('app.timezone')) también
+// usa America/Bogota por defecto — hay que fijarla explícitamente acá porque
+// el servidor de Vercel corre en UTC, y calcular "hoy" con la hora del
+// servidor hace que después de las 7pm (hora Colombia) se le pida a la API
+// datos de un día que, en Bogotá, todavía no llega (dashboard vacío).
+const DEFAULT_TIMEZONE = "America/Bogota";
+
 const currencyFormatter = new Intl.NumberFormat("es-CO", {
   style: "currency",
   currency: "COP",
@@ -18,6 +25,7 @@ export function formatDate(value: string | null | undefined) {
   if (!value) return "—";
   try {
     return new Intl.DateTimeFormat("es-CO", {
+      timeZone: DEFAULT_TIMEZONE,
       day: "2-digit",
       month: "short",
       year: "numeric",
@@ -31,6 +39,7 @@ export function formatDateTime(value: string | null | undefined) {
   if (!value) return "—";
   try {
     return new Intl.DateTimeFormat("es-CO", {
+      timeZone: DEFAULT_TIMEZONE,
       day: "2-digit",
       month: "short",
       hour: "2-digit",
@@ -41,14 +50,26 @@ export function formatDateTime(value: string | null | undefined) {
   }
 }
 
-export function todayISO() {
-  return new Date().toISOString().slice(0, 10);
+/** Fecha (YYYY-MM-DD) de "hoy" en la zona horaria del negocio, sin importar
+ * en qué timezone esté corriendo el servidor o el navegador. */
+export function todayISO(timeZone: string = DEFAULT_TIMEZONE) {
+  return dateInTimeZone(new Date(), timeZone);
 }
 
-export function daysAgoISO(days: number) {
+export function daysAgoISO(days: number, timeZone: string = DEFAULT_TIMEZONE) {
   const d = new Date();
   d.setDate(d.getDate() - days);
-  return d.toISOString().slice(0, 10);
+  return dateInTimeZone(d, timeZone);
+}
+
+function dateInTimeZone(date: Date, timeZone: string) {
+  // en-CA formatea como YYYY-MM-DD, exactamente lo que espera la API.
+  return new Intl.DateTimeFormat("en-CA", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(date);
 }
 
 const ORDER_STATUS_LABELS: Record<string, string> = {
