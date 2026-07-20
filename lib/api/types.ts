@@ -200,6 +200,23 @@ export interface CashSessionDetailResponse {
   data: CashSession;
 }
 
+// ---------- Egresos (compuesto a partir de CashController) ----------
+// La API no expone un endpoint único de "egresos por fecha": se arma
+// combinando /cash/sessions (para saber qué sesiones tuvieron egresos en el
+// rango) con /cash/sessions/{id}/summary (que sí trae cada movimiento con
+// su categoría y descripción). Ver lib/api/queries.ts -> getExpensesReport.
+export interface ExpenseMovement extends CashMovement {
+  session_id: number;
+}
+
+export interface ExpensesReport {
+  period: Period;
+  total: number;
+  count: number;
+  categories: CashExpenseCategoryBreakdown[];
+  movements: ExpenseMovement[];
+}
+
 // ---------- Reports ----------
 export interface SalesSeriesDay {
   date: string;
