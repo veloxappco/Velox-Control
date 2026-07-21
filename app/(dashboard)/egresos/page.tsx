@@ -20,11 +20,9 @@ export default async function EgresosPage({ searchParams }: PageProps) {
   return (
     <div className="flex min-w-0 flex-col gap-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <div>
+        <div className="min-w-0">
           <h1 className="text-xl font-semibold tracking-tight">Egresos</h1>
-          <p className="text-sm text-muted-foreground">
-            Gastos registrados en caja: por categoría y con su descripción.
-          </p>
+          <p className="truncate text-sm text-muted-foreground">Gastos registrados en caja</p>
         </div>
         <DateRangeFilter defaultFrom={from} defaultTo={to} />
       </div>
