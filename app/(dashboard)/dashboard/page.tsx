@@ -12,6 +12,7 @@ import { StatCard } from "@/components/dashboard/stat-card";
 import { SalesBreakdown } from "@/components/dashboard/sales-breakdown";
 import { SalesAreaChart } from "@/components/dashboard/sales-area-chart";
 import { HourlyBarChart } from "@/components/dashboard/hourly-bar-chart";
+import { PendingOrdersList } from "@/components/dashboard/pending-orders-list";
 import { DateRangeFilter } from "@/components/shared/date-range-filter";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -22,7 +23,7 @@ import {
   getOrdersPending,
   getInventoryAlerts,
 } from "@/lib/api/queries";
-import { formatMoney, formatNumber, orderStatusLabel, orderStatusVariant, todayISO } from "@/lib/format";
+import { formatMoney, formatNumber, todayISO } from "@/lib/format";
 import { resolveDateRange } from "@/lib/get-date-range";
 
 interface PageProps {
@@ -57,7 +58,10 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
     getDashboardSummary({ from, to }),
     getReportsSales({ from, to }),
     getReportsHourlySales({ from, to }),
-    getOrdersPending({ limit: 6 }),
+    // Traemos hasta 100 (el máximo que permite la API) para que el lazy
+    // load de la tarjeta pueda revelar de a 10 si hay más pedidos sin
+    // entregar.
+    getOrdersPending({ limit: 100 }),
     getInventoryAlerts({ limit: 6 }),
   ]);
 
@@ -132,29 +136,8 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
               <ClipboardList className="size-4" /> Pedidos pendientes
             </CardTitle>
           </CardHeader>
-          <CardContent className="flex flex-col gap-2">
-            {pending.data.length === 0 && (
-              <EmptyState icon={ClipboardList} title="No hay pedidos pendientes" />
-            )}
-            {pending.data.map((order) => (
-              <div
-                key={order.id}
-                className="flex items-center justify-between rounded-lg border border-border/60 px-3 py-2.5"
-              >
-                <div>
-                  <p className="text-sm font-medium">{order.order_number}</p>
-                  <p className="text-xs text-muted-foreground">
-                    {order.customer_name ?? "Cliente sin nombre"}
-                  </p>
-                </div>
-                <div className="flex flex-col items-end gap-1">
-                  <span className="text-sm font-medium">{formatMoney(order.total)}</span>
-                  <Badge variant={orderStatusVariant(order.status)}>
-                    {orderStatusLabel(order.status)}
-                  </Badge>
-                </div>
-              </div>
-            ))}
+          <CardContent>
+            <PendingOrdersList orders={pending.data} />
           </CardContent>
         </Card>
 
