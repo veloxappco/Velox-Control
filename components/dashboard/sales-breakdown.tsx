@@ -29,7 +29,7 @@ export function SalesBreakdown({
 
       <div className="mt-5 min-w-0">
         <p className="text-xs font-medium text-muted-foreground">Total de ventas</p>
-        <p className="mt-1 break-words font-display text-4xl font-extrabold tracking-tight text-foreground">
+        <p className="mt-1 truncate font-display text-4xl font-extrabold tracking-tight text-foreground">
           {formatMoney(total)}
         </p>
       </div>
@@ -62,7 +62,7 @@ export function SalesBreakdown({
           iconColor="text-accent"
           value={formatMoney(posTotal)}
           sub={`${formatNumber(sales.pos.count)} ventas`}
-          className="pr-4"
+          className="pr-3"
         />
         <ChannelDetail
           icon={ShoppingBag}
@@ -72,7 +72,7 @@ export function SalesBreakdown({
           iconColor="text-success"
           value={formatMoney(onlineTotal)}
           sub={`${formatNumber(sales.online.completed)} pedidos`}
-          className="pl-4"
+          className="pl-3"
         />
       </div>
     </Card>
@@ -99,13 +99,15 @@ function ChannelDetail({
   className?: string;
 }) {
   return (
-    <div className={cn("flex min-w-0 items-start gap-3", className)}>
-      <div className={cn("flex size-11 shrink-0 items-center justify-center rounded-xl", iconBg)}>
-        <Icon className={cn("size-5", iconColor)} />
+    <div className={cn("flex min-w-0 items-start gap-2.5", className)}>
+      <div className={cn("flex size-10 shrink-0 items-center justify-center rounded-xl", iconBg)}>
+        <Icon className={cn("size-4.5", iconColor)} />
       </div>
-      <div className="min-w-0">
-        <p className={cn("font-display text-sm font-bold", labelClass)}>{label}</p>
-        <p className="mt-0.5 break-words font-display text-lg font-extrabold text-foreground">
+      <div className="min-w-0 flex-1">
+        <p className={cn("truncate font-display text-sm font-bold", labelClass)}>{label}</p>
+        {/* truncate (nunca break-words): garantiza una sola línea, nunca se
+         * corta la cifra a la mitad como pasaba con el salto de palabra. */}
+        <p className="mt-0.5 truncate font-display text-lg font-extrabold text-foreground">
           {value}
         </p>
         <p className="truncate text-xs text-muted-foreground">{sub}</p>

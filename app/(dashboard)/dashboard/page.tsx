@@ -81,6 +81,7 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
             icon={ShoppingBag}
             accent="accent"
             size="compact"
+            valueClassName="text-2xl"
           />
           <StatCard
             label="Total ventas"
@@ -89,6 +90,7 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
             icon={ShoppingCart}
             accent="success"
             size="compact"
+            valueClassName="text-2xl"
           />
         </div>
       </div>
