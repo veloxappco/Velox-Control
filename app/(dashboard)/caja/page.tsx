@@ -1,6 +1,6 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { Wallet, ArrowUpRight, ArrowDownRight, ChevronRight, Scale } from "lucide-react";
+import { Wallet, ArrowUpRight, ArrowDownRight, ChevronRight } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -123,17 +123,17 @@ async function CajaContent({ from, to }: { from: string; to: string }) {
           <StatCard
             label="Ingresos totales"
             value={formatMoney(totalIncome)}
-            icon={ArrowUpRight}
             accent="success"
             variant="solid"
+            size="compact"
             valueClassName="text-2xl"
           />
           <StatCard
             label="Egresos totales"
             value={formatMoney(totalExpense)}
-            icon={ArrowDownRight}
             accent="destructive"
             variant="solid"
+            size="compact"
             valueClassName="text-2xl"
           />
         </div>
@@ -141,19 +141,15 @@ async function CajaContent({ from, to }: { from: string; to: string }) {
           <StatCard
             label="Sesiones en el periodo"
             value={String(sessions.data.length)}
-            icon={Wallet}
             accent="primary"
             size="compact"
-            iconSize="lg"
             valueClassName="text-2xl"
           />
           <StatCard
             label="Diferencia acumulada"
             value={formatMoney(sessions.data.reduce((a, s) => a + (s.difference_amount ?? 0), 0))}
-            icon={Scale}
             accent="accent"
             size="compact"
-            iconSize="lg"
             valueClassName="text-2xl"
           />
         </div>
