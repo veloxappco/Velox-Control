@@ -77,7 +77,6 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
           <StatCard
             label="Pedidos"
             value={formatNumber(summary.orders.count)}
-            sub={`${summary.orders.pending} pendientes · ${summary.orders.completed} completados`}
             icon={ShoppingBag}
             accent="accent"
             size="compact"
@@ -87,7 +86,6 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
           <StatCard
             label="Total ventas"
             value={formatNumber(summary.sales.pos.count + summary.sales.online.completed)}
-            sub={`${formatNumber(summary.sales.pos.count)} POS · ${formatNumber(summary.sales.online.completed)} en línea`}
             icon={Store}
             accent="success"
             size="compact"
@@ -102,7 +100,9 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
         <Card className="lg:col-span-3">
           <CardHeader>
-            <CardTitle>Tendencia de ventas</CardTitle>
+            <CardTitle className="font-display text-base font-bold text-foreground">
+              Tendencia de ventas
+            </CardTitle>
           </CardHeader>
           <CardContent>
             {sales.data.length ? (
@@ -115,7 +115,9 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
 
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle>Ventas por hora</CardTitle>
+            <CardTitle className="font-display text-base font-bold text-foreground">
+              Ventas por hora
+            </CardTitle>
           </CardHeader>
           <CardContent>
             <HourlyBarChart data={hourly.data} />
