@@ -47,7 +47,8 @@ export function StatCard({
 }: {
   label: string;
   value: string;
-  icon: LucideIcon;
+  /** Si se omite, la tarjeta no muestra icono y el texto usa todo el ancho. */
+  icon?: LucideIcon;
   sub?: string;
   accent?: Accent;
   /** "soft": tarjeta blanca con icono en caja de color. "solid": tarjeta
@@ -78,10 +79,10 @@ export function StatCard({
         )}
       >
         <div className="flex min-w-0 items-start justify-between gap-3">
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <p
               className={cn(
-                "break-words font-display font-bold text-white/80",
+                "truncate font-display font-bold text-white/80",
                 compact ? "text-[11px]" : "text-xs"
               )}
             >
@@ -89,7 +90,7 @@ export function StatCard({
             </p>
             <p
               className={cn(
-                "break-words font-display font-extrabold tracking-tight text-white",
+                "truncate font-display font-extrabold tracking-tight text-white",
                 compact ? "mt-1 text-lg" : "mt-1.5 text-2xl",
                 valueClassName
               )}
@@ -99,7 +100,7 @@ export function StatCard({
             {sub && (
               <p
                 className={cn(
-                  "break-words font-display font-semibold text-white/75",
+                  "truncate font-display font-semibold text-white/75",
                   compact ? "mt-0.5 text-[11px]" : "mt-1 text-xs"
                 )}
               >
@@ -107,7 +108,9 @@ export function StatCard({
               </p>
             )}
           </div>
-          <Icon className={cn("shrink-0 text-white", ICON_SIZE_CLASSES.icon[resolvedIconSize])} />
+          {Icon && (
+            <Icon className={cn("shrink-0 text-white", ICON_SIZE_CLASSES.icon[resolvedIconSize])} />
+          )}
         </div>
       </Card>
     );
@@ -116,10 +119,10 @@ export function StatCard({
   return (
     <Card className={cn("relative overflow-hidden", compact ? "p-4" : "p-5", className)}>
       <div className="flex min-w-0 items-start justify-between gap-3">
-        <div className="min-w-0">
+        <div className="min-w-0 flex-1">
           <p
             className={cn(
-              "break-words font-display font-bold text-muted-foreground",
+              "truncate font-display font-bold text-muted-foreground",
               compact ? "text-[11px]" : "text-xs"
             )}
           >
@@ -127,7 +130,7 @@ export function StatCard({
           </p>
           <p
             className={cn(
-              "break-words font-display font-extrabold tracking-tight",
+              "truncate font-display font-extrabold tracking-tight",
               compact ? "mt-1 text-lg" : "mt-1.5 text-2xl",
               valueClassName
             )}
@@ -137,7 +140,7 @@ export function StatCard({
           {sub && (
             <p
               className={cn(
-                "break-words font-display font-semibold text-muted-foreground",
+                "truncate font-display font-semibold text-muted-foreground",
                 compact ? "mt-0.5 text-[11px]" : "mt-1 text-xs"
               )}
             >
@@ -145,15 +148,17 @@ export function StatCard({
             </p>
           )}
         </div>
-        <div
-          className={cn(
-            "flex shrink-0 items-center justify-center",
-            ICON_SIZE_CLASSES.wrapper[resolvedIconSize],
-            ICON_BADGE_CLASSES[accent]
-          )}
-        >
-          <Icon className={ICON_SIZE_CLASSES.icon[resolvedIconSize]} />
-        </div>
+        {Icon && (
+          <div
+            className={cn(
+              "flex shrink-0 items-center justify-center",
+              ICON_SIZE_CLASSES.wrapper[resolvedIconSize],
+              ICON_BADGE_CLASSES[accent]
+            )}
+          >
+            <Icon className={ICON_SIZE_CLASSES.icon[resolvedIconSize]} />
+          </div>
+        )}
       </div>
     </Card>
   );

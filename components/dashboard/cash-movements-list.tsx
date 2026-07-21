@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ArrowDownRight, ArrowUpRight, ChevronDown } from "lucide-react";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   Table,
@@ -12,7 +13,8 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { EmptyState } from "@/components/shared/empty-state";
-import { formatDateTime, formatMoney, paymentMethodLabel } from "@/lib/format";
+import { cn } from "@/lib/utils";
+import { formatDateTime, formatMoney, paymentMethodBadgeVariant, paymentMethodLabel } from "@/lib/format";
 import type { CashMovement } from "@/lib/api/types";
 
 const PAGE_SIZE = 10;
@@ -31,35 +33,58 @@ export function CashMovementsList({ movements }: { movements: CashMovement[] }) 
   return (
     <div className="flex min-w-0 flex-col gap-3 p-5 md:px-0 md:pb-4 md:pt-0">
       {/* Mobile: tarjetas apiladas, cero scroll horizontal */}
-      <div className="flex min-w-0 flex-col gap-2 md:hidden">
-        {visible.map((m) => (
-          <div
-            key={m.id}
-            className="min-w-0 rounded-xl border border-border bg-card p-3.5 shadow-sm"
-          >
-            <div className="flex min-w-0 items-start justify-between gap-3">
-              {m.type === "income" ? (
-                <span className="flex items-center gap-1 text-sm font-medium text-success">
-                  <ArrowUpRight className="size-3.5" /> Ingreso
+      <div className="flex min-w-0 flex-col gap-3 md:hidden">
+        {visible.map((m) => {
+          const isIncome = m.type === "income";
+          return (
+            <div
+              key={m.id}
+              className="flex min-w-0 items-center gap-3 rounded-[20px] border border-border/60 bg-card p-4 shadow-sm"
+            >
+              <div
+                className={cn(
+                  "flex size-11 shrink-0 items-center justify-center rounded-full",
+                  isIncome ? "bg-success/10" : "bg-destructive/10"
+                )}
+              >
+                {isIncome ? (
+                  <ArrowUpRight className="size-5 text-success" />
+                ) : (
+                  <ArrowDownRight className="size-5 text-destructive" />
+                )}
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate font-display text-base font-semibold text-foreground">
+                  {m.category ?? (isIncome ? "Ingreso" : "Egreso")}
+                </p>
+                <p className="mt-0.5 truncate text-sm text-muted-foreground">
+                  {m.description?.trim() || formatDateTime(m.created_at)}
+                </p>
+                {m.description?.trim() && (
+                  <p className="mt-0.5 truncate text-xs text-muted-foreground">
+                    {formatDateTime(m.created_at)}
+                  </p>
+                )}
+              </div>
+              <div className="flex shrink-0 flex-col items-end gap-1.5">
+                <span
+                  className={cn(
+                    "font-display text-base font-bold",
+                    isIncome ? "text-success" : "text-destructive"
+                  )}
+                >
+                  {isIncome ? "+" : "-"}
+                  {formatMoney(m.amount)}
                 </span>
-              ) : (
-                <span className="flex items-center gap-1 text-sm font-medium text-destructive">
-                  <ArrowDownRight className="size-3.5" /> Egreso
-                </span>
-              )}
-              <span className="shrink-0 text-sm font-semibold">{formatMoney(m.amount)}</span>
+                {m.payment_method && (
+                  <Badge variant={paymentMethodBadgeVariant(m.payment_method)} className="text-[13px]">
+                    {paymentMethodLabel(m.payment_method)}
+                  </Badge>
+                )}
+              </div>
             </div>
-            <div className="mt-1.5 flex min-w-0 flex-wrap items-center gap-x-3 gap-y-1 text-xs text-muted-foreground">
-              <span className="truncate">{m.category ?? "—"}</span>
-              <span>·</span>
-              <span>{m.payment_method ? paymentMethodLabel(m.payment_method) : "—"}</span>
-            </div>
-            {m.description && (
-              <p className="mt-1 truncate text-xs text-muted-foreground">{m.description}</p>
-            )}
-            <p className="mt-1 text-[11px] text-muted-foreground">{formatDateTime(m.created_at)}</p>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Desktop: tabla completa */}
@@ -93,7 +118,10 @@ export function CashMovementsList({ movements }: { movements: CashMovement[] }) 
               <TableCell className="text-muted-foreground">
                 {m.payment_method ? paymentMethodLabel(m.payment_method) : "—"}
               </TableCell>
-              <TableCell className="text-right font-medium">{formatMoney(m.amount)}</TableCell>
+              <TableCell className="text-right font-semibold">
+                {m.type === "income" ? "+" : "-"}
+                {formatMoney(m.amount)}
+              </TableCell>
               <TableCell className="text-muted-foreground">{formatDateTime(m.created_at)}</TableCell>
             </TableRow>
           ))}
@@ -106,7 +134,7 @@ export function CashMovementsList({ movements }: { movements: CashMovement[] }) 
           variant="outline"
           size="sm"
           onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-          className="mt-1 self-center"
+          className="mt-1 self-center rounded-full"
         >
           <ChevronDown className="size-4" />
           Cargar {Math.min(PAGE_SIZE, remaining)} más ({remaining} restantes)

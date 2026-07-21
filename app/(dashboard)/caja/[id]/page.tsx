@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowLeft, ArrowDownRight, ArrowUpRight, Calculator, CreditCard, Tag, Wallet } from "lucide-react";
+import { ArrowLeft, Calculator, CreditCard, Tag, Wallet } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -61,19 +61,17 @@ export default async function CajaSessionPage({ params }: PageProps) {
           <StatCard
             label="Ingresos totales"
             value={formatMoney(session.income_total)}
-            icon={ArrowUpRight}
             accent="success"
+            variant="solid"
             size="compact"
-            iconSize="lg"
             valueClassName="text-2xl"
           />
           <StatCard
             label="Egresos totales"
             value={formatMoney(session.expense_total)}
-            icon={ArrowDownRight}
-            accent="destructive"
+            accent="warning"
+            variant="solid"
             size="compact"
-            iconSize="lg"
             valueClassName="text-2xl"
           />
         </div>
