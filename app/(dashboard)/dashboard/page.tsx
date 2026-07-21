@@ -128,7 +128,7 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader className="flex-row items-center justify-between space-y-0">
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 font-display text-base font-bold text-foreground">
               <ClipboardList className="size-4" /> Pedidos pendientes
             </CardTitle>
           </CardHeader>
@@ -160,7 +160,7 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
 
         <Card>
           <CardHeader className="flex-row items-center justify-between space-y-0">
-            <CardTitle className="flex items-center gap-2">
+            <CardTitle className="flex items-center gap-2 font-display text-base font-bold text-foreground">
               <PackageSearch className="size-4" /> Stock bajo
             </CardTitle>
           </CardHeader>
