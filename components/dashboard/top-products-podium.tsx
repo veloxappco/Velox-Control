@@ -1,23 +1,42 @@
 "use client";
 
 import { useState } from "react";
-import { Trophy } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { BarChart3, ChevronRight, Medal, Trophy } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import { EmptyState } from "@/components/shared/empty-state";
 import { cn } from "@/lib/utils";
 import { formatMoney, formatNumber } from "@/lib/format";
 import type { TopProductItem } from "@/lib/api/types";
 
-// Orden visual del podio: 2° a la izquierda, 1° al centro (más alto),
-// 3° a la derecha — con `order-*` reacomodamos el orden del DOM.
-// Colores sólidos del sistema de Badges: verde (success) para el 1°, azul
-// (accent) para el 2°, naranja (warning) para el 3°, letras blancas.
-const PODIUM = [
-  { rank: 1, visualOrder: "order-2", height: "h-24", medal: "🥇", badge: "bg-success text-white" },
-  { rank: 2, visualOrder: "order-1", height: "h-16", medal: "🥈", badge: "bg-accent text-white" },
-  { rank: 3, visualOrder: "order-3", height: "h-12", medal: "🥉", badge: "bg-warning text-white" },
-] as const;
+// Un color muy sutil por posición del podio — mismo verde/azul/naranja que
+// el resto de la app, pero en los tonos pastel de Tailwind (50/100/700) que
+// no tenemos como token propio.
+const RANK_STYLES = {
+  1: {
+    border: "border-green-100",
+    bg: "bg-green-50",
+    iconBg: "bg-green-100",
+    iconText: "text-green-600",
+    badgeBg: "bg-green-100",
+    badgeText: "text-green-700",
+  },
+  2: {
+    border: "border-blue-100",
+    bg: "bg-blue-50",
+    iconBg: "bg-blue-100",
+    iconText: "text-blue-600",
+    badgeBg: "bg-blue-100",
+    badgeText: "text-blue-700",
+  },
+  3: {
+    border: "border-orange-100",
+    bg: "bg-orange-50",
+    iconBg: "bg-orange-100",
+    iconText: "text-orange-600",
+    badgeBg: "bg-orange-100",
+    badgeText: "text-orange-700",
+  },
+} as const;
 
 const REVEAL_CHUNK = 20;
 
@@ -26,15 +45,11 @@ export function TopProductsPodium({ products }: { products: TopProductItem[] }) 
 
   if (products.length === 0) {
     return (
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Trophy className="size-4" /> Top de productos
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+      <Card className="rounded-[20px] p-5 shadow-sm">
+        <Header />
+        <div className="mt-5">
           <EmptyState icon={Trophy} title="Sin ventas de productos en este periodo" />
-        </CardContent>
+        </div>
       </Card>
     );
   }
@@ -45,84 +60,109 @@ export function TopProductsPodium({ products }: { products: TopProductItem[] }) 
   const rest = products.slice(3, REVEAL_CHUNK);
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <Trophy className="size-4" /> Top de productos
-        </CardTitle>
-      </CardHeader>
-      <CardContent className="flex flex-col gap-5">
-        <div className="grid grid-cols-3 items-end gap-2">
-          {PODIUM.map((slot) => {
-            const product = top3[slot.rank - 1];
-            if (!product) return <div key={slot.rank} className={slot.visualOrder} />;
-            return (
-              <div
-                key={slot.rank}
-                className={cn("flex min-w-0 flex-col items-center gap-2", slot.visualOrder)}
-              >
-                <div className="flex min-w-0 flex-col items-center gap-1 text-center">
-                  <span className="text-xl leading-none">{slot.medal}</span>
-                  <p className="line-clamp-2 min-w-0 text-xs font-medium">
-                    {product.nombre_producto}
-                  </p>
-                  <p className="text-[11px] text-muted-foreground">
-                    {formatNumber(product.cantidad_vendida)} und.
-                  </p>
-                </div>
-                <div
-                  className={cn(
-                    "flex w-full min-w-0 flex-col items-center justify-center gap-0.5 rounded-t-lg px-1",
-                    slot.height,
-                    slot.badge
-                  )}
-                >
-                  <span className="text-base font-bold">{slot.rank}°</span>
-                  <span className="truncate text-[10px] font-medium">
-                    {formatMoney(product.total_vendido)}
-                  </span>
-                </div>
-              </div>
-            );
-          })}
-        </div>
+    <Card className="rounded-[20px] p-5 shadow-sm">
+      <Header />
 
-        {rest.length > 0 && (
-          <div className="flex flex-col gap-2">
-            {showAll &&
-              rest.map((p, i) => (
-                <div
-                  key={p.producto_id ?? i}
-                  className="flex min-w-0 items-center justify-between gap-3 rounded-lg border border-border/60 px-3 py-2.5"
-                >
-                  <div className="flex min-w-0 items-center gap-2.5">
-                    <span className="flex size-6 shrink-0 items-center justify-center rounded-full bg-secondary text-xs font-medium text-muted-foreground">
-                      {i + 4}
-                    </span>
-                    <div className="min-w-0">
-                      <p className="truncate text-sm font-medium">{p.nombre_producto}</p>
-                      <p className="text-xs text-muted-foreground">
-                        {formatNumber(p.cantidad_vendida)} und.
-                      </p>
-                    </div>
+      <div className="mt-5 flex flex-col gap-3">
+        {top3.map((product, index) => {
+          const rank = (index + 1) as 1 | 2 | 3;
+          const styles = RANK_STYLES[rank];
+          return (
+            <div
+              key={product.producto_id ?? rank}
+              className={cn(
+                "flex min-w-0 items-center gap-3 rounded-[20px] border p-4",
+                styles.border,
+                styles.bg
+              )}
+            >
+              <div
+                className={cn(
+                  "flex size-12 shrink-0 items-center justify-center rounded-full",
+                  styles.iconBg
+                )}
+              >
+                <Medal className={cn("size-5", styles.iconText)} />
+              </div>
+              <div className="min-w-0 flex-1">
+                <p className="truncate font-display text-lg font-semibold text-foreground">
+                  {product.nombre_producto}
+                </p>
+                <p className="mt-0.5 text-sm text-muted-foreground">
+                  {formatNumber(product.cantidad_vendida)} unidades
+                </p>
+              </div>
+              <div
+                className={cn(
+                  "shrink-0 rounded-xl px-3 py-2 font-display text-lg font-bold",
+                  styles.badgeBg,
+                  styles.badgeText
+                )}
+              >
+                {formatMoney(product.total_vendido)}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+
+      {rest.length > 0 && (
+        <div className="mt-3 flex flex-col gap-3">
+          <button
+            type="button"
+            onClick={() => setShowAll((v) => !v)}
+            className="flex items-center justify-between gap-3 rounded-[20px] border border-border/60 bg-card px-4 py-3.5 text-left shadow-sm transition-all duration-200 hover:bg-secondary/30 hover:shadow-md active:scale-[0.99]"
+          >
+            <span className="flex items-center gap-2.5 font-display text-sm font-semibold text-primary">
+              <BarChart3 className="size-4 shrink-0" />
+              {showAll ? "Ver menos" : `Ver ranking completo (${rest.length} más)`}
+            </span>
+            <ChevronRight
+              className={cn(
+                "size-4 shrink-0 text-muted-foreground transition-transform duration-200",
+                showAll && "rotate-90"
+              )}
+            />
+          </button>
+
+          {showAll && (
+            <div className="flex flex-col divide-y divide-border/50">
+              {rest.map((p, i) => (
+                <div key={p.producto_id ?? i} className="flex min-w-0 items-center gap-3 py-4">
+                  <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary text-[15px] font-medium text-foreground/80">
+                    {i + 4}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-display text-lg font-semibold text-foreground">
+                      {p.nombre_producto}
+                    </p>
+                    <p className="mt-0.5 text-sm text-muted-foreground">
+                      {formatNumber(p.cantidad_vendida)} unidades
+                    </p>
                   </div>
-                  <span className="shrink-0 text-sm font-medium">
+                  <span className="shrink-0 font-display text-lg font-bold text-foreground">
                     {formatMoney(p.total_vendido)}
                   </span>
                 </div>
               ))}
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
-              onClick={() => setShowAll((v) => !v)}
-              className="self-start"
-            >
-              {showAll ? "Ver menos" : `Ver ranking completo (${rest.length} más)`}
-            </Button>
-          </div>
-        )}
-      </CardContent>
+            </div>
+          )}
+        </div>
+      )}
     </Card>
+  );
+}
+
+function Header() {
+  return (
+    <div className="flex items-center gap-3">
+      <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
+        <Trophy className="size-6 text-primary" />
+      </div>
+      <div className="min-w-0">
+        <h3 className="font-display text-lg font-bold text-foreground">Top de productos</h3>
+        <p className="text-sm text-muted-foreground">Los productos más vendidos</p>
+      </div>
+    </div>
   );
 }
