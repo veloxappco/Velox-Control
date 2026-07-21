@@ -42,30 +42,35 @@ async function EgresosContent({ from, to }: { from: string; to: string }) {
 
   return (
     <div className="flex min-w-0 flex-col gap-6">
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
+      <div className="flex min-w-0 flex-col gap-3">
         <StatCard
           label="Total egresos"
           value={formatMoney(report.total)}
           icon={Receipt}
           accent="warning"
           variant="solid"
-          className="col-span-2 sm:col-span-1"
+          valueClassName="text-4xl"
         />
-        <StatCard
-          label="Movimientos"
-          value={formatNumber(report.count)}
-          icon={ListChecks}
-          accent="warning"
-          size="compact"
-        />
-        <StatCard
-          label="Categoría principal"
-          value={topCategory ? topCategory.category : "—"}
-          sub={topCategory ? formatMoney(topCategory.total) : undefined}
-          icon={Tags}
-          accent="warning"
-          size="compact"
-        />
+        <div className="grid grid-cols-5 gap-3">
+          <StatCard
+            label="Movimientos"
+            value={formatNumber(report.count)}
+            icon={ListChecks}
+            accent="success"
+            size="compact"
+            valueClassName="text-2xl"
+            className="col-span-2"
+          />
+          <StatCard
+            label="Categoría principal"
+            value={topCategory ? topCategory.category : "—"}
+            sub={topCategory ? formatMoney(topCategory.total) : undefined}
+            icon={Tags}
+            accent="success"
+            size="compact"
+            className="col-span-3"
+          />
+        </div>
       </div>
 
       <div>

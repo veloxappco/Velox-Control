@@ -33,6 +33,7 @@ export function StatCard({
   variant = "soft",
   size = "default",
   className,
+  valueClassName,
 }: {
   label: string;
   value: string;
@@ -46,6 +47,9 @@ export function StatCard({
    * chicas y menos padding, para que la cifra nunca se corte. */
   size?: "default" | "compact";
   className?: string;
+  /** Sobrescribe el tamaño de texto de la cifra (p. ej. "text-4xl") cuando
+   * una tarjeta puntual necesita destacar más que el resto. */
+  valueClassName?: string;
 }) {
   const compact = size === "compact";
 
@@ -72,7 +76,8 @@ export function StatCard({
             <p
               className={cn(
                 "break-words font-display font-extrabold tracking-tight text-white",
-                compact ? "mt-1 text-lg" : "mt-1.5 text-2xl"
+                compact ? "mt-1 text-lg" : "mt-1.5 text-2xl",
+                valueClassName
               )}
             >
               {value}
@@ -109,7 +114,8 @@ export function StatCard({
           <p
             className={cn(
               "break-words font-display font-extrabold tracking-tight",
-              compact ? "mt-1 text-lg" : "mt-1.5 text-2xl"
+              compact ? "mt-1 text-lg" : "mt-1.5 text-2xl",
+              valueClassName
             )}
           >
             {value}

@@ -60,7 +60,7 @@ export function CategoryBreakdown({
                     <div className="flex min-w-0 items-center gap-2">
                       <div className="h-1.5 min-w-0 flex-1 overflow-hidden rounded-full bg-secondary">
                         <div
-                          className="h-full bg-gradient-brand transition-all"
+                          className="h-full bg-success transition-all"
                           style={{ width: `${pct}%` }}
                         />
                       </div>
