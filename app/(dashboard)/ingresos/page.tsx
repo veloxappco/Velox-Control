@@ -1,6 +1,4 @@
 import { Suspense } from "react";
-import { ClipboardList } from "lucide-react";
-import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { SalesBreakdown } from "@/components/dashboard/sales-breakdown";
 import { OrdersModule } from "@/components/dashboard/orders-module";
 import { TopProductsPodium } from "@/components/dashboard/top-products-podium";
@@ -55,16 +53,7 @@ async function IngresosContent({ from, to }: { from: string; to: string }) {
     <div className="flex min-w-0 flex-col gap-6">
       <SalesBreakdown sales={summary.sales} title="Ingresos por canal" />
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <ClipboardList className="size-4" /> Pedidos en línea
-          </CardTitle>
-        </CardHeader>
-        <div className="px-5 pb-5">
-          <OrdersModule orders={ordersInRange} />
-        </div>
-      </Card>
+      <OrdersModule orders={ordersInRange} />
 
       <TopProductsPodium products={topProducts.data} />
     </div>

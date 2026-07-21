@@ -155,18 +155,20 @@ type BadgeVariant =
   | "accent"
   | "outline";
 
+// Un color consistente por estado en toda la app: Pendiente=azul,
+// En Preparación=naranja, Listo=verde, Entregado=morado, Cancelado=rojo.
 export function orderStatusVariant(status: string): BadgeVariant {
   switch (orderStatusLabel(status)) {
-    case "Entregado":
+    case "Pendiente":
+      return "accent";
+    case "En Preparación":
+      return "warning";
+    case "Listo":
       return "success";
+    case "Entregado":
+      return "default";
     case "Cancelado":
       return "destructive";
-    case "Pendiente":
-      return "warning";
-    case "En Preparación":
-      return "accent";
-    case "Listo":
-      return "default";
   }
 }
 
