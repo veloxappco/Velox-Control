@@ -2,8 +2,7 @@ import { Suspense } from "react";
 import {
   DollarSign,
   ShoppingBag,
-  Wallet,
-  AlertTriangle,
+  ShoppingCart,
   ClipboardList,
   PackageSearch,
 } from "lucide-react";
@@ -64,37 +63,34 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
 
   return (
     <div className="flex flex-col gap-6">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 md:gap-4">
+      <div className="flex flex-col gap-3">
         <StatCard
           label="Ventas totales"
           value={formatMoney(summary.sales.total)}
           sub={`${formatNumber(summary.sales.count)} ventas · ticket ${formatMoney(summary.sales.average_ticket)}`}
           icon={DollarSign}
           accent="primary"
+          variant="solid"
+          valueClassName="text-4xl"
         />
-        <StatCard
-          label="Pedidos"
-          value={formatNumber(summary.orders.count)}
-          sub={`${summary.orders.pending} pendientes · ${summary.orders.completed} completados`}
-          icon={ShoppingBag}
-          accent="accent"
-        />
-        <StatCard
-          label="Caja neta"
-          value={formatMoney(summary.cash.net)}
-          sub={`Ingresos ${formatMoney(summary.cash.income)} · Egresos ${formatMoney(summary.cash.expenses)}`}
-          icon={Wallet}
-          accent="success"
-        />
-        <StatCard
-          label="Alertas de inventario"
-          value={formatNumber(
-            summary.inventory.low_stock_products + summary.inventory.low_stock_ingredients
-          )}
-          sub={`${summary.inventory.negative_stock_products + summary.inventory.negative_stock_ingredients} en negativo`}
-          icon={AlertTriangle}
-          accent="warning"
-        />
+        <div className="grid grid-cols-2 gap-3">
+          <StatCard
+            label="Pedidos"
+            value={formatNumber(summary.orders.count)}
+            sub={`${summary.orders.pending} pendientes · ${summary.orders.completed} completados`}
+            icon={ShoppingBag}
+            accent="accent"
+            size="compact"
+          />
+          <StatCard
+            label="Total ventas"
+            value={formatNumber(summary.sales.pos.count + summary.sales.online.completed)}
+            sub={`${formatNumber(summary.sales.pos.count)} POS · ${formatNumber(summary.sales.online.completed)} en línea`}
+            icon={ShoppingCart}
+            accent="success"
+            size="compact"
+          />
+        </div>
       </div>
 
       <SalesBreakdown sales={summary.sales} />
@@ -190,10 +186,12 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
 function DashboardSkeleton() {
   return (
     <div className="flex flex-col gap-6">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4 md:gap-4">
-        {Array.from({ length: 4 }).map((_, i) => (
-          <Skeleton key={i} className="h-[104px] rounded-xl" />
-        ))}
+      <div className="flex flex-col gap-3">
+        <Skeleton className="h-28 rounded-xl" />
+        <div className="grid grid-cols-2 gap-3">
+          <Skeleton className="h-24 rounded-xl" />
+          <Skeleton className="h-24 rounded-xl" />
+        </div>
       </div>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
         <Skeleton className="h-[340px] rounded-xl lg:col-span-3" />
