@@ -103,7 +103,7 @@ export function OrdersModule({ orders }: { orders: OrderListItem[] }) {
         </button>
       </div>
 
-      <div className="flex flex-wrap gap-2">
+      <div className="flex flex-wrap gap-1.5">
         {STATUS_CHIPS.map(({ key, label }) => {
           const count =
             key === "Todos"
@@ -121,13 +121,13 @@ export function OrdersModule({ orders }: { orders: OrderListItem[] }) {
               type="button"
               onClick={() => setStatusFilter(key)}
               className={cn(
-                "flex shrink-0 items-center gap-1.5 rounded-full border px-3.5 py-2 font-display text-sm font-semibold transition-all duration-200",
+                "flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1.5 font-display text-xs font-semibold transition-all duration-200",
                 active
                   ? cn("border-transparent text-white shadow-md", colors.solid)
                   : "border-border bg-card text-foreground/70 hover:bg-secondary/40"
               )}
             >
-              <Icon className={cn("size-4", active ? "text-white" : colors.text)} />
+              <Icon className={cn("size-3.5 shrink-0", active ? "text-white" : colors.text)} />
               {label}
               <span className={active ? "text-white/80" : "text-muted-foreground"}>({count})</span>
             </button>
