@@ -26,6 +26,13 @@ const ICON_BADGE_CLASSES: Record<Accent, string> = {
   destructive: "bg-destructive/10 text-destructive",
 };
 
+// Círculo grande (tipo "app icon" pastel) en vez de la caja chica cuadrada —
+// para las tarjetas que quieran destacar el icono, como Ventas/Pedidos.
+const ICON_SIZE_CLASSES = {
+  wrapper: { sm: "size-8 rounded-xl", md: "size-10 rounded-xl", lg: "size-16 rounded-full" },
+  icon: { sm: "size-4", md: "size-5", lg: "size-7" },
+} as const;
+
 export function StatCard({
   label,
   value,
@@ -34,6 +41,7 @@ export function StatCard({
   accent = "primary",
   variant = "soft",
   size = "default",
+  iconSize,
   className,
   valueClassName,
 }: {
@@ -48,12 +56,16 @@ export function StatCard({
   /** "compact": para grids angostos (2 columnas en mobile) — letras más
    * chicas y menos padding, para que la cifra nunca se corte. */
   size?: "default" | "compact";
+  /** "lg": icono en círculo grande y pastel, como Ventas/Pedidos en el
+   * Dashboard. Por defecto sigue el tamaño chico/normal de `size`. */
+  iconSize?: "sm" | "md" | "lg";
   className?: string;
   /** Sobrescribe el tamaño de texto de la cifra (p. ej. "text-4xl") cuando
    * una tarjeta puntual necesita destacar más que el resto. */
   valueClassName?: string;
 }) {
   const compact = size === "compact";
+  const resolvedIconSize = iconSize ?? (compact ? "sm" : "md");
 
   if (variant === "solid") {
     return (
@@ -95,7 +107,7 @@ export function StatCard({
               </p>
             )}
           </div>
-          <Icon className={cn("shrink-0 text-white", compact ? "size-4" : "size-5")} />
+          <Icon className={cn("shrink-0 text-white", ICON_SIZE_CLASSES.icon[resolvedIconSize])} />
         </div>
       </Card>
     );
@@ -135,12 +147,12 @@ export function StatCard({
         </div>
         <div
           className={cn(
-            "flex shrink-0 items-center justify-center rounded-xl",
-            compact ? "size-8" : "size-10",
+            "flex shrink-0 items-center justify-center",
+            ICON_SIZE_CLASSES.wrapper[resolvedIconSize],
             ICON_BADGE_CLASSES[accent]
           )}
         >
-          <Icon className={compact ? "size-4" : "size-5"} />
+          <Icon className={ICON_SIZE_CLASSES.icon[resolvedIconSize]} />
         </div>
       </div>
     </Card>

@@ -2,7 +2,7 @@ import { Suspense } from "react";
 import {
   DollarSign,
   ShoppingBag,
-  ShoppingCart,
+  Store,
   ClipboardList,
   PackageSearch,
 } from "lucide-react";
@@ -81,15 +81,17 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
             icon={ShoppingBag}
             accent="accent"
             size="compact"
+            iconSize="lg"
             valueClassName="text-2xl"
           />
           <StatCard
             label="Total ventas"
             value={formatNumber(summary.sales.pos.count + summary.sales.online.completed)}
             sub={`${formatNumber(summary.sales.pos.count)} POS · ${formatNumber(summary.sales.online.completed)} en línea`}
-            icon={ShoppingCart}
+            icon={Store}
             accent="success"
             size="compact"
+            iconSize="lg"
             valueClassName="text-2xl"
           />
         </div>
