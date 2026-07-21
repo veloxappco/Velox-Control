@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowDownRight, ArrowUpRight, ChevronDown } from "lucide-react";
+import { ArrowDownRight, ArrowUpRight } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
 import {
   Table,
   TableBody,
@@ -13,6 +12,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { EmptyState } from "@/components/shared/empty-state";
+import { LoadMoreButton } from "@/components/shared/load-more-button";
 import { cn } from "@/lib/utils";
 import { formatDateTime, formatMoney, paymentMethodBadgeVariant, paymentMethodLabel } from "@/lib/format";
 import type { CashMovement } from "@/lib/api/types";
@@ -129,16 +129,10 @@ export function CashMovementsList({ movements }: { movements: CashMovement[] }) 
       </Table>
 
       {hasMore && (
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
+        <LoadMoreButton
+          label={`Cargar ${Math.min(PAGE_SIZE, remaining)} más (${remaining} restantes)`}
           onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-          className="mt-1 self-center rounded-full"
-        >
-          <ChevronDown className="size-4" />
-          Cargar {Math.min(PAGE_SIZE, remaining)} más ({remaining} restantes)
-        </Button>
+        />
       )}
     </div>
   );

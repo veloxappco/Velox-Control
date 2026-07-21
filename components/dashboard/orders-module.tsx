@@ -1,10 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ChevronDown, ShoppingBag, SlidersHorizontal, LayoutGrid } from "lucide-react";
+import { ShoppingBag, SlidersHorizontal, LayoutGrid } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EmptyState } from "@/components/shared/empty-state";
+import { LoadMoreButton } from "@/components/shared/load-more-button";
 import { OrderCard } from "@/components/dashboard/order-card";
 import { OrderDetailSheet } from "@/components/dashboard/order-detail-sheet";
 import { cn } from "@/lib/utils";
@@ -126,16 +127,10 @@ export function OrdersModule({ orders }: { orders: OrderListItem[] }) {
           ))}
 
           {hasMore && (
-            <Button
-              type="button"
-              variant="outline"
-              size="sm"
+            <LoadMoreButton
+              label={`Cargar ${Math.min(PAGE_SIZE, remaining)} más (${remaining} restantes)`}
               onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-              className="mt-1 self-center rounded-full"
-            >
-              <ChevronDown className="size-4" />
-              Cargar {Math.min(PAGE_SIZE, remaining)} más ({remaining} restantes)
-            </Button>
+            />
           )}
         </div>
       )}

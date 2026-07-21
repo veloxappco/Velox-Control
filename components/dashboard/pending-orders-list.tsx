@@ -1,9 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import { ChevronDown, ClipboardList } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { ClipboardList } from "lucide-react";
 import { EmptyState } from "@/components/shared/empty-state";
+import { LoadMoreButton } from "@/components/shared/load-more-button";
 import { OrderCard } from "@/components/dashboard/order-card";
 import { OrderDetailSheet } from "@/components/dashboard/order-detail-sheet";
 import type { OrderListItem } from "@/lib/api/types";
@@ -31,16 +31,10 @@ export function PendingOrdersList({ orders }: { orders: OrderListItem[] }) {
       ))}
 
       {hasMore && (
-        <Button
-          type="button"
-          variant="outline"
-          size="sm"
+        <LoadMoreButton
+          label={`Cargar ${Math.min(PAGE_SIZE, remaining)} más (${remaining} restantes)`}
           onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-          className="mt-1 self-center rounded-full"
-        >
-          <ChevronDown className="size-4" />
-          Cargar {Math.min(PAGE_SIZE, remaining)} más ({remaining} restantes)
-        </Button>
+        />
       )}
 
       <OrderDetailSheet order={selected} onClose={() => setSelected(null)} />
