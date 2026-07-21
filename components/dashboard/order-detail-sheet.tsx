@@ -72,9 +72,9 @@ function OrderDetailContent({ order }: { order: OrderListItem }) {
         />
       </div>
 
-      <div className="flex items-center justify-between rounded-[20px] bg-secondary/40 px-4 py-3.5">
-        <span className="text-sm text-muted-foreground">Total del pedido</span>
-        <span className="font-display text-lg font-extrabold text-foreground">{formatMoney(order.total)}</span>
+      <div className="flex items-center justify-between rounded-[20px] bg-primary px-4 py-3.5 shadow-sm">
+        <span className="text-sm text-white/80">Total del pedido</span>
+        <span className="font-display text-lg font-extrabold text-white">{formatMoney(order.total)}</span>
       </div>
     </div>
   );
