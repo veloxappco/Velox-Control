@@ -1,6 +1,6 @@
 import { Suspense } from "react";
-import { PackageSearch, AlertTriangle, TrendingDown } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { PackageSearch, TrendingDown } from "lucide-react";
+import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -56,31 +56,43 @@ async function InventarioContent({ from, to }: { from: string; to: string }) {
 
   return (
     <div className="flex min-w-0 flex-col gap-6">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          label="Productos bajo stock"
-          value={formatNumber(alerts.summary.low_stock_products)}
-          icon={PackageSearch}
-          accent="warning"
-        />
-        <StatCard
-          label="Insumos bajo stock"
-          value={formatNumber(alerts.summary.low_stock_ingredients)}
-          icon={PackageSearch}
-          accent="warning"
-        />
-        <StatCard
-          label="Productos en negativo"
-          value={formatNumber(alerts.summary.negative_products)}
-          icon={AlertTriangle}
-          accent="destructive"
-        />
-        <StatCard
-          label="Insumos en negativo"
-          value={formatNumber(alerts.summary.negative_ingredients)}
-          icon={AlertTriangle}
-          accent="destructive"
-        />
+      <div className="flex min-w-0 flex-col gap-3">
+        <div className="grid grid-cols-2 gap-3">
+          <StatCard
+            label="Productos bajo stock"
+            value={formatNumber(alerts.summary.low_stock_products)}
+            accent="warning"
+            variant="solid"
+            size="compact"
+            valueClassName="text-2xl"
+          />
+          <StatCard
+            label="Insumos bajo stock"
+            value={formatNumber(alerts.summary.low_stock_ingredients)}
+            accent="warning"
+            variant="solid"
+            size="compact"
+            valueClassName="text-2xl"
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <StatCard
+            label="Productos en negativo"
+            value={formatNumber(alerts.summary.negative_products)}
+            accent="destructive"
+            variant="solid"
+            size="compact"
+            valueClassName="text-2xl"
+          />
+          <StatCard
+            label="Insumos en negativo"
+            value={formatNumber(alerts.summary.negative_ingredients)}
+            accent="destructive"
+            variant="solid"
+            size="compact"
+            valueClassName="text-2xl"
+          />
+        </div>
       </div>
 
       <Tabs defaultValue="products">
@@ -99,15 +111,17 @@ async function InventarioContent({ from, to }: { from: string; to: string }) {
         </TabsContent>
       </Tabs>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <TrendingDown className="size-4" /> Consumo de insumos
-          </CardTitle>
-        </CardHeader>
-        <CardContent className={consumption.data.length === 0 ? undefined : "p-0"}>
-          <ConsumptionSection items={consumption.data} />
-        </CardContent>
+      <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
+        <div className="flex items-center gap-3 p-5 pb-4">
+          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
+            <TrendingDown className="size-6 text-primary" />
+          </div>
+          <div className="min-w-0">
+            <h3 className="font-display text-lg font-bold text-foreground">Consumo de insumos</h3>
+            <p className="text-sm text-muted-foreground">Insumos consumidos en el periodo</p>
+          </div>
+        </div>
+        <ConsumptionSection items={consumption.data} />
       </Card>
     </div>
   );
@@ -188,24 +202,26 @@ function StockTable({
         {items.map((item) => (
           <div
             key={item.id}
-            className="min-w-0 rounded-xl border border-border bg-card p-3.5 shadow-sm"
+            className="min-w-0 rounded-[20px] border border-border/60 bg-card p-4 shadow-sm"
           >
             <div className="flex min-w-0 items-start justify-between gap-3">
-              <p className="min-w-0 truncate text-sm font-medium">{item.name}</p>
-              <Badge variant={item.is_negative ? "destructive" : "warning"} className="shrink-0">
+              <p className="min-w-0 truncate font-display text-base font-semibold text-foreground">
+                {item.name}
+              </p>
+              <Badge variant={item.is_negative ? "destructive" : "warning"} className="shrink-0 text-[13px]">
                 {item.is_negative ? "Negativo" : "Stock bajo"}
               </Badge>
             </div>
-            <div className="mt-2 flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1 text-xs text-muted-foreground">
+            <div className="mt-2 flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
               <span className="truncate">
                 Stock:{" "}
-                <span className="font-medium text-foreground">
+                <span className="font-semibold text-foreground">
                   {formatNumber(item.stock)}
                   {showUnit && item.unit ? ` ${item.unit}` : ""}
                 </span>
               </span>
               <span className="truncate">
-                Mínimo: <span className="font-medium text-foreground">{formatNumber(item.min_stock)}</span>
+                Mínimo: <span className="font-semibold text-foreground">{formatNumber(item.min_stock)}</span>
               </span>
             </div>
           </div>
@@ -252,32 +268,42 @@ function StockTable({
 // ---------- Consumo de insumos — MF, con costo total del periodo ----------
 function ConsumptionSection({ items }: { items: IngredientConsumptionItem[] }) {
   if (items.length === 0) {
-    return <EmptyState icon={TrendingDown} title="Sin consumo registrado en el periodo" />;
+    return (
+      <div className="px-5 pb-5">
+        <EmptyState icon={TrendingDown} title="Sin consumo registrado en el periodo" />
+      </div>
+    );
   }
 
   const totalCost = items.reduce((acc, item) => acc + item.total_cost, 0);
 
   return (
-    <div className="flex min-w-0 flex-col gap-3 p-5 md:p-0">
-      <div className="flex min-w-0 items-center justify-between gap-2 rounded-lg bg-secondary/40 px-4 py-3 md:mx-5 md:mt-5">
-        <span className="text-sm text-muted-foreground">
+    <div className="flex min-w-0 flex-col gap-3 pb-5">
+      <div className="mx-5 flex min-w-0 items-center justify-between gap-2 rounded-[20px] bg-primary px-4 py-3.5 shadow-sm">
+        <span className="text-sm text-white/80">
           Costo total del periodo ({items.length} insumo{items.length === 1 ? "" : "s"})
         </span>
-        <span className="shrink-0 text-lg font-semibold">{formatMoney(totalCost)}</span>
+        <span className="shrink-0 font-display text-lg font-extrabold text-white">
+          {formatMoney(totalCost)}
+        </span>
       </div>
 
       {/* Mobile: tarjetas */}
-      <div className="flex min-w-0 flex-col gap-2 md:hidden">
+      <div className="flex min-w-0 flex-col gap-2 px-5 md:hidden">
         {items.map((item) => (
           <div
             key={item.ingredient_id}
-            className="min-w-0 rounded-xl border border-border bg-card p-3.5 shadow-sm"
+            className="min-w-0 rounded-[20px] border border-border/60 bg-card p-4 shadow-sm"
           >
             <div className="flex min-w-0 items-start justify-between gap-3">
-              <p className="min-w-0 truncate text-sm font-medium">{item.name}</p>
-              <span className="shrink-0 text-sm font-semibold">{formatMoney(item.total_cost)}</span>
+              <p className="min-w-0 truncate font-display text-base font-semibold text-foreground">
+                {item.name}
+              </p>
+              <span className="shrink-0 font-display text-base font-bold text-foreground">
+                {formatMoney(item.total_cost)}
+              </span>
             </div>
-            <p className="mt-1 truncate text-xs text-muted-foreground">
+            <p className="mt-1 truncate text-sm text-muted-foreground">
               {formatNumber(item.quantity)} {item.unit ?? ""} consumidos
             </p>
           </div>
