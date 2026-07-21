@@ -1,7 +1,7 @@
 import { Suspense } from "react";
 import Link from "next/link";
-import { Wallet, ArrowUpRight, ArrowDownRight, ChevronRight } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Wallet, ArrowUpRight, ArrowDownRight, ChevronRight, Scale } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -53,87 +53,125 @@ async function CajaContent({ from, to }: { from: string; to: string }) {
     getCashSessions({ from, to, limit: 30 }),
   ]);
 
+  const totalIncome = sessions.data.reduce((a, s) => a + s.income_total, 0);
+  const totalExpense = sessions.data.reduce((a, s) => a + s.expense_total, 0);
+
   return (
     <div className="flex flex-col gap-6">
-      <Card className="relative overflow-hidden">
-        <div className="pointer-events-none absolute inset-0 bg-gradient-brand opacity-[0.06]" />
-        <CardHeader className="flex-row items-center justify-between space-y-0">
-          <CardTitle className="flex items-center gap-2 text-foreground">
-            <Wallet className="size-4" /> Caja actual
-          </CardTitle>
-          {current.data && (
-            <Badge variant="success">Abierta</Badge>
-          )}
-        </CardHeader>
-        <CardContent>
-          {!current.data ? (
+      {/* Caja actual */}
+      <div className="flex min-w-0 flex-col gap-3">
+        <div className="flex items-center justify-between gap-3">
+          <div className="flex items-center gap-2">
+            <Wallet className="size-5 shrink-0 text-primary" />
+            <h2 className="font-display text-base font-bold text-foreground">Caja actual</h2>
+          </div>
+          {current.data && <Badge variant="success">Abierta</Badge>}
+        </div>
+
+        {!current.data ? (
+          <Card className="rounded-[20px] p-5 shadow-sm">
             <EmptyState icon={Wallet} title="No hay una caja abierta en este momento" />
-          ) : (
-            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-              <MiniStat label="Apertura" value={formatMoney(current.data.opening_amount)} />
-              <MiniStat
+          </Card>
+        ) : (
+          <div className="flex min-w-0 flex-col gap-3">
+            <StatCard
+              label="Efectivo esperado"
+              value={formatMoney(computeExpectedCash(current.data))}
+              sub={`Apertura ${formatMoney(current.data.opening_amount)}`}
+              icon={Wallet}
+              accent="primary"
+              variant="solid"
+              valueClassName="text-4xl"
+            />
+            <div className="grid grid-cols-2 gap-3">
+              <StatCard
                 label="Ingresos"
                 value={formatMoney(current.data.income_total)}
                 icon={ArrowUpRight}
-                tone="success"
+                accent="success"
+                size="compact"
+                iconSize="lg"
+                valueClassName="text-2xl"
               />
-              <MiniStat
+              <StatCard
                 label="Egresos"
                 value={formatMoney(current.data.expense_total)}
                 icon={ArrowDownRight}
-                tone="destructive"
+                accent="destructive"
+                size="compact"
+                iconSize="lg"
+                valueClassName="text-2xl"
               />
-              <MiniStat label="Efectivo esperado" value={formatMoney(computeExpectedCash(current.data))} />
             </div>
-          )}
-        </CardContent>
-        {current.data && (
-          <div className="border-t border-border/60 px-5 py-3">
+
             <Link
               href={`/caja/${current.data.id}`}
-              className="flex items-center gap-1 text-sm font-medium text-primary hover:underline"
+              className="flex items-center justify-between gap-3 rounded-[20px] border border-border/60 bg-card px-4 py-3.5 shadow-sm transition-all duration-200 hover:bg-secondary/30 hover:shadow-md active:scale-[0.99]"
             >
-              Ver detalle de la sesión <ChevronRight className="size-4" />
+              <span className="font-display text-sm font-semibold text-primary">
+                Ver detalle de la sesión
+              </span>
+              <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
             </Link>
           </div>
         )}
-      </Card>
-
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard
-          label="Sesiones en el periodo"
-          value={String(sessions.data.length)}
-          icon={Wallet}
-        />
-        <StatCard
-          label="Ingresos totales"
-          value={formatMoney(sessions.data.reduce((a, s) => a + s.income_total, 0))}
-          icon={ArrowUpRight}
-          accent="success"
-        />
-        <StatCard
-          label="Egresos totales"
-          value={formatMoney(sessions.data.reduce((a, s) => a + s.expense_total, 0))}
-          icon={ArrowDownRight}
-          accent="destructive"
-        />
-        <StatCard
-          label="Diferencia acumulada"
-          value={formatMoney(
-            sessions.data.reduce((a, s) => a + (s.difference_amount ?? 0), 0)
-          )}
-          icon={Wallet}
-          accent="accent"
-        />
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Historial de sesiones</CardTitle>
-        </CardHeader>
-        <CardContent className={sessions.data.length === 0 ? undefined : "p-0"}>
+      {/* Resumen del periodo */}
+      <div className="flex min-w-0 flex-col gap-3">
+        <div className="grid grid-cols-2 gap-3">
+          <StatCard
+            label="Ingresos totales"
+            value={formatMoney(totalIncome)}
+            icon={ArrowUpRight}
+            accent="success"
+            variant="solid"
+            valueClassName="text-2xl"
+          />
+          <StatCard
+            label="Egresos totales"
+            value={formatMoney(totalExpense)}
+            icon={ArrowDownRight}
+            accent="destructive"
+            variant="solid"
+            valueClassName="text-2xl"
+          />
+        </div>
+        <div className="grid grid-cols-2 gap-3">
+          <StatCard
+            label="Sesiones en el periodo"
+            value={String(sessions.data.length)}
+            icon={Wallet}
+            accent="primary"
+            size="compact"
+            iconSize="lg"
+            valueClassName="text-2xl"
+          />
+          <StatCard
+            label="Diferencia acumulada"
+            value={formatMoney(sessions.data.reduce((a, s) => a + (s.difference_amount ?? 0), 0))}
+            icon={Scale}
+            accent="accent"
+            size="compact"
+            iconSize="lg"
+            valueClassName="text-2xl"
+          />
+        </div>
+      </div>
+
+      <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
+        <div className="flex items-center gap-3 p-5 pb-4">
+          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
+            <Wallet className="size-6 text-primary" />
+          </div>
+          <div className="min-w-0">
+            <h3 className="font-display text-lg font-bold text-foreground">Historial de sesiones</h3>
+            <p className="text-sm text-muted-foreground">Sesiones registradas en el periodo</p>
+          </div>
+        </div>
+        <div className={sessions.data.length === 0 ? "px-5 pb-5" : "pb-2"}>
           <SessionsHistory sessions={sessions.data} />
-        </CardContent>
+        </div>
       </Card>
     </div>
   );
@@ -148,7 +186,7 @@ function SessionsHistory({ sessions }: { sessions: CashSession[] }) {
   return (
     <div className="flex min-w-0 flex-col gap-2">
       {/* Mobile: tarjetas apiladas, cero scroll horizontal */}
-      <div className="flex min-w-0 flex-col gap-2 md:hidden">
+      <div className="flex min-w-0 flex-col gap-3 px-5 pb-3 md:hidden">
         {sessions.map((session) => {
           const diff = session.difference_amount;
           const diffTone = diff === null ? "text-foreground" : diff < 0 ? "text-destructive" : "text-success";
@@ -158,7 +196,7 @@ function SessionsHistory({ sessions }: { sessions: CashSession[] }) {
             <Link
               key={session.id}
               href={`/caja/${session.id}`}
-              className="min-w-0 rounded-xl border border-border bg-card p-4 shadow-sm transition-colors hover:bg-secondary/30 active:bg-secondary/50"
+              className="min-w-0 rounded-[20px] border border-border/60 bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.985] active:shadow-sm"
             >
               <div className="flex min-w-0 items-center justify-between gap-3">
                 <Badge variant={session.status === "open" ? "success" : "secondary"}>
@@ -174,13 +212,13 @@ function SessionsHistory({ sessions }: { sessions: CashSession[] }) {
               <div className="mt-3 grid grid-cols-2 gap-3">
                 <div className="min-w-0">
                   <p className="text-[11px] text-muted-foreground">Ingresos</p>
-                  <p className="mt-0.5 truncate text-sm font-semibold text-success">
+                  <p className="mt-0.5 truncate font-display text-lg font-extrabold text-success">
                     {formatMoney(session.income_total)}
                   </p>
                 </div>
                 <div className="min-w-0">
                   <p className="text-[11px] text-muted-foreground">Egresos</p>
-                  <p className="mt-0.5 truncate text-sm font-semibold text-destructive">
+                  <p className="mt-0.5 truncate font-display text-lg font-extrabold text-destructive">
                     {formatMoney(session.expense_total)}
                   </p>
                 </div>
@@ -188,7 +226,9 @@ function SessionsHistory({ sessions }: { sessions: CashSession[] }) {
 
               <div className="mt-3 border-t border-border/60 pt-3">
                 <p className="text-[11px] text-muted-foreground">Balance del turno</p>
-                <p className={cn("mt-0.5 truncate text-base font-semibold", diffTone)}>{diffLabel}</p>
+                <p className={cn("mt-0.5 truncate font-display text-lg font-extrabold", diffTone)}>
+                  {diffLabel}
+                </p>
               </div>
             </Link>
           );
@@ -239,30 +279,6 @@ function SessionsHistory({ sessions }: { sessions: CashSession[] }) {
           ))}
         </TableBody>
       </Table>
-    </div>
-  );
-}
-
-function MiniStat({
-  label,
-  value,
-  icon: Icon,
-  tone,
-}: {
-  label: string;
-  value: string;
-  icon?: React.ElementType;
-  tone?: "success" | "destructive";
-}) {
-  const toneClass =
-    tone === "success" ? "text-success" : tone === "destructive" ? "text-destructive" : "text-foreground";
-  return (
-    <div className="rounded-lg border border-border/60 bg-secondary/30 p-3">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className={`mt-1 flex items-center gap-1 font-display text-lg font-extrabold ${toneClass}`}>
-        {Icon && <Icon className="size-4" />}
-        {value}
-      </p>
     </div>
   );
 }

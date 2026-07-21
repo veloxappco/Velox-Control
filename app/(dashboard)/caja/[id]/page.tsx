@@ -1,6 +1,6 @@
 import Link from "next/link";
-import { ArrowLeft, Calculator, CreditCard, Tag } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ArrowLeft, ArrowDownRight, ArrowUpRight, Calculator, CreditCard, Tag, Wallet } from "lucide-react";
+import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import {
   Table,
@@ -11,10 +11,12 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { EmptyState } from "@/components/shared/empty-state";
+import { StatCard } from "@/components/dashboard/stat-card";
 import { CashMovementsList } from "@/components/dashboard/cash-movements-list";
 import { CashReconciliation } from "@/components/dashboard/cash-reconciliation";
 import { getCashSessionDetail } from "@/lib/api/queries";
 import { formatDateTime, formatMoney, paymentMethodLabel } from "@/lib/format";
+import { computeExpectedCash } from "@/lib/cash";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -45,37 +47,107 @@ export default async function CajaSessionPage({ params }: PageProps) {
         </p>
       </div>
 
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-        <Metric label="Apertura" value={formatMoney(session.opening_amount)} />
-        <Metric label="Ingresos totales" value={formatMoney(session.income_total)} tone="success" />
-        <Metric label="Egresos totales" value={formatMoney(session.expense_total)} tone="destructive" />
+      <div className="flex min-w-0 flex-col gap-3">
+        <StatCard
+          label="Efectivo esperado"
+          value={formatMoney(computeExpectedCash(session))}
+          sub={`Apertura ${formatMoney(session.opening_amount)}`}
+          icon={Wallet}
+          accent="primary"
+          variant="solid"
+          valueClassName="text-4xl"
+        />
+        <div className="grid grid-cols-2 gap-3">
+          <StatCard
+            label="Ingresos totales"
+            value={formatMoney(session.income_total)}
+            icon={ArrowUpRight}
+            accent="success"
+            size="compact"
+            iconSize="lg"
+            valueClassName="text-2xl"
+          />
+          <StatCard
+            label="Egresos totales"
+            value={formatMoney(session.expense_total)}
+            icon={ArrowDownRight}
+            accent="destructive"
+            size="compact"
+            iconSize="lg"
+            valueClassName="text-2xl"
+          />
+        </div>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Calculator className="size-4" /> Cuadre de caja (efectivo)
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
+      <Card className="rounded-[20px] p-5 shadow-sm">
+        <div className="flex items-center gap-3">
+          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
+            <Calculator className="size-6 text-primary" />
+          </div>
+          <div className="min-w-0">
+            <h3 className="font-display text-lg font-bold text-foreground">Cuadre de caja</h3>
+            <p className="text-sm text-muted-foreground">Solo movimientos en efectivo</p>
+          </div>
+        </div>
+        <div className="mt-5">
           <CashReconciliation session={session} />
-        </CardContent>
+        </div>
       </Card>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CreditCard className="size-4" /> Por método de pago
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            {session.payment_methods.length === 0 ? (
-              <div className="p-5">
-                <EmptyState icon={CreditCard} title="Sin movimientos por método de pago" />
+        <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
+          <div className="flex items-center gap-3 p-5 pb-4">
+            <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-accent/10">
+              <CreditCard className="size-6 text-accent" />
+            </div>
+            <div className="min-w-0">
+              <h3 className="font-display text-lg font-bold text-foreground">Por método de pago</h3>
+              <p className="text-sm text-muted-foreground">Ingresos y egresos por método</p>
+            </div>
+          </div>
+
+          {session.payment_methods.length === 0 ? (
+            <div className="px-5 pb-5">
+              <EmptyState icon={CreditCard} title="Sin movimientos por método de pago" />
+            </div>
+          ) : (
+            <>
+              {/* Mobile: tarjetas, cero scroll horizontal */}
+              <div className="flex min-w-0 flex-col gap-3 px-5 pb-5 md:hidden">
+                {session.payment_methods.map((m) => (
+                  <div
+                    key={m.payment_method}
+                    className="rounded-[20px] border border-border/60 bg-card p-4 shadow-sm"
+                  >
+                    <p className="font-display text-base font-semibold text-foreground">
+                      {paymentMethodLabel(m.payment_method)}
+                    </p>
+                    <div className="mt-3 grid grid-cols-3 gap-2 text-center">
+                      <div className="min-w-0">
+                        <p className="text-[11px] text-muted-foreground">Ingresos</p>
+                        <p className="mt-0.5 truncate font-display text-sm font-bold text-success">
+                          {formatMoney(m.income_total)}
+                        </p>
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[11px] text-muted-foreground">Egresos</p>
+                        <p className="mt-0.5 truncate font-display text-sm font-bold text-destructive">
+                          {formatMoney(m.expense_total)}
+                        </p>
+                      </div>
+                      <div className="min-w-0">
+                        <p className="text-[11px] text-muted-foreground">Neto</p>
+                        <p className="mt-0.5 truncate font-display text-sm font-bold text-foreground">
+                          {formatMoney(m.net_total)}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
               </div>
-            ) : (
-              <Table>
+
+              {/* Desktop: tabla completa */}
+              <Table className="hidden md:table">
                 <TableHeader>
                   <TableRow>
                     <TableHead>Método</TableHead>
@@ -99,23 +171,66 @@ export default async function CajaSessionPage({ params }: PageProps) {
                   ))}
                 </TableBody>
               </Table>
-            )}
-          </CardContent>
+            </>
+          )}
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Tag className="size-4" /> Egresos por categoría
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            {session.expense_categories.length === 0 ? (
-              <div className="p-5">
-                <EmptyState icon={Tag} title="Sin egresos registrados" />
+        <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
+          <div className="flex items-center gap-3 p-5 pb-4">
+            <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-warning/10">
+              <Tag className="size-6 text-warning" />
+            </div>
+            <div className="min-w-0">
+              <h3 className="font-display text-lg font-bold text-foreground">Egresos por categoría</h3>
+              <p className="text-sm text-muted-foreground">Distribución del gasto en la sesión</p>
+            </div>
+          </div>
+
+          {session.expense_categories.length === 0 ? (
+            <div className="px-5 pb-5">
+              <EmptyState icon={Tag} title="Sin egresos registrados" />
+            </div>
+          ) : (
+            <>
+              {/* Mobile: tarjetas con barra de distribución, cero scroll horizontal */}
+              <div className="flex min-w-0 flex-col gap-3 px-5 pb-5 md:hidden">
+                {session.expense_categories.map((c) => {
+                  const pct =
+                    session.expense_total > 0 ? Math.round((c.total / session.expense_total) * 100) : 0;
+                  return (
+                    <div
+                      key={c.category}
+                      className="rounded-[20px] border border-border/60 bg-card p-4 shadow-sm"
+                    >
+                      <div className="flex min-w-0 items-center justify-between gap-3">
+                        <span className="min-w-0 truncate font-display text-base font-semibold text-foreground">
+                          {c.category}{" "}
+                          <span className="font-display text-sm font-medium text-muted-foreground">
+                            ({c.count})
+                          </span>
+                        </span>
+                        <span className="shrink-0 font-display text-base font-bold text-foreground">
+                          {formatMoney(c.total)}
+                        </span>
+                      </div>
+                      <div className="mt-2.5 flex min-w-0 items-center gap-2.5">
+                        <div className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-secondary">
+                          <div
+                            className="h-full rounded-full bg-success transition-all duration-300"
+                            style={{ width: `${pct}%` }}
+                          />
+                        </div>
+                        <span className="w-9 shrink-0 text-right text-xs font-semibold text-muted-foreground">
+                          {pct}%
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-            ) : (
-              <Table>
+
+              {/* Desktop: tabla completa */}
+              <Table className="hidden md:table">
                 <TableHeader>
                   <TableRow>
                     <TableHead>Categoría</TableHead>
@@ -133,39 +248,27 @@ export default async function CajaSessionPage({ params }: PageProps) {
                   ))}
                 </TableBody>
               </Table>
-            )}
-          </CardContent>
+            </>
+          )}
         </Card>
       </div>
 
-      <Card>
-        <CardHeader>
-          <CardTitle>Movimientos</CardTitle>
-        </CardHeader>
-        <CardContent
-          className={!session.movements || session.movements.length === 0 ? undefined : "p-0"}
+      <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
+        <div className="flex items-center gap-3 p-5 pb-4">
+          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-secondary">
+            <Wallet className="size-6 text-foreground/70" />
+          </div>
+          <div className="min-w-0">
+            <h3 className="font-display text-lg font-bold text-foreground">Movimientos</h3>
+            <p className="text-sm text-muted-foreground">Todos los movimientos de la sesión</p>
+          </div>
+        </div>
+        <div
+          className={!session.movements || session.movements.length === 0 ? "px-5 pb-5" : "pb-2"}
         >
           <CashMovementsList movements={session.movements ?? []} />
-        </CardContent>
+        </div>
       </Card>
     </div>
-  );
-}
-
-function Metric({
-  label,
-  value,
-  tone,
-}: {
-  label: string;
-  value: string;
-  tone?: "success" | "destructive";
-}) {
-  const toneClass = tone === "success" ? "text-success" : tone === "destructive" ? "text-destructive" : "text-foreground";
-  return (
-    <Card className="p-4">
-      <p className="text-xs text-muted-foreground">{label}</p>
-      <p className={`mt-1 font-display text-lg font-extrabold ${toneClass}`}>{value}</p>
-    </Card>
   );
 }
