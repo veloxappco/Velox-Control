@@ -16,12 +16,14 @@ const SOLID_CLASSES: Record<Accent, string> = {
   destructive: "bg-destructive text-destructive-foreground",
 };
 
+// Mismo estilo "tenue" que los íconos de la tarjeta Ventas por canal: fondo
+// muy suave del color y el ícono en ese mismo color, sin sombra.
 const ICON_BADGE_CLASSES: Record<Accent, string> = {
-  primary: "bg-primary text-primary-foreground shadow-primary/25",
-  accent: "bg-accent text-accent-foreground shadow-accent/25",
-  success: "bg-success text-white shadow-success/25",
-  warning: "bg-warning text-white shadow-warning/25",
-  destructive: "bg-destructive text-destructive-foreground shadow-destructive/25",
+  primary: "bg-primary/10 text-primary",
+  accent: "bg-accent/10 text-accent",
+  success: "bg-success/10 text-success",
+  warning: "bg-warning/10 text-warning",
+  destructive: "bg-destructive/10 text-destructive",
 };
 
 export function StatCard({
@@ -133,7 +135,7 @@ export function StatCard({
         </div>
         <div
           className={cn(
-            "flex shrink-0 items-center justify-center rounded-xl shadow-lg",
+            "flex shrink-0 items-center justify-center rounded-xl",
             compact ? "size-8" : "size-10",
             ICON_BADGE_CLASSES[accent]
           )}

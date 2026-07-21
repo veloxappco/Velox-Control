@@ -1,4 +1,4 @@
-import { Info, ShoppingBag, Store, type LucideIcon } from "lucide-react";
+import { Info, ShoppingBag, ShoppingCart, type LucideIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
 import { formatMoney, formatNumber } from "@/lib/format";
@@ -55,7 +55,7 @@ export function SalesBreakdown({
 
       <div className="grid grid-cols-2 divide-x divide-border/60">
         <ChannelDetail
-          icon={Store}
+          icon={ShoppingCart}
           label="POS"
           labelClass="text-accent"
           iconBg="bg-accent/10"
