@@ -1,8 +1,9 @@
 import { Suspense } from "react";
-import { TrendingUp, CreditCard, Trophy, CalendarDays, Clock, Layers, Columns3 } from "lucide-react";
+import { TrendingUp, CreditCard, CalendarDays, Clock, Layers, Columns3 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { StatCard } from "@/components/dashboard/stat-card";
+import { ReportKpiCarousel, type ReportKpis } from "@/components/dashboard/report-kpi-carousel";
+import { CategoryReportList, type CategoryRow } from "@/components/dashboard/category-report-list";
 import { SalesAreaChart } from "@/components/dashboard/sales-area-chart";
 import { HourlyBarChart } from "@/components/dashboard/hourly-bar-chart";
 import { ChannelBarChart } from "@/components/dashboard/channel-bar-chart";
@@ -14,10 +15,10 @@ import {
   getReportsPaymentMethods,
   getReportsTopProducts,
   getReportsHourlySales,
-  getReportsProfit,
+  getExpensesReport,
 } from "@/lib/api/queries";
 import {
-  daysAgoISO,
+  monthStartISO,
   formatMoney,
   formatNumber,
   paymentMethodBadgeVariant,
@@ -33,7 +34,7 @@ interface PageProps {
 
 export default async function ReportesPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const { from, to } = await resolveDateRange(params, { from: daysAgoISO(7), to: todayISO() });
+  const { from, to } = await resolveDateRange(params, { from: monthStartISO(), to: todayISO() });
 
   return (
     <div className="flex flex-col gap-6">
@@ -41,7 +42,7 @@ export default async function ReportesPage({ searchParams }: PageProps) {
         <div>
           <h1 className="text-xl font-semibold tracking-tight">Reportes</h1>
           <p className="text-sm text-muted-foreground">
-            Ventas, medios de pago, productos top y rentabilidad.
+            Ingresos, egresos, ventas por categoría y medios de pago.
           </p>
         </div>
         <DateRangeFilter defaultFrom={from} defaultTo={to} />
@@ -85,91 +86,52 @@ function SectionHeader({
 }
 
 async function ReportesContent({ from, to }: { from: string; to: string }) {
-  const [sales, paymentMethods, topProducts, hourly, profit] = await Promise.all([
+  const [sales, paymentMethods, topProducts, hourly, expenses] = await Promise.all([
     getReportsSales({ from, to }),
     getReportsPaymentMethods({ from, to }),
-    getReportsTopProducts({ from, to, limit: 20 }),
+    getReportsTopProducts({ from, to, limit: 100 }),
     getReportsHourlySales({ from, to }),
-    getReportsProfit({ from, to }),
+    getExpensesReport({ from, to }),
   ]);
 
   const paymentTotal = paymentMethods.data.reduce((a, m) => a + m.net_total, 0);
-  const top10 = topProducts.data.slice(0, 10);
 
-  // Ticket promedio y mejor/peor día (solo días con ventas)
-  const avgTicket = sales.summary.count > 0 ? sales.summary.total / sales.summary.count : 0;
-  const daysWithSales = sales.data.filter((d) => d.total > 0);
-  const bestDay = daysWithSales.length ? daysWithSales.reduce((a, b) => (b.total > a.total ? b : a)) : null;
-  const worstDay = daysWithSales.length ? daysWithSales.reduce((a, b) => (b.total < a.total ? b : a)) : null;
   const dayLabel = (iso: string) =>
     new Intl.DateTimeFormat("es-CO", { day: "2-digit", month: "short" }).format(parseDateOnly(iso));
+  const daysWithSales = sales.data.filter((d) => d.total > 0);
+  const toDay = (d: (typeof sales.data)[number] | undefined) =>
+    d ? { label: dayLabel(d.date), total: d.total, count: d.pos_count + d.online_count } : null;
+  const best = daysWithSales.length ? daysWithSales.reduce((a, b) => (b.total > a.total ? b : a)) : undefined;
+  const worst = daysWithSales.length ? daysWithSales.reduce((a, b) => (b.total < a.total ? b : a)) : undefined;
 
-  // Ventas por categoría (agrupando el top de productos)
-  const byCategory = Object.values(
-    topProducts.data.reduce<Record<string, { categoria: string; total: number; qty: number }>>((acc, p) => {
-      const key = p.categoria || "Sin categoría";
-      acc[key] ??= { categoria: key, total: 0, qty: 0 };
-      acc[key].total += p.total_vendido;
-      acc[key].qty += p.cantidad_vendida;
-      return acc;
-    }, {})
-  ).sort((a, b) => b.total - a.total);
-  const categoryTotal = byCategory.reduce((a, c) => a + c.total, 0);
+  const kpis: ReportKpis = {
+    income: {
+      total: sales.summary.total,
+      pos: sales.summary.pos_total,
+      online: sales.summary.online_total,
+    },
+    expenses: { total: expenses.total, count: expenses.count },
+    bestDay: toDay(best),
+    worstDay: toDay(worst),
+  };
+
+  // Ventas por categoría (con sus productos para el modal)
+  const catMap = new Map<string, CategoryRow>();
+  for (const p of topProducts.data) {
+    const key = p.categoria || "Sin categoría";
+    const row = catMap.get(key) ?? { categoria: key, total: 0, qty: 0, products: [] };
+    row.total += p.total_vendido;
+    row.qty += p.cantidad_vendida;
+    row.products.push({ nombre: p.nombre_producto, cantidad: p.cantidad_vendida, total: p.total_vendido });
+    catMap.set(key, row);
+  }
+  const byCategory = Array.from(catMap.values())
+    .map((c) => ({ ...c, products: c.products.sort((a, b) => b.total - a.total) }))
+    .sort((a, b) => b.total - a.total);
 
   return (
     <div className="flex min-w-0 flex-col gap-6">
-      <div className="flex min-w-0 flex-col gap-3">
-        <StatCard
-          label="Utilidad bruta"
-          value={formatMoney(profit.summary.gross_profit)}
-          sub={`Margen bruto ${profit.summary.gross_margin_percent}%`}
-          icon={TrendingUp}
-          accent="primary"
-          variant="solid"
-          valueClassName="text-4xl"
-        />
-        <div className="grid grid-cols-2 gap-3">
-          <StatCard
-            label="Ingresos"
-            value={formatMoney(profit.summary.revenue)}
-            accent="success"
-            variant="solid"
-            size="compact"
-            valueClassName="text-2xl"
-          />
-          <StatCard
-            label="Costo"
-            value={formatMoney(profit.summary.cost)}
-            accent="warning"
-            variant="solid"
-            size="compact"
-            valueClassName="text-2xl"
-          />
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3">
-        <StatCard label="Ticket promedio" value={formatMoney(avgTicket)} accent="accent" variant="solid" size="compact" valueClassName="text-2xl" />
-        <StatCard label="Ventas" value={formatNumber(sales.summary.count)} accent="primary" variant="solid" size="compact" valueClassName="text-2xl" />
-        <StatCard
-          label="Mejor día"
-          value={bestDay ? formatMoney(bestDay.total) : "—"}
-          sub={bestDay ? dayLabel(bestDay.date) : undefined}
-          accent="success"
-          variant="solid"
-          size="compact"
-          valueClassName="text-2xl"
-        />
-        <StatCard
-          label="Día más bajo"
-          value={worstDay ? formatMoney(worstDay.total) : "—"}
-          sub={worstDay ? dayLabel(worstDay.date) : undefined}
-          accent="destructive"
-          variant="solid"
-          size="compact"
-          valueClassName="text-2xl"
-        />
-      </div>
+      <ReportKpiCarousel kpis={kpis} />
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
         <Card className="rounded-[20px] p-5 shadow-sm lg:col-span-3">
@@ -203,45 +165,18 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
 
       <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
         <div className="p-5 pb-4">
-          <SectionHeader icon={Layers} title="Ventas por categoría" subtitle="Según el top 20 de productos" tone="primary" />
+          <SectionHeader icon={Layers} title="Ventas por categoría" subtitle="Toca una categoría para ver sus productos" tone="primary" />
         </div>
         {byCategory.length === 0 ? (
           <div className="px-5 pb-5">
             <EmptyState icon={Layers} title="Sin ventas en el periodo" />
           </div>
         ) : (
-          <div className="flex flex-col divide-y divide-border/50">
-            {byCategory.map((c) => {
-              const pct = categoryTotal > 0 ? Math.round((c.total / categoryTotal) * 100) : 0;
-              return (
-                <div key={c.categoria} className="flex min-w-0 flex-col gap-2 px-5 py-4">
-                  <div className="flex min-w-0 items-center justify-between gap-3">
-                    <span className="min-w-0 truncate font-display text-base font-semibold text-foreground">
-                      {c.categoria}{" "}
-                      <span className="font-display text-sm font-medium text-muted-foreground">
-                        ({formatNumber(c.qty)} und.)
-                      </span>
-                    </span>
-                    <span className="shrink-0 font-display text-base font-bold text-foreground">
-                      {formatMoney(c.total)}
-                    </span>
-                  </div>
-                  <div className="flex min-w-0 items-center gap-2.5">
-                    <div className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-secondary">
-                      <div className="h-full rounded-full bg-warning" style={{ width: `${pct}%` }} />
-                    </div>
-                    <span className="w-9 shrink-0 text-right text-xs font-semibold text-muted-foreground">
-                      {pct}%
-                    </span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
+          <CategoryReportList categories={byCategory} />
         )}
       </Card>
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4">
         <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
           <div className="p-5 pb-4">
             <SectionHeader
@@ -285,43 +220,6 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
                   </div>
                 );
               })}
-            </div>
-          )}
-        </Card>
-
-        <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
-          <div className="p-5 pb-4">
-            <SectionHeader
-              icon={Trophy}
-              title="Productos más vendidos"
-              subtitle="Top 10 del periodo"
-              tone="warning"
-            />
-          </div>
-          {top10.length === 0 ? (
-            <div className="px-5 pb-5">
-              <EmptyState icon={Trophy} title="Sin ventas de productos en el periodo" />
-            </div>
-          ) : (
-            <div className="flex flex-col divide-y divide-border/50">
-              {top10.map((p, i) => (
-                <div key={p.producto_id ?? i} className="flex min-w-0 items-center gap-3 px-5 py-4">
-                  <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-[15px] font-bold text-white">
-                    {i + 1}
-                  </span>
-                  <div className="min-w-0 flex-1">
-                    <p className="truncate font-display text-base font-semibold text-foreground">
-                      {p.nombre_producto}
-                    </p>
-                    <p className="mt-0.5 truncate text-sm text-muted-foreground">
-                      {formatNumber(p.cantidad_vendida)} und. · {p.porcentaje_participacion}%
-                    </p>
-                  </div>
-                  <span className="shrink-0 font-display text-base font-bold text-foreground">
-                    {formatMoney(p.total_vendido)}
-                  </span>
-                </div>
-              ))}
             </div>
           )}
         </Card>

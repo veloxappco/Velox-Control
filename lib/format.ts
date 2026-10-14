@@ -78,6 +78,11 @@ export function todayISO(timeZone: string = DEFAULT_TIMEZONE) {
   return dateInTimeZone(new Date(), timeZone);
 }
 
+/** Primer día del mes actual (YYYY-MM-DD) en la zona horaria del negocio. */
+export function monthStartISO(timeZone: string = DEFAULT_TIMEZONE) {
+  return `${todayISO(timeZone).slice(0, 8)}01`;
+}
+
 export function daysAgoISO(days: number, timeZone: string = DEFAULT_TIMEZONE) {
   const d = new Date();
   d.setDate(d.getDate() - days);

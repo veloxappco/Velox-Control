@@ -4,13 +4,13 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useTransition } from "react";
 import { ArrowRight, Calendar, RefreshCw } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { daysAgoISO, todayISO } from "@/lib/format";
+import { daysAgoISO, monthStartISO, todayISO } from "@/lib/format";
 import { persistDateRange } from "@/lib/date-range-cookie";
 
 const PRESETS = [
-  { label: "Hoy", days: 0 },
-  { label: "7 días", days: 7 },
-  { label: "30 días", days: 30 },
+  { label: "Hoy", range: () => ({ from: daysAgoISO(0), to: todayISO() }) },
+  { label: "7 días", range: () => ({ from: daysAgoISO(7), to: todayISO() }) },
+  { label: "Este mes", range: () => ({ from: monthStartISO(), to: todayISO() }) },
 ];
 
 export function DateRangeFilter({
@@ -43,8 +43,9 @@ export function DateRangeFilter({
     });
   }
 
-  function isActivePreset(days: number) {
-    return from === daysAgoISO(days) && to === todayISO();
+  function isActivePreset(range: () => { from: string; to: string }) {
+    const r = range();
+    return from === r.from && to === r.to;
   }
 
   return (
@@ -59,12 +60,15 @@ export function DateRangeFilter({
       {/* Filtros rápidos */}
       <div className="mt-3 flex items-stretch gap-2">
         {PRESETS.map((preset) => {
-          const active = isActivePreset(preset.days);
+          const active = isActivePreset(preset.range);
           return (
             <button
               key={preset.label}
               type="button"
-              onClick={() => apply(daysAgoISO(preset.days), todayISO())}
+              onClick={() => {
+                const r = preset.range();
+                apply(r.from, r.to);
+              }}
               className={cn(
                 "flex h-12 flex-1 items-center justify-center gap-1.5 rounded-full font-display text-sm font-bold transition-all",
                 active
