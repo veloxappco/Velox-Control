@@ -1,10 +1,9 @@
 import { Suspense } from "react";
-import { TrendingUp, CreditCard, CalendarDays, Clock, Layers, Columns3 } from "lucide-react";
+import { CreditCard, Clock, Layers, Columns3 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { ReportKpiCarousel, type ReportKpis } from "@/components/dashboard/report-kpi-carousel";
 import { CategoryReportList, type CategoryRow } from "@/components/dashboard/category-report-list";
-import { SalesAreaChart } from "@/components/dashboard/sales-area-chart";
 import { HourlyBarChart } from "@/components/dashboard/hourly-bar-chart";
 import { ChannelBarChart } from "@/components/dashboard/channel-bar-chart";
 import { DateRangeFilter } from "@/components/shared/date-range-filter";
@@ -137,33 +136,21 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
     <div className="flex min-w-0 flex-col gap-6">
       <ReportKpiCarousel kpis={kpis} />
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
-        <Card className="rounded-[20px] p-5 shadow-sm lg:col-span-3">
-          <SectionHeader icon={CalendarDays} title="Ventas por día" subtitle="Evolución en el periodo" />
-          <div className="mt-5">
-            {sales.data.length ? (
-              <SalesAreaChart data={sales.data} />
-            ) : (
-              <EmptyState icon={TrendingUp} title="Sin ventas en el periodo" />
-            )}
-          </div>
-        </Card>
-        <Card className="rounded-[20px] p-5 shadow-sm lg:col-span-2">
-          <SectionHeader icon={Clock} title="Ventas por hora" subtitle="Horas de mayor venta" tone="accent" />
-          <div className="mt-5">
-            <HourlyBarChart data={hourly.data} />
-          </div>
-        </Card>
-      </div>
-
       <Card className="rounded-[20px] p-5 shadow-sm">
-        <SectionHeader icon={Columns3} title="POS vs. en línea" subtitle="Ventas por canal, día a día" tone="accent" />
+        <SectionHeader icon={Columns3} title="Ventas" subtitle="POS y en línea, día a día" tone="accent" />
         <div className="mt-5">
           {sales.data.length ? (
             <ChannelBarChart data={sales.data} />
           ) : (
             <EmptyState icon={Columns3} title="Sin ventas en el periodo" />
           )}
+        </div>
+      </Card>
+
+      <Card className="rounded-[20px] p-5 shadow-sm">
+        <SectionHeader icon={Clock} title="Ventas por hora" subtitle="Horas de mayor venta" tone="accent" />
+        <div className="mt-5">
+          <HourlyBarChart data={hourly.data} />
         </div>
       </Card>
 
