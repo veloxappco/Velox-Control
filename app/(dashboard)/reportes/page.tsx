@@ -1,14 +1,7 @@
 import { Suspense } from "react";
-import { TrendingUp, CreditCard, Trophy, Percent } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { TrendingUp, CreditCard, Trophy, CalendarDays, Clock } from "lucide-react";
+import { Card } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { SalesAreaChart } from "@/components/dashboard/sales-area-chart";
 import { HourlyBarChart } from "@/components/dashboard/hourly-bar-chart";
@@ -22,7 +15,14 @@ import {
   getReportsHourlySales,
   getReportsProfit,
 } from "@/lib/api/queries";
-import { daysAgoISO, formatMoney, formatNumber, paymentMethodLabel, todayISO } from "@/lib/format";
+import {
+  daysAgoISO,
+  formatMoney,
+  formatNumber,
+  paymentMethodBadgeVariant,
+  paymentMethodLabel,
+  todayISO,
+} from "@/lib/format";
 import { resolveDateRange } from "@/lib/get-date-range";
 
 interface PageProps {
@@ -52,6 +52,36 @@ export default async function ReportesPage({ searchParams }: PageProps) {
   );
 }
 
+function SectionHeader({
+  icon: Icon,
+  title,
+  subtitle,
+  tone = "primary",
+}: {
+  icon: React.ElementType;
+  title: string;
+  subtitle: string;
+  tone?: "primary" | "accent" | "success" | "warning";
+}) {
+  const toneClass = {
+    primary: "bg-primary/10 text-primary",
+    accent: "bg-accent/10 text-accent",
+    success: "bg-success/10 text-success",
+    warning: "bg-warning/10 text-warning",
+  }[tone];
+  return (
+    <div className="flex items-center gap-3">
+      <div className={`flex size-12 shrink-0 items-center justify-center rounded-2xl ${toneClass}`}>
+        <Icon className="size-6" />
+      </div>
+      <div className="min-w-0">
+        <h3 className="font-display text-lg font-bold text-foreground">{title}</h3>
+        <p className="text-sm text-muted-foreground">{subtitle}</p>
+      </div>
+    </div>
+  );
+}
+
 async function ReportesContent({ from, to }: { from: string; to: string }) {
   const [sales, paymentMethods, topProducts, hourly, profit] = await Promise.all([
     getReportsSales({ from, to }),
@@ -61,133 +91,142 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
     getReportsProfit({ from, to }),
   ]);
 
+  const paymentTotal = paymentMethods.data.reduce((a, m) => a + m.net_total, 0);
+
   return (
-    <div className="flex flex-col gap-6">
-      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <StatCard label="Ingresos" value={formatMoney(profit.summary.revenue)} icon={TrendingUp} />
-        <StatCard
-          label="Costo"
-          value={formatMoney(profit.summary.cost)}
-          icon={TrendingUp}
-          accent="destructive"
-        />
+    <div className="flex min-w-0 flex-col gap-6">
+      <div className="flex min-w-0 flex-col gap-3">
         <StatCard
           label="Utilidad bruta"
           value={formatMoney(profit.summary.gross_profit)}
+          sub={`Margen bruto ${profit.summary.gross_margin_percent}%`}
           icon={TrendingUp}
-          accent="success"
+          accent="primary"
+          variant="solid"
+          valueClassName="text-4xl"
         />
-        <StatCard
-          label="Margen bruto"
-          value={`${profit.summary.gross_margin_percent}%`}
-          icon={Percent}
-          accent="accent"
-        />
+        <div className="grid grid-cols-2 gap-3">
+          <StatCard
+            label="Ingresos"
+            value={formatMoney(profit.summary.revenue)}
+            accent="success"
+            variant="solid"
+            size="compact"
+            valueClassName="text-2xl"
+          />
+          <StatCard
+            label="Costo"
+            value={formatMoney(profit.summary.cost)}
+            accent="warning"
+            variant="solid"
+            size="compact"
+            valueClassName="text-2xl"
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
-        <Card className="lg:col-span-3">
-          <CardHeader>
-            <CardTitle>Ventas por día</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <Card className="rounded-[20px] p-5 shadow-sm lg:col-span-3">
+          <SectionHeader icon={CalendarDays} title="Ventas por día" subtitle="Evolución en el periodo" />
+          <div className="mt-5">
             {sales.data.length ? (
               <SalesAreaChart data={sales.data} />
             ) : (
               <EmptyState icon={TrendingUp} title="Sin ventas en el periodo" />
             )}
-          </CardContent>
+          </div>
         </Card>
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle>Ventas por hora</CardTitle>
-          </CardHeader>
-          <CardContent>
+        <Card className="rounded-[20px] p-5 shadow-sm lg:col-span-2">
+          <SectionHeader icon={Clock} title="Ventas por hora" subtitle="Horas de mayor venta" tone="accent" />
+          <div className="mt-5">
             <HourlyBarChart data={hourly.data} />
-          </CardContent>
+          </div>
         </Card>
       </div>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <CreditCard className="size-4" /> Medios de pago
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            {paymentMethods.data.length === 0 ? (
-              <div className="p-5">
-                <EmptyState icon={CreditCard} title="Sin transacciones en el periodo" />
-              </div>
-            ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Método</TableHead>
-                    <TableHead className="text-right">Transacciones</TableHead>
-                    <TableHead className="text-right">Neto</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {paymentMethods.data.map((m) => (
-                    <TableRow key={m.payment_method}>
-                      <TableCell className="font-medium">
-                        {paymentMethodLabel(m.payment_method)}
-                      </TableCell>
-                      <TableCell className="text-right">{m.transactions}</TableCell>
-                      <TableCell className="text-right font-medium">
+        <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
+          <div className="p-5 pb-4">
+            <SectionHeader
+              icon={CreditCard}
+              title="Medios de pago"
+              subtitle="Distribución del ingreso neto"
+              tone="success"
+            />
+          </div>
+          {paymentMethods.data.length === 0 ? (
+            <div className="px-5 pb-5">
+              <EmptyState icon={CreditCard} title="Sin transacciones en el periodo" />
+            </div>
+          ) : (
+            <div className="flex flex-col divide-y divide-border/50">
+              {paymentMethods.data.map((m) => {
+                const pct = paymentTotal > 0 ? Math.round((m.net_total / paymentTotal) * 100) : 0;
+                return (
+                  <div key={m.payment_method} className="flex min-w-0 flex-col gap-2 px-5 py-4">
+                    <div className="flex min-w-0 items-center justify-between gap-3">
+                      <div className="flex min-w-0 items-center gap-2">
+                        <Badge variant={paymentMethodBadgeVariant(m.payment_method)} className="text-[13px]">
+                          {paymentMethodLabel(m.payment_method)}
+                        </Badge>
+                        <span className="truncate text-sm text-muted-foreground">
+                          {formatNumber(m.transactions)} transacc.
+                        </span>
+                      </div>
+                      <span className="shrink-0 font-display text-base font-bold text-foreground">
                         {formatMoney(m.net_total)}
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </CardContent>
+                      </span>
+                    </div>
+                    <div className="flex min-w-0 items-center gap-2.5">
+                      <div className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-secondary">
+                        <div className="h-full rounded-full bg-primary" style={{ width: `${pct}%` }} />
+                      </div>
+                      <span className="w-9 shrink-0 text-right text-xs font-semibold text-muted-foreground">
+                        {pct}%
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+          )}
         </Card>
 
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center gap-2">
-              <Trophy className="size-4" /> Productos más vendidos
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="p-0">
-            {topProducts.data.length === 0 ? (
-              <div className="p-5">
-                <EmptyState icon={Trophy} title="Sin ventas de productos en el periodo" />
-              </div>
-            ) : (
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Producto</TableHead>
-                    <TableHead className="text-right">Cant.</TableHead>
-                    <TableHead className="text-right">Total</TableHead>
-                    <TableHead className="text-right">%</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {topProducts.data.map((p, i) => (
-                    <TableRow key={p.producto_id ?? i}>
-                      <TableCell>
-                        <p className="font-medium">{p.nombre_producto}</p>
-                        <p className="text-xs text-muted-foreground">{p.categoria}</p>
-                      </TableCell>
-                      <TableCell className="text-right">{formatNumber(p.cantidad_vendida)}</TableCell>
-                      <TableCell className="text-right font-medium">
-                        {formatMoney(p.total_vendido)}
-                      </TableCell>
-                      <TableCell className="text-right text-muted-foreground">
-                        {p.porcentaje_participacion}%
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            )}
-          </CardContent>
+        <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
+          <div className="p-5 pb-4">
+            <SectionHeader
+              icon={Trophy}
+              title="Productos más vendidos"
+              subtitle="Top 10 del periodo"
+              tone="warning"
+            />
+          </div>
+          {topProducts.data.length === 0 ? (
+            <div className="px-5 pb-5">
+              <EmptyState icon={Trophy} title="Sin ventas de productos en el periodo" />
+            </div>
+          ) : (
+            <div className="flex flex-col divide-y divide-border/50">
+              {topProducts.data.map((p, i) => (
+                <div key={p.producto_id ?? i} className="flex min-w-0 items-center gap-3 px-5 py-4">
+                  <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-[15px] font-bold text-white">
+                    {i + 1}
+                  </span>
+                  <div className="min-w-0 flex-1">
+                    <p className="truncate font-display text-base font-semibold text-foreground">
+                      {p.nombre_producto}
+                    </p>
+                    <p className="mt-0.5 truncate text-sm text-muted-foreground">
+                      {formatNumber(p.cantidad_vendida)} und. · {p.porcentaje_participacion}%
+                    </p>
+                  </div>
+                  <span className="shrink-0 font-display text-base font-bold text-foreground">
+                    {formatMoney(p.total_vendido)}
+                  </span>
+                </div>
+              ))}
+            </div>
+          )}
         </Card>
       </div>
     </div>
