@@ -4,10 +4,13 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "VeloxAdmin",
   description: "Panel de control para negocios gastronómicos — VeloxAdmin",
+  applicationName: "VeloxAdmin",
+  appleWebApp: { capable: true, title: "VeloxAdmin", statusBarStyle: "default" },
+  formatDetection: { telephone: false },
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f6f7fb",
+  themeColor: "#7c3aed",
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
