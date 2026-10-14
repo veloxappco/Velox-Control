@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState } from "react";
-import { LogOut, ChefHat } from "lucide-react";
+import Image from "next/image";
+import { LogOut } from "lucide-react";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -43,9 +44,7 @@ export function Topbar({
   return (
     <header className="sticky top-0 z-30 flex items-center gap-2 border-b border-border/60 bg-background/80 px-4 py-3 backdrop-blur-lg md:px-6 md:gap-3">
       <div className="flex shrink-0 items-center gap-2 md:hidden">
-        <div className="flex size-8 items-center justify-center rounded-lg bg-gradient-brand">
-          <ChefHat className="size-4 text-white" />
-        </div>
+        <Image src="/logo-velox.png" alt="Velox" width={32} height={32} priority className="size-8 shrink-0" />
         <span className="font-semibold text-gradient-brand">VeloxAdmin</span>
       </div>
 

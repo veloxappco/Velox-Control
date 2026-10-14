@@ -2,7 +2,8 @@
 
 import { Suspense, useState, type FormEvent } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { ChefHat, Eye, EyeOff, Loader2, Lock, User } from "lucide-react";
+import Image from "next/image";
+import { Eye, EyeOff, Loader2, Lock, User } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -58,9 +59,7 @@ function LoginForm() {
 
       <div className="w-full max-w-sm">
         <div className="mb-8 flex flex-col items-center gap-3 text-center">
-          <div className="flex size-14 items-center justify-center rounded-2xl bg-gradient-brand shadow-lg shadow-primary/30">
-            <ChefHat className="size-7 text-white" />
-          </div>
+          <Image src="/logo-velox.png" alt="Velox" width={80} height={80} priority className="size-20" />
           <div>
             <h1 className="text-2xl font-semibold tracking-tight text-gradient-brand">
               VeloxAdmin

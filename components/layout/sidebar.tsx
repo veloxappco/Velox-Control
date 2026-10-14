@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ChefHat } from "lucide-react";
+import Image from "next/image";
 import { NAV_ITEMS } from "./nav-items";
 import { cn } from "@/lib/utils";
 
@@ -12,9 +12,7 @@ export function Sidebar() {
   return (
     <aside className="sticky top-0 hidden h-screen w-64 shrink-0 flex-col border-r border-sidebar-border bg-sidebar md:flex">
       <div className="flex items-center gap-2.5 px-6 py-6">
-        <div className="flex size-9 items-center justify-center rounded-xl bg-gradient-brand shadow-lg shadow-primary/30">
-          <ChefHat className="size-5 text-white" />
-        </div>
+        <Image src="/logo-velox.png" alt="Velox" width={40} height={40} priority className="size-10 shrink-0" />
         <span className="text-lg font-semibold tracking-tight text-gradient-brand">
           VeloxAdmin
         </span>
