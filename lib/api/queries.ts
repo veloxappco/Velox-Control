@@ -76,11 +76,13 @@ export async function getExpensesReport({
 
   // Pedimos los detalles de a lotes: con rangos largos pueden ser decenas de
   // sesiones y dispararlas todas a la vez satura la API / agota el tiempo.
+  // Si un detalle falla, lo omitimos en vez de tumbar toda la pantalla.
   const details: Awaited<ReturnType<typeof getCashSessionDetail>>[] = [];
-  const BATCH = 6;
+  const BATCH = 8;
   for (let i = 0; i < sessionsWithExpenses.length; i += BATCH) {
     const chunk = sessionsWithExpenses.slice(i, i + BATCH);
-    details.push(...(await Promise.all(chunk.map((s) => getCashSessionDetail(s.id)))));
+    const results = await Promise.allSettled(chunk.map((s) => getCashSessionDetail(s.id)));
+    for (const r of results) if (r.status === "fulfilled") details.push(r.value);
   }
 
   // Normalizamos la categoría acá (Tipo Título) para que "LECHE DE TINA" y

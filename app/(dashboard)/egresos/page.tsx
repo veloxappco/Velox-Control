@@ -8,6 +8,9 @@ import { getExpensesReport } from "@/lib/api/queries";
 import { formatMoney, formatNumber, todayISO } from "@/lib/format";
 import { resolveDateRange } from "@/lib/get-date-range";
 
+// Con rangos largos se consultan muchas cajas: damos más tiempo a la función.
+export const maxDuration = 60;
+
 interface PageProps {
   searchParams: Promise<{ from?: string; to?: string }>;
 }
