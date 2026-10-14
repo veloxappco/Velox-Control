@@ -88,8 +88,8 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
   const [sales, paymentMethods, topProducts, hourly, expenses] = await Promise.all([
     getReportsSales({ from, to }),
     getReportsPaymentMethods({ from, to }),
-    // La API puede rechazar límites altos: probamos 50 y caemos a 20.
-    getReportsTopProducts({ from, to, limit: 50 }).catch(() =>
+    // Pedimos el máximo; la API hoy lo limita a 20 (ver aviso en la tarjeta).
+    getReportsTopProducts({ from, to, limit: 500 }).catch(() =>
       getReportsTopProducts({ from, to, limit: 20 }).catch(() => ({ data: [] as never[] }))
     ),
     getReportsHourlySales({ from, to }),
@@ -128,6 +128,8 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
     row.products.push({ nombre: p.nombre_producto, cantidad: p.cantidad_vendida, total: p.total_vendido });
     catMap.set(key, row);
   }
+  // Si la API devolvió exactamente su tope (20), el desglose puede estar incompleto.
+  const categoriesTruncated = topProducts.data.length >= 20;
   const byCategory = Array.from(catMap.values())
     .map((c) => ({ ...c, products: c.products.sort((a, b) => b.total - a.total) }))
     .sort((a, b) => b.total - a.total);
@@ -156,7 +158,7 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
 
       <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
         <div className="p-5 pb-4">
-          <SectionHeader icon={Layers} title="Ventas por categoría" subtitle="Toca una categoría para ver sus productos" tone="primary" />
+          <SectionHeader icon={Layers} title="Ventas por categoría" subtitle={categoriesTruncated ? "Solo incluye los 20 productos más vendidos" : "Toca una categoría para ver sus productos"} tone="primary" />
         </div>
         {byCategory.length === 0 ? (
           <div className="px-5 pb-5">
