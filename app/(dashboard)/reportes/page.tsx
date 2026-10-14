@@ -89,9 +89,13 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
   const [sales, paymentMethods, topProducts, hourly, expenses] = await Promise.all([
     getReportsSales({ from, to }),
     getReportsPaymentMethods({ from, to }),
-    getReportsTopProducts({ from, to, limit: 100 }),
+    // La API puede rechazar límites altos: probamos 50 y caemos a 20.
+    getReportsTopProducts({ from, to, limit: 50 }).catch(() =>
+      getReportsTopProducts({ from, to, limit: 20 }).catch(() => ({ data: [] as never[] }))
+    ),
     getReportsHourlySales({ from, to }),
-    getExpensesReport({ from, to }),
+    // Si egresos falla, el resto del reporte debe seguir cargando.
+    getExpensesReport({ from, to }).catch(() => ({ total: 0, count: 0 })),
   ]);
 
   const paymentTotal = paymentMethods.data.reduce((a, m) => a + m.net_total, 0);
