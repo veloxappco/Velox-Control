@@ -1,10 +1,11 @@
 import { Suspense } from "react";
-import { TrendingUp, CreditCard, Trophy, CalendarDays, Clock } from "lucide-react";
+import { TrendingUp, CreditCard, Trophy, CalendarDays, Clock, Layers, Columns3 } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { SalesAreaChart } from "@/components/dashboard/sales-area-chart";
 import { HourlyBarChart } from "@/components/dashboard/hourly-bar-chart";
+import { ChannelBarChart } from "@/components/dashboard/channel-bar-chart";
 import { DateRangeFilter } from "@/components/shared/date-range-filter";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -23,6 +24,7 @@ import {
   paymentMethodLabel,
   todayISO,
 } from "@/lib/format";
+import { parseDateOnly } from "@/lib/format";
 import { resolveDateRange } from "@/lib/get-date-range";
 
 interface PageProps {
@@ -86,12 +88,33 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
   const [sales, paymentMethods, topProducts, hourly, profit] = await Promise.all([
     getReportsSales({ from, to }),
     getReportsPaymentMethods({ from, to }),
-    getReportsTopProducts({ from, to, limit: 10 }),
+    getReportsTopProducts({ from, to, limit: 20 }),
     getReportsHourlySales({ from, to }),
     getReportsProfit({ from, to }),
   ]);
 
   const paymentTotal = paymentMethods.data.reduce((a, m) => a + m.net_total, 0);
+  const top10 = topProducts.data.slice(0, 10);
+
+  // Ticket promedio y mejor/peor día (solo días con ventas)
+  const avgTicket = sales.summary.count > 0 ? sales.summary.total / sales.summary.count : 0;
+  const daysWithSales = sales.data.filter((d) => d.total > 0);
+  const bestDay = daysWithSales.length ? daysWithSales.reduce((a, b) => (b.total > a.total ? b : a)) : null;
+  const worstDay = daysWithSales.length ? daysWithSales.reduce((a, b) => (b.total < a.total ? b : a)) : null;
+  const dayLabel = (iso: string) =>
+    new Intl.DateTimeFormat("es-CO", { day: "2-digit", month: "short" }).format(parseDateOnly(iso));
+
+  // Ventas por categoría (agrupando el top de productos)
+  const byCategory = Object.values(
+    topProducts.data.reduce<Record<string, { categoria: string; total: number; qty: number }>>((acc, p) => {
+      const key = p.categoria || "Sin categoría";
+      acc[key] ??= { categoria: key, total: 0, qty: 0 };
+      acc[key].total += p.total_vendido;
+      acc[key].qty += p.cantidad_vendida;
+      return acc;
+    }, {})
+  ).sort((a, b) => b.total - a.total);
+  const categoryTotal = byCategory.reduce((a, c) => a + c.total, 0);
 
   return (
     <div className="flex min-w-0 flex-col gap-6">
@@ -125,6 +148,29 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
         </div>
       </div>
 
+      <div className="grid grid-cols-2 gap-3">
+        <StatCard label="Ticket promedio" value={formatMoney(avgTicket)} accent="accent" variant="solid" size="compact" valueClassName="text-2xl" />
+        <StatCard label="Ventas" value={formatNumber(sales.summary.count)} accent="primary" variant="solid" size="compact" valueClassName="text-2xl" />
+        <StatCard
+          label="Mejor día"
+          value={bestDay ? formatMoney(bestDay.total) : "—"}
+          sub={bestDay ? dayLabel(bestDay.date) : undefined}
+          accent="success"
+          variant="solid"
+          size="compact"
+          valueClassName="text-2xl"
+        />
+        <StatCard
+          label="Día más bajo"
+          value={worstDay ? formatMoney(worstDay.total) : "—"}
+          sub={worstDay ? dayLabel(worstDay.date) : undefined}
+          accent="destructive"
+          variant="solid"
+          size="compact"
+          valueClassName="text-2xl"
+        />
+      </div>
+
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
         <Card className="rounded-[20px] p-5 shadow-sm lg:col-span-3">
           <SectionHeader icon={CalendarDays} title="Ventas por día" subtitle="Evolución en el periodo" />
@@ -143,6 +189,57 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
           </div>
         </Card>
       </div>
+
+      <Card className="rounded-[20px] p-5 shadow-sm">
+        <SectionHeader icon={Columns3} title="POS vs. en línea" subtitle="Ventas por canal, día a día" tone="accent" />
+        <div className="mt-5">
+          {sales.data.length ? (
+            <ChannelBarChart data={sales.data} />
+          ) : (
+            <EmptyState icon={Columns3} title="Sin ventas en el periodo" />
+          )}
+        </div>
+      </Card>
+
+      <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
+        <div className="p-5 pb-4">
+          <SectionHeader icon={Layers} title="Ventas por categoría" subtitle="Según el top 20 de productos" tone="primary" />
+        </div>
+        {byCategory.length === 0 ? (
+          <div className="px-5 pb-5">
+            <EmptyState icon={Layers} title="Sin ventas en el periodo" />
+          </div>
+        ) : (
+          <div className="flex flex-col divide-y divide-border/50">
+            {byCategory.map((c) => {
+              const pct = categoryTotal > 0 ? Math.round((c.total / categoryTotal) * 100) : 0;
+              return (
+                <div key={c.categoria} className="flex min-w-0 flex-col gap-2 px-5 py-4">
+                  <div className="flex min-w-0 items-center justify-between gap-3">
+                    <span className="min-w-0 truncate font-display text-base font-semibold text-foreground">
+                      {c.categoria}{" "}
+                      <span className="font-display text-sm font-medium text-muted-foreground">
+                        ({formatNumber(c.qty)} und.)
+                      </span>
+                    </span>
+                    <span className="shrink-0 font-display text-base font-bold text-foreground">
+                      {formatMoney(c.total)}
+                    </span>
+                  </div>
+                  <div className="flex min-w-0 items-center gap-2.5">
+                    <div className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-secondary">
+                      <div className="h-full rounded-full bg-warning" style={{ width: `${pct}%` }} />
+                    </div>
+                    <span className="w-9 shrink-0 text-right text-xs font-semibold text-muted-foreground">
+                      {pct}%
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
+        )}
+      </Card>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
@@ -201,13 +298,13 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
               tone="warning"
             />
           </div>
-          {topProducts.data.length === 0 ? (
+          {top10.length === 0 ? (
             <div className="px-5 pb-5">
               <EmptyState icon={Trophy} title="Sin ventas de productos en el periodo" />
             </div>
           ) : (
             <div className="flex flex-col divide-y divide-border/50">
-              {topProducts.data.map((p, i) => (
+              {top10.map((p, i) => (
                 <div key={p.producto_id ?? i} className="flex min-w-0 items-center gap-3 px-5 py-4">
                   <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-primary text-[15px] font-bold text-white">
                     {i + 1}
