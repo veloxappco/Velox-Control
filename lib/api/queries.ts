@@ -71,12 +71,17 @@ export async function getExpensesReport({
   from: string;
   to: string;
 }): Promise<ExpensesReport> {
-  const sessions = await getCashSessions({ from, to, limit: 90 });
+  const sessions = await getCashSessions({ from, to, limit: 100 });
   const sessionsWithExpenses = sessions.data.filter((s) => s.expense_total > 0);
 
-  const details = await Promise.all(
-    sessionsWithExpenses.map((s) => getCashSessionDetail(s.id))
-  );
+  // Pedimos los detalles de a lotes: con rangos largos pueden ser decenas de
+  // sesiones y dispararlas todas a la vez satura la API / agota el tiempo.
+  const details: Awaited<ReturnType<typeof getCashSessionDetail>>[] = [];
+  const BATCH = 6;
+  for (let i = 0; i < sessionsWithExpenses.length; i += BATCH) {
+    const chunk = sessionsWithExpenses.slice(i, i + BATCH);
+    details.push(...(await Promise.all(chunk.map((s) => getCashSessionDetail(s.id)))));
+  }
 
   // Normalizamos la categoría acá (Tipo Título) para que "LECHE DE TINA" y
   // "leche de tina" se muestren igual y se agrupen como una sola categoría.
@@ -110,6 +115,17 @@ export async function getExpensesReport({
     count: movements.length,
     categories,
     movements,
+  };
+}
+
+// Total de egresos del rango con UNA sola llamada (suma de las sesiones de
+// caja). Para resúmenes (Reportes) sin pedir el detalle de cada sesión.
+export async function getExpensesTotal({ from, to }: { from: string; to: string }) {
+  const sessions = await getCashSessions({ from, to, limit: 100 });
+  const withExpenses = sessions.data.filter((s) => s.expense_total > 0);
+  return {
+    total: withExpenses.reduce((a, s) => a + s.expense_total, 0),
+    sessions: withExpenses.length,
   };
 }
 

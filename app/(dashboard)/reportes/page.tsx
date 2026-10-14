@@ -14,7 +14,7 @@ import {
   getReportsPaymentMethods,
   getReportsTopProducts,
   getReportsHourlySales,
-  getExpensesReport,
+  getExpensesTotal,
 } from "@/lib/api/queries";
 import {
   monthStartISO,
@@ -94,7 +94,7 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
     ),
     getReportsHourlySales({ from, to }),
     // Si egresos falla, el resto del reporte debe seguir cargando.
-    getExpensesReport({ from, to }).catch(() => ({ total: 0, count: 0 })),
+    getExpensesTotal({ from, to }).catch(() => ({ total: 0, sessions: 0 })),
   ]);
 
   const paymentTotal = paymentMethods.data.reduce((a, m) => a + m.net_total, 0);
@@ -113,7 +113,7 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
       pos: sales.summary.pos_total,
       online: sales.summary.online_total,
     },
-    expenses: { total: expenses.total, count: expenses.count },
+    expenses: { total: expenses.total, count: expenses.sessions },
     bestDay: toDay(best),
     worstDay: toDay(worst),
   };

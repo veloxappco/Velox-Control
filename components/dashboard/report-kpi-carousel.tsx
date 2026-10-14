@@ -64,7 +64,7 @@ export function ReportKpiCarousel({ kpis }: { kpis: ReportKpis }) {
             {formatMoney(kpis.expenses.total)}
           </p>
           <div className="flex min-w-0 gap-2">
-            <Pill label="Movimientos" value={formatNumber(kpis.expenses.count)} />
+            <Pill label="Cajas con egresos" value={formatNumber(kpis.expenses.count)} />
             <Pill
               label="% de ingresos"
               value={`${kpis.income.total > 0 ? Math.round((kpis.expenses.total / kpis.income.total) * 100) : 0}%`}
