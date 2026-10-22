@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { SalesBreakdown } from "@/components/dashboard/sales-breakdown";
-import { SalesAreaChart } from "@/components/dashboard/sales-area-chart";
+import { SalesByDayCard } from "@/components/dashboard/sales-by-day-card";
 import { HourlyBarChart } from "@/components/dashboard/hourly-bar-chart";
 import { PendingOrdersList } from "@/components/dashboard/pending-orders-list";
 import { DateRangeFilter } from "@/components/shared/date-range-filter";
@@ -102,20 +102,7 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
       <SalesBreakdown sales={summary.sales} />
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
-        <Card className="lg:col-span-3">
-          <CardHeader>
-            <CardTitle className="font-display text-base font-bold text-foreground">
-              Tendencia de ventas
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            {sales.data.length ? (
-              <SalesAreaChart data={sales.data} />
-            ) : (
-              <EmptyState icon={DollarSign} title="Sin ventas en este periodo" />
-            )}
-          </CardContent>
-        </Card>
+        <SalesByDayCard data={sales.data} />
 
         <Card className="lg:col-span-2">
           <CardHeader>

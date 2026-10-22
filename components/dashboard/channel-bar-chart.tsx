@@ -5,7 +5,20 @@ import { formatMoney, parseDateOnly } from "@/lib/format";
 import type { SalesSeriesDay } from "@/lib/api/types";
 
 // Ventas por día apiladas: POS (azul) + En línea (verde).
-export function ChannelBarChart({ data }: { data: SalesSeriesDay[] }) {
+export function ChannelBarChart({
+  data,
+  onDayClick,
+}: {
+  data: SalesSeriesDay[];
+  /** Si se pasa, cada barra es clicable y entrega el día. */
+  onDayClick?: (day: SalesSeriesDay) => void;
+}) {
+  // Recharts entrega las props de la barra; los datos del día vienen en `payload`.
+  const handleClick = (bar: unknown) => {
+    const day = (bar as { payload?: SalesSeriesDay }).payload;
+    if (day && onDayClick) onDayClick(day);
+  };
+
   const chartData = data.map((d) => ({
     ...d,
     fullLabel: new Intl.DateTimeFormat("es-CO", { weekday: "long", day: "numeric", month: "long" }).format(
@@ -60,8 +73,23 @@ export function ChannelBarChart({ data }: { data: SalesSeriesDay[] }) {
           }}
         />
         <Legend iconType="circle" wrapperStyle={{ fontSize: 12 }} />
-        <Bar dataKey="pos_total" name="POS" stackId="a" fill="var(--color-accent)" />
-        <Bar dataKey="online_total" name="En línea" stackId="a" fill="var(--color-success)" radius={[6, 6, 0, 0]} />
+        <Bar
+          dataKey="pos_total"
+          name="POS"
+          stackId="a"
+          fill="var(--color-accent)"
+          cursor={onDayClick ? "pointer" : undefined}
+          onClick={handleClick}
+        />
+        <Bar
+          dataKey="online_total"
+          name="En línea"
+          stackId="a"
+          fill="var(--color-success)"
+          radius={[6, 6, 0, 0]}
+          cursor={onDayClick ? "pointer" : undefined}
+          onClick={handleClick}
+        />
       </BarChart>
     </ResponsiveContainer>
   );
