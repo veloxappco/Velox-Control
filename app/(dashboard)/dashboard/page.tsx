@@ -1,13 +1,11 @@
 import { Suspense } from "react";
-import { DollarSign, ShoppingBag, Store, PackageSearch, Receipt } from "lucide-react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
+import { DollarSign, ShoppingBag, Store, Receipt } from "lucide-react";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { SalesBreakdown } from "@/components/dashboard/sales-breakdown";
 import { SalesByDayCard } from "@/components/dashboard/sales-by-day-card";
+import { StockAlerts } from "@/components/dashboard/stock-alerts";
 import { CategoryBreakdown } from "@/components/dashboard/category-breakdown";
 import { DateRangeFilter } from "@/components/shared/date-range-filter";
-import { EmptyState } from "@/components/shared/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   getDashboardSummary,
@@ -113,34 +111,7 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
         </div>
       )}
 
-      <div className="grid grid-cols-1 gap-4">
-        <Card>
-          <CardHeader className="flex-row items-center justify-between space-y-0">
-            <CardTitle className="flex items-center gap-2 font-display text-base font-bold text-foreground">
-              <PackageSearch className="size-4" /> Stock bajo
-            </CardTitle>
-          </CardHeader>
-          <CardContent className="flex flex-col gap-2">
-            {[...alerts.products, ...alerts.ingredients].length === 0 && (
-              <EmptyState icon={PackageSearch} title="Inventario en buen estado" />
-            )}
-            {[...alerts.products, ...alerts.ingredients].slice(0, 6).map((item) => (
-              <div
-                key={`${item.type}-${item.id}`}
-                className="flex items-center justify-between rounded-lg border border-border/60 px-3 py-2.5"
-              >
-                <div>
-                  <p className="text-sm font-medium">{item.name}</p>
-                  <p className="text-xs text-muted-foreground capitalize">{item.type === "product" ? "Producto" : "Insumo"}</p>
-                </div>
-                <Badge variant={item.is_negative ? "destructive" : "warning"}>
-                  {formatNumber(item.stock)} / min {formatNumber(item.min_stock)}
-                </Badge>
-              </div>
-            ))}
-          </CardContent>
-        </Card>
-      </div>
+      <StockAlerts items={[...alerts.products, ...alerts.ingredients].slice(0, 6)} />
     </div>
   );
 }
