@@ -314,3 +314,44 @@ export interface DateRangeParams {
   limit?: number;
   [key: string]: string | number | boolean | undefined | null;
 }
+
+// ---------- Ventas POS ----------
+export interface PosSaleListItem {
+  id: number;
+  sale_number: string;
+  status: string;
+  customer_name: string | null;
+  table: string | null;
+  cashier: string | null;
+  cash_session_status: "open" | "closed" | string;
+  payment_method: string | null;
+  subtotal: number;
+  total: number;
+  sold_at: string;
+}
+
+export interface PosSaleItem {
+  id: number;
+  product_name: string;
+  quantity: number;
+  unit_price: number;
+  total: number;
+}
+
+export interface PosSaleDetail extends PosSaleListItem {
+  items: PosSaleItem[];
+}
+
+export interface PosSalesResponse {
+  period: Period;
+  data: PosSaleListItem[];
+  meta: { current_page: number; last_page: number; per_page: number; total: number };
+}
+
+export interface RemoveItemsPayload {
+  kind: "pos-sale" | "order";
+  id: number;
+  item_ids: number[];
+  all: boolean;
+  reason: string;
+}

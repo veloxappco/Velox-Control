@@ -16,6 +16,8 @@ import type {
   CashExpenseCategoryBreakdown,
   ExpenseMovement,
   ExpensesReport,
+  PosSaleDetail,
+  PosSalesResponse,
   ReportsSalesResponse,
   ReportsPaymentMethodsResponse,
   ReportsTopProductsResponse,
@@ -130,6 +132,16 @@ export async function getExpensesTotal({ from, to }: { from: string; to: string 
     sessions: withExpenses.length,
   };
 }
+
+// ---------- Ventas POS ----------
+export const getPosSales = (params: DateRangeParams & { per_page?: number }) =>
+  apiFetch<PosSalesResponse>(ENDPOINTS.posSales.list, {
+    // per_page / limit: la API usa 25 por defecto; pedimos más y que ella decida.
+    params: { from: params.from, to: params.to, per_page: params.per_page, limit: params.per_page },
+  });
+
+export const getPosSale = (id: number | string) =>
+  apiFetch<{ data: PosSaleDetail }>(ENDPOINTS.posSales.detail(id));
 
 // ---------- Reports ----------
 export const getReportsSales = (params: DateRangeParams) =>

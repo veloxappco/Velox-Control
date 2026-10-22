@@ -220,6 +220,8 @@ const PAYMENT_METHOD_LABELS: Record<string, string> = {
   daviplata: "Daviplata",
   transfer: "Transferencia",
   bank_transfer: "Transferencia",
+  mixed: "Mixto",
+  bancolombia: "Bancolombia",
   other: "Otro",
 };
 
@@ -240,6 +242,8 @@ const PAYMENT_METHOD_BADGE_VARIANTS: Record<
   card: "default",
   nequi: "warning",
   daviplata: "destructive",
+  bancolombia: "success",
+  mixed: "default",
   other: "secondary",
 };
 

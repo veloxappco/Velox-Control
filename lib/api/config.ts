@@ -19,6 +19,10 @@ export const ENDPOINTS = {
     recent: "/orders/recent",
     pending: "/orders/pending",
   },
+  posSales: {
+    list: "/pos-sales",
+    detail: (id: number | string) => `/pos-sales/${id}`,
+  },
   inventory: {
     alerts: "/inventory/alerts",
     // Ruta real: top-consumed-ingredients (antes asumida como ingredient-consumption)

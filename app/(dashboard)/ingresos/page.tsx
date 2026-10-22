@@ -1,10 +1,11 @@
 import { Suspense } from "react";
 import { SalesBreakdown } from "@/components/dashboard/sales-breakdown";
+import { PosSalesModule } from "@/components/dashboard/pos-sales-module";
 import { OrdersModule } from "@/components/dashboard/orders-module";
 import { TopProductsPodium } from "@/components/dashboard/top-products-podium";
 import { DateRangeFilter } from "@/components/shared/date-range-filter";
 import { Skeleton } from "@/components/ui/skeleton";
-import { getDashboardSummary, getOrdersRecent, getReportsTopProducts } from "@/lib/api/queries";
+import { getDashboardSummary, getOrdersRecent, getPosSales, getReportsTopProducts } from "@/lib/api/queries";
 import { isoDateOnly, todayISO } from "@/lib/format";
 import { resolveDateRange } from "@/lib/get-date-range";
 
@@ -36,12 +37,14 @@ export default async function IngresosPage({ searchParams }: PageProps) {
 }
 
 async function IngresosContent({ from, to }: { from: string; to: string }) {
-  const [summary, orders, topProducts] = await Promise.all([
+  const [summary, orders, topProducts, posSales] = await Promise.all([
     getDashboardSummary({ from, to }),
     // /orders/recent no acepta from/to (solo limit), así que traemos los 100
     // más recientes (el máximo que permite la API) y filtramos por fecha acá.
     getOrdersRecent({ limit: 100 }),
     getReportsTopProducts({ from, to, limit: 20 }),
+    // Si las ventas POS fallan, el resto de Ingresos debe seguir cargando.
+    getPosSales({ from, to, per_page: 100 }).catch(() => null),
   ]);
 
   const ordersInRange = orders.data.filter((order) => {
@@ -54,6 +57,8 @@ async function IngresosContent({ from, to }: { from: string; to: string }) {
       <SalesBreakdown sales={summary.sales} title="Ingresos por canal" />
 
       <OrdersModule orders={ordersInRange} />
+
+      {posSales && <PosSalesModule sales={posSales.data} total={posSales.meta.total} />}
 
       <TopProductsPodium products={topProducts.data} />
     </div>
