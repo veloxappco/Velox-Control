@@ -68,7 +68,7 @@ function LoginForm() {
       <div className="flex min-h-dvh w-full max-w-[440px] flex-col bg-white md:min-h-0 md:overflow-hidden md:rounded-[32px] md:shadow-2xl md:shadow-[#6230C9]/20">
         {/* Encabezado: degradado morado + curva blanca orgánica */}
         <header
-          className="relative flex min-h-[28dvh] flex-col justify-center px-7 pb-[88px] pt-[max(env(safe-area-inset-top),2rem)] text-center text-white"
+          className="relative flex min-h-[35dvh] flex-col justify-center md:min-h-[28dvh] px-7 pb-[88px] pt-[max(env(safe-area-inset-top),2rem)] text-center text-white"
           style={{ background: "linear-gradient(115deg, #B52FDC 0%, #7A33DA 48%, #5B2ECF 100%)" }}
         >
           <h1 className="text-[40px] font-bold leading-[1.1] tracking-tight">
