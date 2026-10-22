@@ -71,7 +71,7 @@ export function OrdersModule({ orders }: { orders: OrderListItem[] }) {
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
           <ShoppingBag className="size-5 shrink-0 text-primary" />
-          <h2 className="font-display text-base font-bold text-foreground">Pedidos en línea</h2>
+          <h2 className="font-display text-[15px] font-bold text-foreground">Pedidos en línea</h2>
         </div>
         <button
           type="button"
@@ -104,7 +104,7 @@ export function OrdersModule({ orders }: { orders: OrderListItem[] }) {
               type="button"
               onClick={() => setStatusFilter(key)}
               className={cn(
-                "flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1.5 font-display text-xs font-semibold transition-all duration-200",
+                "flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1.5 font-display text-[11px] font-semibold transition-all duration-200",
                 active
                   ? cn("border-transparent text-white shadow-md", colors.solid)
                   : "border-border bg-card text-foreground/70 hover:bg-secondary/40"
@@ -138,11 +138,11 @@ export function OrdersModule({ orders }: { orders: OrderListItem[] }) {
       <Sheet open={filtersOpen} onOpenChange={setFiltersOpen}>
         <SheetContent side="bottom" className="max-h-[75vh] overflow-y-auto">
           <div className="flex min-w-0 flex-col gap-5 p-5 pt-8">
-            <h3 className="font-display text-lg font-bold text-foreground">Filtros</h3>
+            <h3 className="font-display text-[17px] font-bold text-foreground">Filtros</h3>
 
             {deliveryOptions.length > 0 && (
               <div>
-                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                   Tipo de entrega
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -165,7 +165,7 @@ export function OrdersModule({ orders }: { orders: OrderListItem[] }) {
 
             {paymentOptions.length > 0 && (
               <div>
-                <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                <p className="mb-2 text-[11px] font-semibold uppercase tracking-wide text-muted-foreground">
                   Método de pago
                 </p>
                 <div className="flex flex-wrap gap-2">
@@ -204,7 +204,7 @@ function FilterChip({ label, active, onClick }: { label: string; active: boolean
       type="button"
       onClick={onClick}
       className={cn(
-        "rounded-full border px-3.5 py-1.5 text-sm font-medium transition-colors duration-200",
+        "rounded-full border px-3.5 py-1.5 text-[13px] font-medium transition-colors duration-200",
         active
           ? "border-transparent bg-primary text-white"
           : "border-border bg-card text-foreground/70 hover:bg-secondary/40"

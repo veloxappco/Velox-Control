@@ -1,9 +1,8 @@
 import { Suspense } from "react";
-import { Store } from "lucide-react";
 import { SalesBreakdown } from "@/components/dashboard/sales-breakdown";
 import { ItemRemovalLogs } from "@/components/dashboard/item-removal-logs";
-import { PosAccountsModule } from "@/components/dashboard/pos-accounts-module";
-import { PosSalesModule } from "@/components/dashboard/pos-sales-module";
+import { IngresosTabs } from "@/components/dashboard/ingresos-tabs";
+import { PosModule } from "@/components/dashboard/pos-module";
 import { OrdersModule } from "@/components/dashboard/orders-module";
 import { TopProductsPodium } from "@/components/dashboard/top-products-podium";
 import { DateRangeFilter } from "@/components/shared/date-range-filter";
@@ -26,7 +25,7 @@ export default async function IngresosPage({ searchParams }: PageProps) {
         <div>
           <h1 className="text-xl font-semibold tracking-tight">Ingresos</h1>
           <p className="text-sm text-muted-foreground">
-            Venta POS y pedidos en línea — todo lo que entra al negocio.
+            Gestión del día o entre fechas: pedidos, ventas POS y productos eliminados.
           </p>
         </div>
         <DateRangeFilter defaultFrom={from} defaultTo={to} />
@@ -62,23 +61,46 @@ async function IngresosContent({ from, to }: { from: string; to: string }) {
     <div className="flex min-w-0 flex-col gap-6">
       <SalesBreakdown sales={summary.sales} title="Ingresos por canal" />
 
-      <OrdersModule orders={ordersInRange} />
-
-      {/* Ventas POS: cuentas abiertas ahora (en vivo) + ventas cobradas del periodo */}
-      {(posAccounts || posSales) && (
-        <section className="flex min-w-0 flex-col gap-5">
-          <div className="flex items-center gap-2">
-            <Store className="size-5 shrink-0 text-primary" />
-            <h2 className="font-display text-base font-bold text-foreground">Ventas POS</h2>
-          </div>
-          {posAccounts && <PosAccountsModule accounts={posAccounts.data} embedded />}
-          {posSales && <PosSalesModule sales={posSales.data} total={posSales.meta.total} embedded />}
-        </section>
-      )}
-
-      {removalLogs && <ItemRemovalLogs logs={removalLogs.data} total={removalLogs.meta.total} />}
-
-      <TopProductsPodium products={topProducts.data} />
+      <IngresosTabs
+        tabs={[
+          {
+            value: "pedidos",
+            label: "Pedidos",
+            count: ordersInRange.length,
+            content: <OrdersModule orders={ordersInRange} />,
+          },
+          {
+            value: "pos",
+            label: "Ventas POS",
+            count: (posAccounts?.data.filter((a) => a.status !== "paid").length ?? 0) + (posSales?.meta.total ?? 0),
+            content:
+              posAccounts || posSales ? (
+                <PosModule
+                  accounts={posAccounts?.data ?? []}
+                  sales={posSales?.data ?? []}
+                  salesTotal={posSales?.meta.total ?? 0}
+                />
+              ) : (
+                <p className="text-sm text-muted-foreground">No se pudieron cargar las ventas POS.</p>
+              ),
+          },
+          {
+            value: "top",
+            label: "Top",
+            content: <TopProductsPodium products={topProducts.data} />,
+          },
+          {
+            value: "eliminados",
+            label: "Eliminados",
+            count: removalLogs?.meta.total ?? 0,
+            content: removalLogs ? (
+              <ItemRemovalLogs logs={removalLogs.data} total={removalLogs.meta.total} />
+            ) : (
+              <p className="text-sm text-muted-foreground">No se pudo cargar el historial.</p>
+            ),
+          },
+        ]}
+      />
     </div>
   );
 }

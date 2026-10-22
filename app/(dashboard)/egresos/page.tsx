@@ -25,7 +25,7 @@ export default async function EgresosPage({ searchParams }: PageProps) {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <h1 className="text-xl font-semibold tracking-tight">Egresos</h1>
-          <p className="truncate text-sm text-muted-foreground">Gastos registrados en caja</p>
+          <p className="truncate text-[13px] text-muted-foreground">Gastos registrados en caja</p>
         </div>
         <DateRangeFilter defaultFrom={from} defaultTo={to} />
       </div>
@@ -75,7 +75,7 @@ async function EgresosContent({ from, to }: { from: string; to: string }) {
       </div>
 
       <div>
-        <p className="mb-3 text-xs text-muted-foreground">
+        <p className="mb-3 text-[11px] text-muted-foreground">
           Toca una categoría para ver el detalle de sus movimientos.
         </p>
         <CategoryBreakdown

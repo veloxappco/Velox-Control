@@ -35,7 +35,7 @@ export default async function CajaPage({ searchParams }: PageProps) {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-xl font-semibold tracking-tight">Caja</h1>
-          <p className="text-sm text-muted-foreground">Sesiones de caja e ingresos/egresos.</p>
+          <p className="text-[13px] text-muted-foreground">Sesiones de caja e ingresos/egresos.</p>
         </div>
         <DateRangeFilter defaultFrom={from} defaultTo={to} />
       </div>
@@ -63,7 +63,7 @@ async function CajaContent({ from, to }: { from: string; to: string }) {
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
             <Wallet className="size-5 shrink-0 text-primary" />
-            <h2 className="font-display text-base font-bold text-foreground">Caja actual</h2>
+            <h2 className="font-display text-[15px] font-bold text-foreground">Caja actual</h2>
           </div>
           {current.data && <Badge variant="success">Abierta</Badge>}
         </div>
@@ -108,7 +108,7 @@ async function CajaContent({ from, to }: { from: string; to: string }) {
               href={`/caja/${current.data.id}`}
               className="flex items-center justify-between gap-3 rounded-[20px] border border-border/60 bg-card px-4 py-3.5 shadow-sm transition-all duration-200 hover:bg-secondary/30 hover:shadow-md active:scale-[0.99]"
             >
-              <span className="font-display text-sm font-semibold text-primary">
+              <span className="font-display text-[13px] font-semibold text-primary">
                 Ver detalle de la sesión
               </span>
               <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
@@ -161,8 +161,8 @@ async function CajaContent({ from, to }: { from: string; to: string }) {
             <Wallet className="size-6 text-primary" />
           </div>
           <div className="min-w-0">
-            <h3 className="font-display text-lg font-bold text-foreground">Historial de sesiones</h3>
-            <p className="text-sm text-muted-foreground">Sesiones registradas en el periodo</p>
+            <h3 className="font-display text-[17px] font-bold text-foreground">Historial de sesiones</h3>
+            <p className="text-[13px] text-muted-foreground">Sesiones registradas en el periodo</p>
           </div>
         </div>
         <div className={sessions.data.length === 0 ? "px-5 pb-5" : "pb-2"}>
@@ -201,20 +201,20 @@ function SessionsHistory({ sessions }: { sessions: CashSession[] }) {
                 <ChevronRight className="size-4 shrink-0 text-muted-foreground" />
               </div>
 
-              <p className="mt-2 truncate text-xs text-muted-foreground">
+              <p className="mt-2 truncate text-[11px] text-muted-foreground">
                 {formatShiftRange(session.opened_at, session.closed_at)}
               </p>
 
               <div className="mt-3 grid grid-cols-2 gap-3">
                 <div className="min-w-0">
                   <p className="text-[11px] text-muted-foreground">Ingresos</p>
-                  <p className="mt-0.5 truncate font-display text-lg font-extrabold text-success">
+                  <p className="mt-0.5 truncate font-display text-[17px] font-extrabold text-success">
                     {formatMoney(session.income_total)}
                   </p>
                 </div>
                 <div className="min-w-0">
                   <p className="text-[11px] text-muted-foreground">Egresos</p>
-                  <p className="mt-0.5 truncate font-display text-lg font-extrabold text-destructive">
+                  <p className="mt-0.5 truncate font-display text-[17px] font-extrabold text-destructive">
                     {formatMoney(session.expense_total)}
                   </p>
                 </div>
@@ -222,7 +222,7 @@ function SessionsHistory({ sessions }: { sessions: CashSession[] }) {
 
               <div className="mt-3 border-t border-border/60 pt-3">
                 <p className="text-[11px] text-muted-foreground">Balance del turno</p>
-                <p className={cn("mt-0.5 truncate font-display text-lg font-extrabold", diffTone)}>
+                <p className={cn("mt-0.5 truncate font-display text-[17px] font-extrabold", diffTone)}>
                   {diffLabel}
                 </p>
               </div>
@@ -266,7 +266,7 @@ function SessionsHistory({ sessions }: { sessions: CashSession[] }) {
               <TableCell>
                 <Link
                   href={`/caja/${session.id}`}
-                  className="flex items-center gap-1 text-xs font-medium text-primary hover:underline"
+                  className="flex items-center gap-1 text-[11px] font-medium text-primary hover:underline"
                 >
                   Ver <ChevronRight className="size-3.5" />
                 </Link>

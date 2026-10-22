@@ -76,13 +76,11 @@ export function PosSalesModule({
 
   return (
     <div className="flex min-w-0 flex-col gap-4">
-      {embedded ? (
-        <p className="text-sm font-semibold text-muted-foreground">Cobradas en el periodo ({formatNumber(total)})</p>
-      ) : (
+      {!embedded && (
         <div className="flex items-center gap-2">
           <Store className="size-5 shrink-0 text-primary" />
-          <h2 className="font-display text-base font-bold text-foreground">Ventas POS</h2>
-          <span className="text-sm text-muted-foreground">({formatNumber(total)})</span>
+          <h2 className="font-display text-[15px] font-bold text-foreground">Ventas POS</h2>
+          <span className="text-[13px] text-muted-foreground">({formatNumber(total)})</span>
         </div>
       )}
 
@@ -103,24 +101,24 @@ export function PosSalesModule({
                   <Store className="size-5 text-primary" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-display text-xl font-extrabold tracking-tight text-foreground">
+                  <p className="truncate font-display text-[19px] font-extrabold tracking-tight text-foreground">
                     {sale.table ?? sale.customer_name ?? "Venta"}
                   </p>
-                  <p className="mt-0.5 truncate text-sm font-medium text-foreground/70">{sale.sale_number}</p>
-                  <p className="mt-0.5 truncate text-sm text-muted-foreground">{formatDateTime(sale.sold_at)}</p>
+                  <p className="mt-0.5 truncate text-[13px] font-medium text-foreground/70">{sale.sale_number}</p>
+                  <p className="mt-0.5 truncate text-[13px] text-muted-foreground">{formatDateTime(sale.sold_at)}</p>
                 </div>
                 <div className="flex shrink-0 flex-col items-end gap-1.5">
-                  <span className="font-display text-xl font-extrabold tracking-tight text-foreground">
+                  <span className="font-display text-[19px] font-extrabold tracking-tight text-foreground">
                     {formatMoney(sale.total)}
                   </span>
                   <div className="flex items-center gap-1.5">
                     {sale.payment_method && (
-                      <Badge variant={paymentMethodBadgeVariant(sale.payment_method)} className="text-[12px]">
+                      <Badge variant={paymentMethodBadgeVariant(sale.payment_method)} className="text-[11px]">
                         {paymentMethodLabel(sale.payment_method)}
                       </Badge>
                     )}
                     {st.variant !== "success" && (
-                      <Badge variant={st.variant} className="text-[12px]">
+                      <Badge variant={st.variant} className="text-[11px]">
                         {st.label}
                       </Badge>
                     )}
@@ -137,7 +135,7 @@ export function PosSalesModule({
             />
           )}
           {total > sales.length && (
-            <p className="text-center text-xs text-muted-foreground">
+            <p className="text-center text-[11px] text-muted-foreground">
               Mostrando {formatNumber(sales.length)} de {formatNumber(total)} ventas del periodo.
             </p>
           )}
@@ -183,7 +181,6 @@ function SaleDetail({
 }) {
   const sale = detail ?? base;
   const st = saleStatus(sale.status);
-  const closed = sale.cash_session_status === "closed";
 
   return (
     <div className="flex min-w-0 flex-col gap-5 p-5 pt-8">
@@ -193,40 +190,40 @@ function SaleDetail({
             <Store className="size-5 text-primary" />
           </div>
           <div className="min-w-0">
-            <p className="text-xs text-muted-foreground">Venta {sale.sale_number}</p>
-            <h3 className="truncate font-display text-2xl font-extrabold tracking-tight text-foreground">
+            <p className="text-[11px] text-muted-foreground">Venta {sale.sale_number}</p>
+            <h3 className="truncate font-display text-[22px] font-extrabold tracking-tight text-foreground">
               {sale.table ?? sale.customer_name ?? "Venta POS"}
             </h3>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-1.5">
-          <Badge variant={st.variant} className="text-[13px]">
+          <Badge variant={st.variant} className="text-[12px]">
             {st.label}
           </Badge>
           {sale.payment_method && (
-            <Badge variant={paymentMethodBadgeVariant(sale.payment_method)} className="text-[13px]">
+            <Badge variant={paymentMethodBadgeVariant(sale.payment_method)} className="text-[12px]">
               {paymentMethodLabel(sale.payment_method)}
             </Badge>
           )}
-          <span className="text-xs text-muted-foreground">{formatDateTime(sale.sold_at)}</span>
+          <span className="text-[11px] text-muted-foreground">{formatDateTime(sale.sold_at)}</span>
         </div>
       </div>
 
       <div className="flex items-center justify-between rounded-[20px] bg-primary px-4 py-3.5 shadow-sm">
-        <span className="text-sm text-white/80">Total de la venta</span>
-        <span className="font-display text-lg font-extrabold text-white">{formatMoney(sale.total)}</span>
+        <span className="text-[13px] text-white/80">Total de la venta</span>
+        <span className="font-display text-[17px] font-extrabold text-white">{formatMoney(sale.total)}</span>
       </div>
 
       {loading && !detail && (
-        <div className="flex items-center justify-center gap-2 py-8 text-sm text-muted-foreground">
+        <div className="flex items-center justify-center gap-2 py-8 text-[13px] text-muted-foreground">
           <Loader2 className="size-4 animate-spin" /> Cargando productos…
         </div>
       )}
 
       {error && !detail && (
         <div className="flex flex-col items-center gap-2 rounded-[20px] border border-destructive/30 bg-destructive/5 p-4 text-center">
-          <p className="text-sm text-destructive">{error}</p>
-          <button type="button" onClick={onRetry} className="font-display text-sm font-semibold text-primary">
+          <p className="text-[13px] text-destructive">{error}</p>
+          <button type="button" onClick={onRetry} className="font-display text-[13px] font-semibold text-primary">
             Reintentar
           </button>
         </div>
@@ -237,9 +234,9 @@ function SaleDetail({
           kind="pos-sale"
           id={sale.id}
           items={detail.items}
-          locked={st.variant === "destructive"}
-          voidedNote={st.variant === "destructive" ? "Venta anulada" : "Esta venta no tiene productos"}
-          warning={closed ? "La caja de esta venta ya está cerrada. El sistema puede rechazar la eliminación." : undefined}
+          locked
+          lockedNote="Venta cobrada: solo consulta. Los productos solo se pueden eliminar mientras la cuenta está abierta."
+          voidedNote="Esta venta no tiene productos"
           onChanged={onChanged}
         />
       )}

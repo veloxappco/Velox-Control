@@ -34,7 +34,7 @@ export default async function InventarioPage({ searchParams }: PageProps) {
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h1 className="text-xl font-semibold tracking-tight">Inventario</h1>
-          <p className="text-sm text-muted-foreground">
+          <p className="text-[13px] text-muted-foreground">
             Stock bajo, negativos y consumo de insumos.
           </p>
         </div>
@@ -117,8 +117,8 @@ async function InventarioContent({ from, to }: { from: string; to: string }) {
             <TrendingDown className="size-6 text-primary" />
           </div>
           <div className="min-w-0">
-            <h3 className="font-display text-lg font-bold text-foreground">Consumo de insumos</h3>
-            <p className="text-sm text-muted-foreground">Insumos consumidos en el periodo</p>
+            <h3 className="font-display text-[17px] font-bold text-foreground">Consumo de insumos</h3>
+            <p className="text-[13px] text-muted-foreground">Insumos consumidos en el periodo</p>
           </div>
         </div>
         <ConsumptionSection items={consumption.data} />
@@ -145,7 +145,7 @@ function InventoryShareButton({
       href={href}
       target="_blank"
       rel="noopener noreferrer"
-      className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-[#25D366] px-3 py-1.5 text-xs font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
+      className="inline-flex shrink-0 items-center gap-1.5 rounded-lg bg-[#25D366] px-3 py-1.5 text-[11px] font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
     >
       <WhatsappIcon className="size-4" />
       Compartir
@@ -205,14 +205,14 @@ function StockTable({
             className="min-w-0 rounded-[20px] border border-border/60 bg-card p-4 shadow-sm"
           >
             <div className="flex min-w-0 items-start justify-between gap-3">
-              <p className="min-w-0 truncate font-display text-base font-semibold text-foreground">
+              <p className="min-w-0 truncate font-display text-[15px] font-semibold text-foreground">
                 {item.name}
               </p>
-              <Badge variant={item.is_negative ? "destructive" : "warning"} className="shrink-0 text-[13px]">
+              <Badge variant={item.is_negative ? "destructive" : "warning"} className="shrink-0 text-[12px]">
                 {item.is_negative ? "Negativo" : "Stock bajo"}
               </Badge>
             </div>
-            <div className="mt-2 flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1 text-sm text-muted-foreground">
+            <div className="mt-2 flex min-w-0 flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-muted-foreground">
               <span className="truncate">
                 Stock:{" "}
                 <span className="font-semibold text-foreground">
@@ -280,10 +280,10 @@ function ConsumptionSection({ items }: { items: IngredientConsumptionItem[] }) {
   return (
     <div className="flex min-w-0 flex-col gap-3 pb-5">
       <div className="mx-5 flex min-w-0 items-center justify-between gap-2 rounded-[20px] bg-primary px-4 py-3.5 shadow-sm">
-        <span className="text-sm text-white/80">
+        <span className="text-[13px] text-white/80">
           Costo total del periodo ({items.length} insumo{items.length === 1 ? "" : "s"})
         </span>
-        <span className="shrink-0 font-display text-lg font-extrabold text-white">
+        <span className="shrink-0 font-display text-[17px] font-extrabold text-white">
           {formatMoney(totalCost)}
         </span>
       </div>
@@ -296,14 +296,14 @@ function ConsumptionSection({ items }: { items: IngredientConsumptionItem[] }) {
             className="min-w-0 rounded-[20px] border border-border/60 bg-card p-4 shadow-sm"
           >
             <div className="flex min-w-0 items-start justify-between gap-3">
-              <p className="min-w-0 truncate font-display text-base font-semibold text-foreground">
+              <p className="min-w-0 truncate font-display text-[15px] font-semibold text-foreground">
                 {item.name}
               </p>
-              <span className="shrink-0 font-display text-base font-bold text-foreground">
+              <span className="shrink-0 font-display text-[15px] font-bold text-foreground">
                 {formatMoney(item.total_cost)}
               </span>
             </div>
-            <p className="mt-1 truncate text-sm text-muted-foreground">
+            <p className="mt-1 truncate text-[13px] text-muted-foreground">
               {formatNumber(item.quantity)} {item.unit ?? ""} consumidos
             </p>
           </div>

@@ -27,21 +27,13 @@ export function PosAccountsModule({ accounts, embedded = false }: { accounts: Po
   // La cuenta abierta se lee de las props, así tras un refresh se actualiza sola.
   const selected = active.find((a) => a.id === selectedId) ?? null;
 
-  // Dentro de "Ventas POS": sin título propio y, si no hay cuentas abiertas,
-  // no se muestra nada.
-  if (embedded && active.length === 0) return null;
-
   return (
     <div className="flex min-w-0 flex-col gap-4">
-      {embedded ? (
-        <p className="text-sm font-semibold text-muted-foreground">
-          Abiertas ahora ({formatNumber(active.length)})
-        </p>
-      ) : (
+      {!embedded && (
         <div className="flex items-center gap-2">
           <Armchair className="size-5 shrink-0 text-primary" />
-          <h2 className="font-display text-base font-bold text-foreground">Mesas abiertas</h2>
-          <span className="text-sm text-muted-foreground">({formatNumber(active.length)})</span>
+          <h2 className="font-display text-[15px] font-bold text-foreground">Mesas abiertas</h2>
+          <span className="text-[13px] text-muted-foreground">({formatNumber(active.length)})</span>
         </div>
       )}
 
@@ -63,20 +55,20 @@ export function PosAccountsModule({ accounts, embedded = false }: { accounts: Po
                   <Icon className="size-5 text-warning" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-display text-xl font-extrabold tracking-tight text-foreground">
+                  <p className="truncate font-display text-[19px] font-extrabold tracking-tight text-foreground">
                     {accountTitle(a)}
                   </p>
-                  <p className="mt-0.5 truncate text-sm font-medium text-foreground/70">
+                  <p className="mt-0.5 truncate text-[13px] font-medium text-foreground/70">
                     {formatNumber(a.items.length)} producto{a.items.length === 1 ? "" : "s"}
                     {pending > 0 && ` · ${pending} sin servir`}
                   </p>
-                  <p className="mt-0.5 truncate text-sm text-muted-foreground">{formatDateTime(a.opened_at)}</p>
+                  <p className="mt-0.5 truncate text-[13px] text-muted-foreground">{formatDateTime(a.opened_at)}</p>
                 </div>
                 <div className="flex shrink-0 flex-col items-end gap-1.5">
-                  <span className="font-display text-xl font-extrabold tracking-tight text-foreground">
+                  <span className="font-display text-[19px] font-extrabold tracking-tight text-foreground">
                     {formatMoney(a.total)}
                   </span>
-                  <Badge variant={a.payment_status === "paid" ? "success" : "warning"} className="text-[12px]">
+                  <Badge variant={a.payment_status === "paid" ? "success" : "warning"} className="text-[11px]">
                     {a.payment_status === "paid" ? "Pagada" : "Sin pagar"}
                   </Badge>
                 </div>
@@ -92,23 +84,23 @@ export function PosAccountsModule({ accounts, embedded = false }: { accounts: Po
             <div className="flex min-w-0 flex-col gap-5 p-5 pt-8">
               <div className="flex min-w-0 flex-col gap-3">
                 <div className="min-w-0">
-                  <p className="text-xs text-muted-foreground">Cuenta {selected.number}</p>
-                  <h3 className="truncate font-display text-2xl font-extrabold tracking-tight text-foreground">
+                  <p className="text-[11px] text-muted-foreground">Cuenta {selected.number}</p>
+                  <h3 className="truncate font-display text-[22px] font-extrabold tracking-tight text-foreground">
                     {accountTitle(selected)}
                   </h3>
                 </div>
                 <div className="flex flex-wrap items-center gap-1.5">
-                  <Badge variant={selected.payment_status === "paid" ? "success" : "warning"} className="text-[13px]">
+                  <Badge variant={selected.payment_status === "paid" ? "success" : "warning"} className="text-[12px]">
                     {selected.payment_status === "paid" ? "Pagada" : "Sin pagar"}
                   </Badge>
-                  {selected.cashier && <span className="text-xs text-muted-foreground">Cajero: {selected.cashier}</span>}
-                  <span className="text-xs text-muted-foreground">{formatDateTime(selected.opened_at)}</span>
+                  {selected.cashier && <span className="text-[11px] text-muted-foreground">Cajero: {selected.cashier}</span>}
+                  <span className="text-[11px] text-muted-foreground">{formatDateTime(selected.opened_at)}</span>
                 </div>
               </div>
 
               <div className="flex items-center justify-between rounded-[20px] bg-primary px-4 py-3.5 shadow-sm">
-                <span className="text-sm text-white/80">Total de la cuenta</span>
-                <span className="font-display text-lg font-extrabold text-white">{formatMoney(selected.total)}</span>
+                <span className="text-[13px] text-white/80">Total de la cuenta</span>
+                <span className="font-display text-[17px] font-extrabold text-white">{formatMoney(selected.total)}</span>
               </div>
 
               <ItemRemovalList

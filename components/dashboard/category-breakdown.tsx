@@ -34,8 +34,8 @@ export function CategoryBreakdown({
             <Tags className="size-6 text-warning" />
           </div>
           <div className="min-w-0">
-            <h3 className="font-display text-lg font-bold text-foreground">Egresos por categoría</h3>
-            <p className="text-sm text-muted-foreground">Distribución del gasto en el periodo</p>
+            <h3 className="font-display text-[17px] font-bold text-foreground">Egresos por categoría</h3>
+            <p className="text-[13px] text-muted-foreground">Distribución del gasto en el periodo</p>
           </div>
         </div>
 
@@ -55,13 +55,13 @@ export function CategoryBreakdown({
                   className="flex min-w-0 flex-col gap-2 px-5 py-4 text-left transition-all duration-200 hover:bg-secondary/30 active:bg-secondary/50"
                 >
                   <div className="flex min-w-0 items-center justify-between gap-3">
-                    <span className="min-w-0 truncate font-display text-base font-semibold text-foreground">
+                    <span className="min-w-0 truncate font-display text-[15px] font-semibold text-foreground">
                       {c.category}{" "}
-                      <span className="font-display text-sm font-medium text-muted-foreground">
+                      <span className="font-display text-[13px] font-medium text-muted-foreground">
                         ({c.count})
                       </span>
                     </span>
-                    <span className="shrink-0 font-display text-base font-bold text-foreground">
+                    <span className="shrink-0 font-display text-[15px] font-bold text-foreground">
                       {formatMoney(c.total)}
                     </span>
                   </div>
@@ -72,7 +72,7 @@ export function CategoryBreakdown({
                         style={{ width: `${pct}%` }}
                       />
                     </div>
-                    <span className="w-9 shrink-0 text-right text-xs font-semibold text-muted-foreground">
+                    <span className="w-9 shrink-0 text-right text-[11px] font-semibold text-muted-foreground">
                       {pct}%
                     </span>
                   </div>
@@ -92,14 +92,14 @@ export function CategoryBreakdown({
                   <Tags className="size-5 text-warning" />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-xs text-muted-foreground">Categoría</p>
-                  <h3 className="truncate font-display text-2xl font-extrabold tracking-tight text-foreground">
+                  <p className="text-[11px] text-muted-foreground">Categoría</p>
+                  <h3 className="truncate font-display text-[22px] font-extrabold tracking-tight text-foreground">
                     {openCategory}
                   </h3>
                 </div>
               </div>
               {activeSummary && (
-                <p className="text-sm text-muted-foreground">
+                <p className="text-[13px] text-muted-foreground">
                   {activeSummary.count} movimientos · {formatMoney(activeSummary.total)}
                 </p>
               )}
@@ -118,19 +118,19 @@ export function CategoryBreakdown({
                       <Receipt className="size-5 text-destructive" />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <p className="truncate font-display text-base font-semibold text-foreground">
+                      <p className="truncate font-display text-[15px] font-semibold text-foreground">
                         {m.description?.trim() || "Sin descripción"}
                       </p>
-                      <p className="mt-0.5 truncate text-sm text-muted-foreground">
+                      <p className="mt-0.5 truncate text-[13px] text-muted-foreground">
                         {formatDateTime(m.created_at)}
                       </p>
                     </div>
                     <div className="flex shrink-0 flex-col items-end gap-1.5">
-                      <span className="font-display text-base font-bold text-destructive">
+                      <span className="font-display text-[15px] font-bold text-destructive">
                         -{formatMoney(m.amount)}
                       </span>
                       {m.payment_method && (
-                        <Badge variant={paymentMethodBadgeVariant(m.payment_method)} className="text-[13px]">
+                        <Badge variant={paymentMethodBadgeVariant(m.payment_method)} className="text-[12px]">
                           {paymentMethodLabel(m.payment_method)}
                         </Badge>
                       )}
