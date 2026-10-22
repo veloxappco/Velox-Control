@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ShoppingBag, SlidersHorizontal, LayoutGrid } from "lucide-react";
+import { ShoppingBag, SlidersHorizontal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EmptyState } from "@/components/shared/empty-state";
@@ -10,7 +10,7 @@ import { OrderCard } from "@/components/dashboard/order-card";
 import { OrderDetailSheet } from "@/components/dashboard/order-detail-sheet";
 import { cn } from "@/lib/utils";
 import { deliveryTypeLabel, orderStatusLabel, paymentMethodLabel, type OrderStatusGroup } from "@/lib/format";
-import { orderStatusColors, orderStatusIcon } from "@/lib/order-status";
+import { orderStatusColors } from "@/lib/order-status";
 import type { OrderListItem } from "@/lib/api/types";
 
 const PAGE_SIZE = 10;
@@ -18,7 +18,7 @@ const PAGE_SIZE = 10;
 const STATUS_CHIPS: Array<{ key: "Todos" | OrderStatusGroup; label: string }> = [
   { key: "Todos", label: "Todos" },
   { key: "Pendiente", label: "Pendientes" },
-  { key: "En Preparación", label: "En preparación" },
+  { key: "En Preparación", label: "Preparación" },
   { key: "Listo", label: "Listos" },
   { key: "Entregado", label: "Entregados" },
   { key: "Cancelado", label: "Cancelados" },
@@ -86,33 +86,30 @@ export function OrdersModule({ orders }: { orders: OrderListItem[] }) {
         </button>
       </div>
 
-      <div className="flex flex-wrap gap-1.5">
+      {/* Estados: una sola fila deslizable, con punto de color por estado */}
+      <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         {STATUS_CHIPS.map(({ key, label }) => {
           const count =
             key === "Todos"
               ? orders.length
               : orders.filter((o) => orderStatusLabel(o.status) === key).length;
           const active = statusFilter === key;
-          const colors =
-            key === "Todos"
-              ? { text: "text-primary", solid: "bg-primary" }
-              : orderStatusColors(key);
-          const Icon = key === "Todos" ? LayoutGrid : orderStatusIcon(key);
+          const dot = key === "Todos" ? "bg-primary" : orderStatusColors(key).solid;
           return (
             <button
               key={key}
               type="button"
               onClick={() => setStatusFilter(key)}
               className={cn(
-                "flex shrink-0 items-center gap-1 rounded-full border px-2.5 py-1.5 font-display text-xs font-semibold transition-all duration-200",
+                "flex h-9 shrink-0 items-center gap-2 rounded-full border px-3.5 text-sm font-medium transition-all duration-200",
                 active
-                  ? cn("border-transparent text-white shadow-md", colors.solid)
-                  : "border-border bg-card text-foreground/70 hover:bg-secondary/40"
+                  ? "border-foreground bg-foreground text-background shadow-sm"
+                  : "border-border bg-card text-foreground/75 hover:bg-secondary/40"
               )}
             >
-              <Icon className={cn("size-3.5 shrink-0", active ? "text-white" : colors.text)} />
+              <span className={cn("size-2 shrink-0 rounded-full", dot)} />
               {label}
-              <span className={active ? "text-white/80" : "text-muted-foreground"}>({count})</span>
+              <span className={cn("text-xs", active ? "text-background/70" : "text-muted-foreground")}>{count}</span>
             </button>
           );
         })}

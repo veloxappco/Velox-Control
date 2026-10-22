@@ -85,11 +85,6 @@ async function IngresosContent({ from, to }: { from: string; to: string }) {
               ),
           },
           {
-            value: "top",
-            label: "Top",
-            content: <TopProductsPodium products={topProducts.data} />,
-          },
-          {
             value: "eliminados",
             label: "Eliminados",
             count: removalLogs?.meta.total ?? 0,
@@ -101,6 +96,8 @@ async function IngresosContent({ from, to }: { from: string; to: string }) {
           },
         ]}
       />
+
+      <TopProductsPodium products={topProducts.data} />
     </div>
   );
 }

@@ -15,7 +15,8 @@ interface TabDef {
 export function IngresosTabs({ tabs }: { tabs: TabDef[] }) {
   return (
     <Tabs defaultValue={tabs[0]?.value} className="min-w-0 gap-5">
-      <TabsList className="grid h-auto w-full grid-cols-4 gap-1 rounded-2xl p-1">
+      <TabsList className="grid h-auto w-full gap-1 rounded-2xl p-1"
+        style={{ gridTemplateColumns: `repeat(${tabs.length}, minmax(0, 1fr))` }}>
         {tabs.map((t) => (
           <TabsTrigger
             key={t.value}
