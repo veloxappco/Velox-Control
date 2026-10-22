@@ -35,7 +35,7 @@ export function OrderItemsSection({ orderId, status }: { orderId: number; status
 
   if (error && !detail) {
     return (
-      <div className="flex flex-col items-center gap-2 rounded-[20px] border border-destructive/30 bg-destructive/5 p-4 text-center">
+      <div className="flex flex-col items-center gap-2 rounded-2xl border border-destructive/30 bg-destructive/5 p-4 text-center">
         <p className="text-sm text-destructive">{error}</p>
         <button type="button" onClick={() => setTick((t) => t + 1)} className="font-display text-sm font-semibold text-primary">
           Reintentar

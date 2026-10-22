@@ -21,7 +21,7 @@ export function SalesBreakdown({
   const posPct = denom > 0 ? 100 - onlinePct : 0;
 
   return (
-    <Card className="rounded-[20px] p-5 shadow-sm">
+    <Card className="rounded-2xl p-4 shadow-sm">
       <div className="flex items-center gap-1.5">
         <h3 className="font-display text-md font-semibold text-foreground">{title}</h3>
         <Info className="size-4 text-muted-foreground" />

@@ -77,10 +77,10 @@ export default async function CajaSessionPage({ params }: PageProps) {
         </div>
       </div>
 
-      <Card className="rounded-[20px] p-5 shadow-sm">
+      <Card className="rounded-2xl p-4 shadow-sm">
         <div className="flex items-center gap-3">
-          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
-            <Calculator className="size-6 text-primary" />
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
+            <Calculator className="size-[18px] text-primary" />
           </div>
           <div className="min-w-0">
             <h3 className="font-display text-md font-semibold text-foreground">Cuadre de caja</h3>
@@ -93,10 +93,10 @@ export default async function CajaSessionPage({ params }: PageProps) {
       </Card>
 
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
-          <div className="flex items-center gap-3 p-5 pb-4">
-            <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-accent/10">
-              <CreditCard className="size-6 text-accent" />
+        <Card className="overflow-hidden rounded-2xl p-0 shadow-sm">
+          <div className="flex items-center gap-3 p-4 pb-3">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-accent/10">
+              <CreditCard className="size-[18px] text-accent" />
             </div>
             <div className="min-w-0">
               <h3 className="font-display text-md font-semibold text-foreground">Por método de pago</h3>
@@ -105,17 +105,17 @@ export default async function CajaSessionPage({ params }: PageProps) {
           </div>
 
           {session.payment_methods.length === 0 ? (
-            <div className="px-5 pb-5">
+            <div className="px-4 pb-4">
               <EmptyState icon={CreditCard} title="Sin movimientos por método de pago" />
             </div>
           ) : (
             <>
               {/* Mobile: tarjetas, cero scroll horizontal */}
-              <div className="flex min-w-0 flex-col gap-3 px-5 pb-5 md:hidden">
+              <div className="flex min-w-0 flex-col gap-3 px-4 pb-4 md:hidden">
                 {session.payment_methods.map((m) => (
                   <div
                     key={m.payment_method}
-                    className="rounded-[20px] border border-border/60 bg-card p-4 shadow-sm"
+                    className="rounded-2xl border border-border/60 bg-card p-4 shadow-sm"
                   >
                     <p className="font-display text-base font-semibold text-foreground">
                       {paymentMethodLabel(m.payment_method)}
@@ -173,10 +173,10 @@ export default async function CajaSessionPage({ params }: PageProps) {
           )}
         </Card>
 
-        <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
-          <div className="flex items-center gap-3 p-5 pb-4">
-            <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-warning/10">
-              <Tag className="size-6 text-warning" />
+        <Card className="overflow-hidden rounded-2xl p-0 shadow-sm">
+          <div className="flex items-center gap-3 p-4 pb-3">
+            <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-warning/10">
+              <Tag className="size-[18px] text-warning" />
             </div>
             <div className="min-w-0">
               <h3 className="font-display text-md font-semibold text-foreground">Egresos por categoría</h3>
@@ -185,20 +185,20 @@ export default async function CajaSessionPage({ params }: PageProps) {
           </div>
 
           {session.expense_categories.length === 0 ? (
-            <div className="px-5 pb-5">
+            <div className="px-4 pb-4">
               <EmptyState icon={Tag} title="Sin egresos registrados" />
             </div>
           ) : (
             <>
               {/* Mobile: tarjetas con barra de distribución, cero scroll horizontal */}
-              <div className="flex min-w-0 flex-col gap-3 px-5 pb-5 md:hidden">
+              <div className="flex min-w-0 flex-col gap-3 px-4 pb-4 md:hidden">
                 {session.expense_categories.map((c) => {
                   const pct =
                     session.expense_total > 0 ? Math.round((c.total / session.expense_total) * 100) : 0;
                   return (
                     <div
                       key={c.category}
-                      className="rounded-[20px] border border-border/60 bg-card p-4 shadow-sm"
+                      className="rounded-2xl border border-border/60 bg-card p-4 shadow-sm"
                     >
                       <div className="flex min-w-0 items-center justify-between gap-3">
                         <span className="min-w-0 truncate font-display text-base font-semibold text-foreground">
@@ -251,10 +251,10 @@ export default async function CajaSessionPage({ params }: PageProps) {
         </Card>
       </div>
 
-      <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
-        <div className="flex items-center gap-3 p-5 pb-4">
-          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-secondary">
-            <Wallet className="size-6 text-foreground/70" />
+      <Card className="overflow-hidden rounded-2xl p-0 shadow-sm">
+        <div className="flex items-center gap-3 p-4 pb-3">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-secondary">
+            <Wallet className="size-[18px] text-foreground/70" />
           </div>
           <div className="min-w-0">
             <h3 className="font-display text-md font-semibold text-foreground">Movimientos</h3>
@@ -262,7 +262,7 @@ export default async function CajaSessionPage({ params }: PageProps) {
           </div>
         </div>
         <div
-          className={!session.movements || session.movements.length === 0 ? "px-5 pb-5" : "pb-2"}
+          className={!session.movements || session.movements.length === 0 ? "px-4 pb-4" : "pb-2"}
         >
           <CashMovementsList movements={session.movements ?? []} />
         </div>

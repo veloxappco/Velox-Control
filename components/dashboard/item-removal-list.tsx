@@ -110,7 +110,7 @@ export function ItemRemovalList({
       {items.length === 0 ? (
         <EmptyState icon={Store} title={voidedNote ?? "Sin productos"} />
       ) : (
-        <div className="flex flex-col divide-y divide-border/50 rounded-[20px] border border-border/60 bg-card shadow-sm">
+        <div className="flex flex-col divide-y divide-border/50 rounded-2xl border border-border/60 bg-card shadow-sm">
           {items.map((item) => {
             const on = checked.has(item.id);
             return (
@@ -124,7 +124,7 @@ export function ItemRemovalList({
                 {!locked && item.status_group !== "served" && (
                   <span
                     className={cn(
-                      "flex size-6 shrink-0 items-center justify-center rounded-full border-2 transition-colors",
+                      "flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 transition-colors",
                       on ? "border-destructive bg-destructive text-white" : "border-border bg-card"
                     )}
                   >
@@ -187,7 +187,7 @@ export function ItemRemovalList({
       )}
 
       {!locked && items.length > 0 && checked.size > 0 && (
-        <div className="flex flex-col gap-3 rounded-[20px] border border-border/60 p-4 shadow-sm">
+        <div className="flex flex-col gap-3 rounded-2xl border border-border/60 p-4 shadow-sm">
           <label className="flex flex-col gap-1.5">
             <span className="text-sm font-medium text-foreground">Motivo (obligatorio)</span>
             <textarea

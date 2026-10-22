@@ -28,10 +28,10 @@ export function CategoryBreakdown({
 
   return (
     <>
-      <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
-        <div className="flex items-center gap-3 p-5 pb-4">
-          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-warning/10">
-            <Tags className="size-6 text-warning" />
+      <Card className="overflow-hidden rounded-2xl p-0 shadow-sm">
+        <div className="flex items-center gap-3 p-4 pb-3">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-warning/10">
+            <Tags className="size-[18px] text-warning" />
           </div>
           <div className="min-w-0">
             <h3 className="font-display text-md font-semibold text-foreground">Egresos por categoría</h3>
@@ -40,7 +40,7 @@ export function CategoryBreakdown({
         </div>
 
         {categories.length === 0 ? (
-          <div className="px-5 pb-5">
+          <div className="px-4 pb-4">
             <EmptyState icon={Tags} title="Sin egresos en este periodo" />
           </div>
         ) : (
@@ -52,7 +52,7 @@ export function CategoryBreakdown({
                   key={c.category}
                   type="button"
                   onClick={() => setOpenCategory(c.category)}
-                  className="flex min-w-0 flex-col gap-2 px-5 py-4 text-left transition-all duration-200 hover:bg-secondary/30 active:bg-secondary/50"
+                  className="flex min-w-0 flex-col gap-2 px-4 py-3.5 text-left transition-all duration-200 hover:bg-secondary/30 active:bg-secondary/50"
                 >
                   <div className="flex min-w-0 items-center justify-between gap-3">
                     <span className="min-w-0 truncate font-display text-base font-semibold text-foreground">
@@ -89,11 +89,11 @@ export function CategoryBreakdown({
             <div className="flex min-w-0 flex-col gap-3">
               <div className="flex min-w-0 items-center gap-3">
                 <div className="flex size-11 shrink-0 items-center justify-center rounded-2xl bg-warning/10">
-                  <Tags className="size-5 text-warning" />
+                  <Tags className="size-[18px] text-warning" />
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs text-muted-foreground">Categoría</p>
-                  <h3 className="truncate font-display text-2xl font-semibold tracking-tight text-foreground">
+                  <h3 className="truncate font-display text-xl font-semibold tracking-tight text-foreground">
                     {openCategory}
                   </h3>
                 </div>
@@ -112,10 +112,10 @@ export function CategoryBreakdown({
                 activeMovements.map((m) => (
                   <div
                     key={m.id}
-                    className="flex min-w-0 items-center gap-3 rounded-[20px] border border-border/60 bg-card p-4 shadow-sm"
+                    className="flex min-w-0 items-center gap-3 rounded-2xl border border-border/60 bg-card p-4 shadow-sm"
                   >
                     <div className="flex size-11 shrink-0 items-center justify-center rounded-full bg-destructive/10">
-                      <Receipt className="size-5 text-destructive" />
+                      <Receipt className="size-[18px] text-destructive" />
                     </div>
                     <div className="min-w-0 flex-1">
                       <p className="truncate font-display text-base font-semibold text-foreground">

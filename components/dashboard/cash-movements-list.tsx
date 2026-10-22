@@ -39,7 +39,7 @@ export function CashMovementsList({ movements }: { movements: CashMovement[] }) 
           return (
             <div
               key={m.id}
-              className="flex min-w-0 items-center gap-3 rounded-[20px] border border-border/60 bg-card p-4 shadow-sm"
+              className="flex min-w-0 items-center gap-3 rounded-2xl border border-border/60 bg-card p-4 shadow-sm"
             >
               <div
                 className={cn(
@@ -48,9 +48,9 @@ export function CashMovementsList({ movements }: { movements: CashMovement[] }) 
                 )}
               >
                 {isIncome ? (
-                  <ArrowUpRight className="size-5 text-success" />
+                  <ArrowUpRight className="size-[18px] text-success" />
                 ) : (
-                  <ArrowDownRight className="size-5 text-destructive" />
+                  <ArrowDownRight className="size-[18px] text-destructive" />
                 )}
               </div>
               <div className="min-w-0 flex-1">

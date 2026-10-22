@@ -70,7 +70,7 @@ export function OrdersModule({ orders }: { orders: OrderListItem[] }) {
     <div className="flex min-w-0 flex-col gap-4">
       <div className="flex items-center justify-between gap-3">
         <div className="flex items-center gap-2">
-          <ShoppingBag className="size-5 shrink-0 text-primary" />
+          <ShoppingBag className="size-[18px] shrink-0 text-primary" />
           <h2 className="font-display text-md font-semibold text-foreground">Pedidos en línea</h2>
         </div>
         <button

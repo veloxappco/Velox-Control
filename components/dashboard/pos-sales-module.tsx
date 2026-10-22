@@ -78,7 +78,7 @@ export function PosSalesModule({
     <div className="flex min-w-0 flex-col gap-4">
       {!embedded && (
         <div className="flex items-center gap-2">
-          <Store className="size-5 shrink-0 text-primary" />
+          <Store className="size-[18px] shrink-0 text-primary" />
           <h2 className="font-display text-md font-semibold text-foreground">Ventas POS</h2>
           <span className="text-sm text-muted-foreground">({formatNumber(total)})</span>
         </div>
@@ -95,20 +95,20 @@ export function PosSalesModule({
                 key={sale.id}
                 type="button"
                 onClick={() => openSale(sale)}
-                className="flex min-w-0 items-center gap-3 rounded-[20px] border border-border/60 bg-card p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.985] active:shadow-sm sm:p-5"
+                className="flex min-w-0 items-center gap-3 rounded-2xl border border-border/60 bg-card p-3.5 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.985] active:shadow-sm sm:p-4"
               >
-                <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10">
-                  <Store className="size-5 text-primary" />
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
+                  <Store className="size-[18px] text-primary" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-display text-xl font-bold tracking-tight text-foreground">
+                  <p className="truncate font-display text-md font-semibold text-foreground">
                     {sale.table ?? sale.customer_name ?? "Venta"}
                   </p>
                   <p className="mt-0.5 truncate text-sm font-medium text-foreground/70">{sale.sale_number}</p>
                   <p className="mt-0.5 truncate text-sm text-muted-foreground">{formatDateTime(sale.sold_at)}</p>
                 </div>
                 <div className="flex shrink-0 flex-col items-end gap-1.5">
-                  <span className="font-display text-xl font-bold tracking-tight text-foreground">
+                  <span className="font-display text-md font-semibold text-foreground">
                     {formatMoney(sale.total)}
                   </span>
                   <div className="flex items-center gap-1.5">
@@ -186,12 +186,12 @@ function SaleDetail({
     <div className="flex min-w-0 flex-col gap-5 p-5 pt-8">
       <div className="flex min-w-0 flex-col gap-3">
         <div className="flex min-w-0 items-center gap-3">
-          <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-primary/10">
-            <Store className="size-5 text-primary" />
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-primary/10">
+            <Store className="size-[18px] text-primary" />
           </div>
           <div className="min-w-0">
             <p className="text-xs text-muted-foreground">Venta {sale.sale_number}</p>
-            <h3 className="truncate font-display text-2xl font-semibold tracking-tight text-foreground">
+            <h3 className="truncate font-display text-xl font-semibold tracking-tight text-foreground">
               {sale.table ?? sale.customer_name ?? "Venta POS"}
             </h3>
           </div>
@@ -209,7 +209,7 @@ function SaleDetail({
         </div>
       </div>
 
-      <div className="flex items-center justify-between rounded-[20px] bg-primary px-4 py-3.5 shadow-sm">
+      <div className="flex items-center justify-between rounded-2xl bg-primary px-4 py-3.5 shadow-sm">
         <span className="text-sm text-white/80">Total de la venta</span>
         <span className="font-display text-md font-bold text-white">{formatMoney(sale.total)}</span>
       </div>
@@ -221,7 +221,7 @@ function SaleDetail({
       )}
 
       {error && !detail && (
-        <div className="flex flex-col items-center gap-2 rounded-[20px] border border-destructive/30 bg-destructive/5 p-4 text-center">
+        <div className="flex flex-col items-center gap-2 rounded-2xl border border-destructive/30 bg-destructive/5 p-4 text-center">
           <p className="text-sm text-destructive">{error}</p>
           <button type="button" onClick={onRetry} className="font-display text-sm font-semibold text-primary">
             Reintentar

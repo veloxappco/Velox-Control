@@ -23,7 +23,7 @@ export function MobileNav() {
                 active ? "font-semibold text-primary" : "text-sidebar-foreground/50"
               )}
             >
-              <Icon className={cn("size-5", active && "drop-shadow-[0_0_6px_rgba(139,92,246,0.6)]")} />
+              <Icon className={cn("size-[18px]", active && "drop-shadow-[0_0_6px_rgba(139,92,246,0.6)]")} />
               {item.label}
             </Link>
           );

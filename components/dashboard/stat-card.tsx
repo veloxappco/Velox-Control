@@ -29,8 +29,8 @@ const ICON_BADGE_CLASSES: Record<Accent, string> = {
 // Círculo grande (tipo "app icon" pastel) en vez de la caja chica cuadrada —
 // para las tarjetas que quieran destacar el icono, como Ventas/Pedidos.
 const ICON_SIZE_CLASSES = {
-  wrapper: { sm: "size-8 rounded-xl", md: "size-10 rounded-xl", lg: "size-16 rounded-full" },
-  icon: { sm: "size-4", md: "size-5", lg: "size-7" },
+  wrapper: { sm: "size-7 rounded-lg", md: "size-9 rounded-xl", lg: "size-12 rounded-full" },
+  icon: { sm: "size-3.5", md: "size-[18px]", lg: "size-6" },
 } as const;
 
 export function StatCard({

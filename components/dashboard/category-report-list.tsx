@@ -31,7 +31,7 @@ export function CategoryReportList({ categories }: { categories: CategoryRow[] }
               key={c.categoria}
               type="button"
               onClick={() => setSelected(c)}
-              className="flex min-w-0 flex-col gap-2 px-5 py-4 text-left transition-colors hover:bg-secondary/40 active:bg-secondary/60"
+              className="flex min-w-0 flex-col gap-2 px-4 py-3.5 text-left transition-colors hover:bg-secondary/40 active:bg-secondary/60"
             >
               <div className="flex min-w-0 items-center justify-between gap-3">
                 <span className="min-w-0 truncate font-display text-base font-semibold text-foreground">
@@ -62,18 +62,18 @@ export function CategoryReportList({ categories }: { categories: CategoryRow[] }
             <div className="flex min-w-0 flex-col gap-5 p-5 pt-8">
               <div className="min-w-0">
                 <p className="text-xs text-muted-foreground">Resumen de categoría</p>
-                <h3 className="truncate font-display text-2xl font-semibold tracking-tight text-foreground">
+                <h3 className="truncate font-display text-xl font-semibold tracking-tight text-foreground">
                   {selected.categoria}
                 </h3>
               </div>
-              <div className="rounded-[20px] bg-primary p-5 text-white">
+              <div className="rounded-2xl bg-primary p-5 text-white">
                 <p className="text-sm font-medium text-white/85">Total vendido</p>
                 <p className="truncate font-display text-3xl font-bold">{formatMoney(selected.total)}</p>
                 <p className="mt-1 text-sm text-white/85">
                   {formatNumber(selected.qty)} und. · {selected.products.length} productos
                 </p>
               </div>
-              <div className="flex flex-col divide-y divide-border/50 rounded-[20px] border border-border/60 bg-card">
+              <div className="flex flex-col divide-y divide-border/50 rounded-2xl border border-border/60 bg-card">
                 {selected.products.map((p, i) => (
                   <div key={`${p.nombre}-${i}`} className="flex min-w-0 items-center gap-3 px-4 py-3.5">
                     <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-primary/10 text-sm font-bold text-primary">

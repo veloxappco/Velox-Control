@@ -111,10 +111,10 @@ async function InventarioContent({ from, to }: { from: string; to: string }) {
         </TabsContent>
       </Tabs>
 
-      <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
-        <div className="flex items-center gap-3 p-5 pb-4">
-          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
-            <TrendingDown className="size-6 text-primary" />
+      <Card className="overflow-hidden rounded-2xl p-0 shadow-sm">
+        <div className="flex items-center gap-3 p-4 pb-3">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
+            <TrendingDown className="size-[18px] text-primary" />
           </div>
           <div className="min-w-0">
             <h3 className="font-display text-md font-semibold text-foreground">Consumo de insumos</h3>
@@ -202,7 +202,7 @@ function StockTable({
         {items.map((item) => (
           <div
             key={item.id}
-            className="min-w-0 rounded-[20px] border border-border/60 bg-card p-4 shadow-sm"
+            className="min-w-0 rounded-2xl border border-border/60 bg-card p-4 shadow-sm"
           >
             <div className="flex min-w-0 items-start justify-between gap-3">
               <p className="min-w-0 truncate font-display text-base font-semibold text-foreground">
@@ -269,7 +269,7 @@ function StockTable({
 function ConsumptionSection({ items }: { items: IngredientConsumptionItem[] }) {
   if (items.length === 0) {
     return (
-      <div className="px-5 pb-5">
+      <div className="px-4 pb-4">
         <EmptyState icon={TrendingDown} title="Sin consumo registrado en el periodo" />
       </div>
     );
@@ -279,7 +279,7 @@ function ConsumptionSection({ items }: { items: IngredientConsumptionItem[] }) {
 
   return (
     <div className="flex min-w-0 flex-col gap-3 pb-5">
-      <div className="mx-5 flex min-w-0 items-center justify-between gap-2 rounded-[20px] bg-primary px-4 py-3.5 shadow-sm">
+      <div className="mx-5 flex min-w-0 items-center justify-between gap-2 rounded-2xl bg-primary px-4 py-3.5 shadow-sm">
         <span className="text-sm text-white/80">
           Costo total del periodo ({items.length} insumo{items.length === 1 ? "" : "s"})
         </span>
@@ -293,7 +293,7 @@ function ConsumptionSection({ items }: { items: IngredientConsumptionItem[] }) {
         {items.map((item) => (
           <div
             key={item.ingredient_id}
-            className="min-w-0 rounded-[20px] border border-border/60 bg-card p-4 shadow-sm"
+            className="min-w-0 rounded-2xl border border-border/60 bg-card p-4 shadow-sm"
           >
             <div className="flex min-w-0 items-start justify-between gap-3">
               <p className="min-w-0 truncate font-display text-base font-semibold text-foreground">

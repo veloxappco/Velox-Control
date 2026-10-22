@@ -34,7 +34,7 @@ export function ItemRemovalLogs({ logs, total }: { logs: ItemRemovalLog[]; total
   return (
     <div className="flex min-w-0 flex-col gap-4">
       <div className="flex items-center gap-2">
-        <Trash2 className="size-5 shrink-0 text-destructive" />
+        <Trash2 className="size-[18px] shrink-0 text-destructive" />
         <h2 className="font-display text-md font-semibold text-foreground">Productos eliminados</h2>
         <span className="text-sm text-muted-foreground">({formatNumber(total)})</span>
       </div>
@@ -50,13 +50,13 @@ export function ItemRemovalLogs({ logs, total }: { logs: ItemRemovalLog[]; total
                 key={log.id}
                 type="button"
                 onClick={() => setSelected(log)}
-                className="flex min-w-0 items-center gap-3 rounded-[20px] border border-border/60 bg-card p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.985] active:shadow-sm sm:p-5"
+                className="flex min-w-0 items-center gap-3 rounded-2xl border border-border/60 bg-card p-3.5 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.985] active:shadow-sm sm:p-4"
               >
-                <div className="flex size-12 shrink-0 items-center justify-center rounded-full bg-destructive/10">
-                  <Trash2 className="size-5 text-destructive" />
+                <div className="flex size-10 shrink-0 items-center justify-center rounded-full bg-destructive/10">
+                  <Trash2 className="size-[18px] text-destructive" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-display text-md font-bold tracking-tight text-foreground">
+                  <p className="truncate font-display text-md font-semibold text-foreground">
                     {origin(log)} #{refId(log)}
                   </p>
                   <p className="mt-0.5 truncate text-sm font-medium text-foreground/70">
@@ -67,7 +67,7 @@ export function ItemRemovalLogs({ logs, total }: { logs: ItemRemovalLog[]; total
                     {formatDateTime(log.created_at)}
                   </p>
                 </div>
-                <span className="shrink-0 font-display text-xl font-bold tracking-tight text-destructive">
+                <span className="shrink-0 font-display text-md font-semibold text-destructive">
                   -{formatMoney(removedAmount(log))}
                 </span>
               </button>
@@ -88,7 +88,7 @@ export function ItemRemovalLogs({ logs, total }: { logs: ItemRemovalLog[]; total
             <div className="flex min-w-0 flex-col gap-5 p-5 pt-8">
               <div className="min-w-0">
                 <p className="text-xs text-muted-foreground">{formatDateTime(selected.created_at)}</p>
-                <h3 className="truncate font-display text-2xl font-semibold tracking-tight text-foreground">
+                <h3 className="truncate font-display text-xl font-semibold tracking-tight text-foreground">
                   {origin(selected)} #{refId(selected)}
                 </h3>
                 <p className="mt-1 text-sm text-muted-foreground">
@@ -96,7 +96,7 @@ export function ItemRemovalLogs({ logs, total }: { logs: ItemRemovalLog[]; total
                 </p>
               </div>
 
-              <div className="rounded-[20px] bg-destructive px-4 py-4 text-white shadow-sm">
+              <div className="rounded-2xl bg-destructive px-4 py-4 text-white shadow-sm">
                 <p className="text-sm text-white/80">Valor eliminado</p>
                 <p className="font-display text-3xl font-bold">{formatMoney(removedAmount(selected))}</p>
                 <p className="mt-1 text-sm text-white/85">
@@ -104,12 +104,12 @@ export function ItemRemovalLogs({ logs, total }: { logs: ItemRemovalLog[]; total
                 </p>
               </div>
 
-              <div className="rounded-[20px] border border-border/60 p-4 shadow-sm">
+              <div className="rounded-2xl border border-border/60 p-4 shadow-sm">
                 <p className="text-xs text-muted-foreground">Motivo</p>
                 <p className="mt-0.5 text-base font-semibold text-foreground">{selected.reason || "—"}</p>
               </div>
 
-              <div className="flex flex-col divide-y divide-border/50 rounded-[20px] border border-border/60 bg-card shadow-sm">
+              <div className="flex flex-col divide-y divide-border/50 rounded-2xl border border-border/60 bg-card shadow-sm">
                 {selected.removed_items.map((item, i) => (
                   <div key={`${item.id}-${i}`} className="flex min-w-0 items-center gap-3 px-4 py-3.5">
                     <div className="min-w-0 flex-1">

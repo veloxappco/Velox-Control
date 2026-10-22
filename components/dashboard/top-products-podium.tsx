@@ -45,7 +45,7 @@ export function TopProductsPodium({ products }: { products: TopProductItem[] }) 
 
   if (products.length === 0) {
     return (
-      <Card className="rounded-[20px] p-5 shadow-sm">
+      <Card className="rounded-2xl p-4 shadow-sm">
         <Header />
         <div className="mt-5">
           <EmptyState icon={Trophy} title="Sin ventas de productos en este periodo" />
@@ -60,7 +60,7 @@ export function TopProductsPodium({ products }: { products: TopProductItem[] }) 
   const rest = products.slice(3, REVEAL_CHUNK);
 
   return (
-    <Card className="rounded-[20px] p-5 shadow-sm">
+    <Card className="rounded-2xl p-4 shadow-sm">
       <Header />
 
       <div className="mt-5 flex flex-col gap-3">
@@ -71,21 +71,21 @@ export function TopProductsPodium({ products }: { products: TopProductItem[] }) 
             <div
               key={product.producto_id ?? rank}
               className={cn(
-                "flex min-w-0 items-center gap-3 rounded-[20px] border p-4",
+                "flex min-w-0 items-center gap-3 rounded-2xl border p-4",
                 styles.border,
                 styles.bg
               )}
             >
               <div
                 className={cn(
-                  "flex size-12 shrink-0 items-center justify-center rounded-full",
+                  "flex size-10 shrink-0 items-center justify-center rounded-full",
                   styles.iconBg
                 )}
               >
-                <Medal className={cn("size-5", styles.iconText)} />
+                <Medal className={cn("size-[18px]", styles.iconText)} />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="truncate font-display text-md font-semibold text-foreground">
+                <p className="truncate font-display text-base font-semibold text-foreground">
                   {product.nombre_producto}
                 </p>
                 <p className="mt-0.5 text-sm text-muted-foreground">
@@ -94,7 +94,7 @@ export function TopProductsPodium({ products }: { products: TopProductItem[] }) 
               </div>
               <div
                 className={cn(
-                  "shrink-0 rounded-xl px-3 py-2 font-display text-md font-bold",
+                  "shrink-0 rounded-xl px-3 py-2 font-display text-base font-bold",
                   styles.badgeBg,
                   styles.badgeText
                 )}
@@ -111,7 +111,7 @@ export function TopProductsPodium({ products }: { products: TopProductItem[] }) 
           <button
             type="button"
             onClick={() => setShowAll((v) => !v)}
-            className="flex items-center justify-between gap-3 rounded-[20px] border border-border/60 bg-card px-4 py-3.5 text-left shadow-sm transition-all duration-200 hover:bg-secondary/30 hover:shadow-md active:scale-[0.99]"
+            className="flex items-center justify-between gap-3 rounded-2xl border border-border/60 bg-card px-4 py-3.5 text-left shadow-sm transition-all duration-200 hover:bg-secondary/30 hover:shadow-md active:scale-[0.99]"
           >
             <span className="flex items-center gap-2.5 font-display text-sm font-semibold text-primary">
               <BarChart3 className="size-4 shrink-0" />
@@ -129,18 +129,18 @@ export function TopProductsPodium({ products }: { products: TopProductItem[] }) 
             <div className="flex flex-col divide-y divide-border/50">
               {rest.map((p, i) => (
                 <div key={p.producto_id ?? i} className="flex min-w-0 items-center gap-3 py-4">
-                  <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary text-base font-medium text-foreground/80">
+                  <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-secondary text-base font-medium text-foreground/80">
                     {i + 4}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-display text-md font-semibold text-foreground">
+                    <p className="truncate font-display text-base font-semibold text-foreground">
                       {p.nombre_producto}
                     </p>
                     <p className="mt-0.5 text-sm text-muted-foreground">
                       {formatNumber(p.cantidad_vendida)} unidades
                     </p>
                   </div>
-                  <span className="shrink-0 font-display text-md font-bold text-foreground">
+                  <span className="shrink-0 font-display text-base font-bold text-foreground">
                     {formatMoney(p.total_vendido)}
                   </span>
                 </div>
@@ -156,11 +156,11 @@ export function TopProductsPodium({ products }: { products: TopProductItem[] }) 
 function Header() {
   return (
     <div className="flex items-center gap-3">
-      <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
-        <Trophy className="size-6 text-primary" />
+      <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
+        <Trophy className="size-[18px] text-primary" />
       </div>
       <div className="min-w-0">
-        <h3 className="font-display text-md font-semibold text-foreground">Top de productos</h3>
+        <h3 className="font-display text-base font-semibold text-foreground">Top de productos</h3>
         <p className="text-sm text-muted-foreground">Los productos más vendidos</p>
       </div>
     </div>

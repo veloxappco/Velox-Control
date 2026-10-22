@@ -73,8 +73,8 @@ function SectionHeader({
   }[tone];
   return (
     <div className="flex items-center gap-3">
-      <div className={`flex size-12 shrink-0 items-center justify-center rounded-2xl ${toneClass}`}>
-        <Icon className="size-6" />
+      <div className={`flex size-10 shrink-0 items-center justify-center rounded-2xl ${toneClass}`}>
+        <Icon className="size-[18px]" />
       </div>
       <div className="min-w-0">
         <h3 className="font-display text-md font-semibold text-foreground">{title}</h3>
@@ -138,7 +138,7 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
     <div className="flex min-w-0 flex-col gap-6">
       <ReportKpiCarousel kpis={kpis} />
 
-      <Card className="rounded-[20px] p-5 shadow-sm">
+      <Card className="rounded-2xl p-4 shadow-sm">
         <SectionHeader icon={Columns3} title="Ventas" subtitle="POS y en línea, día a día" tone="accent" />
         <div className="mt-5">
           {sales.data.length ? (
@@ -149,19 +149,19 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
         </div>
       </Card>
 
-      <Card className="rounded-[20px] p-5 shadow-sm">
+      <Card className="rounded-2xl p-4 shadow-sm">
         <SectionHeader icon={Clock} title="Ventas por hora" subtitle="Horas de mayor venta" tone="accent" />
         <div className="mt-5">
           <HourlyBarChart data={hourly.data} />
         </div>
       </Card>
 
-      <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
-        <div className="p-5 pb-4">
+      <Card className="overflow-hidden rounded-2xl p-0 shadow-sm">
+        <div className="p-4 pb-3">
           <SectionHeader icon={Layers} title="Ventas por categoría" subtitle={categoriesTruncated ? "Solo incluye los 20 productos más vendidos" : "Toca una categoría para ver sus productos"} tone="primary" />
         </div>
         {byCategory.length === 0 ? (
-          <div className="px-5 pb-5">
+          <div className="px-4 pb-4">
             <EmptyState icon={Layers} title="Sin ventas en el periodo" />
           </div>
         ) : (
@@ -170,8 +170,8 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
       </Card>
 
       <div className="grid grid-cols-1 gap-4">
-        <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
-          <div className="p-5 pb-4">
+        <Card className="overflow-hidden rounded-2xl p-0 shadow-sm">
+          <div className="p-4 pb-3">
             <SectionHeader
               icon={CreditCard}
               title="Medios de pago"
@@ -180,7 +180,7 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
             />
           </div>
           {paymentMethods.data.length === 0 ? (
-            <div className="px-5 pb-5">
+            <div className="px-4 pb-4">
               <EmptyState icon={CreditCard} title="Sin transacciones en el periodo" />
             </div>
           ) : (
@@ -188,7 +188,7 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
               {paymentMethods.data.map((m) => {
                 const pct = paymentTotal > 0 ? Math.round((m.net_total / paymentTotal) * 100) : 0;
                 return (
-                  <div key={m.payment_method} className="flex min-w-0 flex-col gap-2 px-5 py-4">
+                  <div key={m.payment_method} className="flex min-w-0 flex-col gap-2 px-4 py-3.5">
                     <div className="flex min-w-0 items-center justify-between gap-3">
                       <div className="flex min-w-0 items-center gap-2">
                         <Badge variant={paymentMethodBadgeVariant(m.payment_method)} className="text-xs">

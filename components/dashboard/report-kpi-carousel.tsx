@@ -8,7 +8,7 @@ export interface ReportKpis {
   worstDay: { label: string; total: number; count: number } | null;
 }
 
-const CARD = "flex min-w-0 shrink-0 snap-center flex-col justify-between gap-4 rounded-[20px] p-5 text-white shadow-sm";
+const CARD = "flex min-w-0 shrink-0 snap-center flex-col justify-between gap-4 rounded-2xl p-5 text-white shadow-sm";
 
 function Pill({ label, value }: { label: string; value: string }) {
   return (

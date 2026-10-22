@@ -43,13 +43,13 @@ function OrderDetailContent({ order }: { order: OrderListItem }) {
     <div className="flex min-w-0 flex-col gap-5 p-5 pt-8">
       <div className="flex min-w-0 flex-col gap-3">
         <div className="flex min-w-0 items-center gap-3">
-          <div className={cn("flex size-12 shrink-0 items-center justify-center rounded-full", colors.soft)}>
+          <div className={cn("flex size-10 shrink-0 items-center justify-center rounded-full", colors.soft)}>
             {/* eslint-disable-next-line react-hooks/static-components */}
-            <Icon className={cn("size-5", colors.text)} />
+            <Icon className={cn("size-[18px]", colors.text)} />
           </div>
           <div className="min-w-0">
             <p className="text-xs text-muted-foreground">Pedido {order.order_number}</p>
-            <h3 className="truncate font-display text-2xl font-semibold tracking-tight text-foreground">
+            <h3 className="truncate font-display text-xl font-semibold tracking-tight text-foreground">
               {order.customer_name ?? "Cliente sin nombre"}
             </h3>
           </div>
@@ -61,7 +61,7 @@ function OrderDetailContent({ order }: { order: OrderListItem }) {
 
       <OrderTimeline order={order} />
 
-      <div className="flex flex-col gap-3 rounded-[20px] border border-border/60 p-4 shadow-sm">
+      <div className="flex flex-col gap-3 rounded-2xl border border-border/60 p-4 shadow-sm">
         {order.customer_phone && (
           <DetailRow icon={Phone} label="Teléfono" value={order.customer_phone} />
         )}
@@ -75,7 +75,7 @@ function OrderDetailContent({ order }: { order: OrderListItem }) {
 
       <OrderItemsSection key={order.id} orderId={order.id} status={order.status} />
 
-      <div className="flex items-center justify-between rounded-[20px] bg-primary px-4 py-3.5 shadow-sm">
+      <div className="flex items-center justify-between rounded-2xl bg-primary px-4 py-3.5 shadow-sm">
         <span className="text-sm text-white/80">Total del pedido</span>
         <span className="font-display text-md font-bold text-white">{formatMoney(order.total)}</span>
       </div>
@@ -134,7 +134,7 @@ function OrderTimeline({ order }: { order: OrderListItem }) {
   ];
 
   return (
-    <div className="flex min-w-0 flex-col rounded-[20px] border border-border/60 p-4 shadow-sm">
+    <div className="flex min-w-0 flex-col rounded-2xl border border-border/60 p-4 shadow-sm">
       {steps.map((step, index) => {
         const done = Boolean(step.at) && !step.cancelled;
         const isLast = index === steps.length - 1;
@@ -144,7 +144,7 @@ function OrderTimeline({ order }: { order: OrderListItem }) {
             <div className="flex flex-col items-center">
               <span
                 className={cn(
-                  "flex size-6 shrink-0 items-center justify-center rounded-full",
+                  "flex size-[18px] shrink-0 items-center justify-center rounded-full",
                   step.cancelled || done ? cn(step.solid, "text-white shadow-sm") : "bg-secondary text-muted-foreground"
                 )}
               >

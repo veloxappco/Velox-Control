@@ -16,18 +16,18 @@ export function OrderCard({ order, onClick }: { order: OrderListItem; onClick?: 
     <button
       type="button"
       onClick={onClick}
-      className="flex min-w-0 items-center gap-3 rounded-[20px] border border-border/60 bg-card p-4 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.985] active:shadow-sm sm:p-5"
+      className="flex min-w-0 items-center gap-3 rounded-2xl border border-border/60 bg-card p-3.5 text-left shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.985] active:shadow-sm sm:p-4"
     >
-      <div className={cn("flex size-12 shrink-0 items-center justify-center rounded-full", colors.soft)}>
+      <div className={cn("flex size-10 shrink-0 items-center justify-center rounded-full", colors.soft)}>
         {/* orderStatusIcon() devuelve una referencia estable desde un Record
          * fijo (Clock/ChefHat/etc. son constantes de módulo) — no crea un
          * componente nuevo en cada render, pese a la advertencia genérica
          * del linter. */}
         {/* eslint-disable-next-line react-hooks/static-components */}
-        <Icon className={cn("size-5", colors.text)} />
+        <Icon className={cn("size-[18px]", colors.text)} />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="truncate font-display text-xl font-bold tracking-tight text-foreground sm:text-xl">
+        <p className="truncate font-display text-md font-semibold text-foreground sm:text-md">
           {order.order_number}
         </p>
         <p className="mt-0.5 truncate text-base font-medium text-foreground/70">
@@ -36,7 +36,7 @@ export function OrderCard({ order, onClick }: { order: OrderListItem; onClick?: 
         <p className="mt-0.5 truncate text-sm text-muted-foreground">{formatDateTime(order.created_at)}</p>
       </div>
       <div className="flex shrink-0 flex-col items-end gap-1.5">
-        <span className="font-display text-xl font-bold tracking-tight text-foreground">
+        <span className="font-display text-md font-semibold text-foreground">
           {formatMoney(order.total)}
         </span>
         <Badge variant={orderStatusVariant(order.status)} className="text-xs">

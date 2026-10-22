@@ -62,14 +62,14 @@ async function CajaContent({ from, to }: { from: string; to: string }) {
       <div className="flex min-w-0 flex-col gap-3">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <Wallet className="size-5 shrink-0 text-primary" />
-            <h2 className="font-display text-md font-semibold text-foreground">Caja actual</h2>
+            <Wallet className="size-[18px] shrink-0 text-primary" />
+            <h2 className="font-display text-base font-semibold text-foreground">Caja actual</h2>
           </div>
           {current.data && <Badge variant="success">Abierta</Badge>}
         </div>
 
         {!current.data ? (
-          <Card className="rounded-[20px] p-5 shadow-sm">
+          <Card className="rounded-2xl p-4 shadow-sm">
             <EmptyState icon={Wallet} title="No hay una caja abierta en este momento" />
           </Card>
         ) : (
@@ -106,7 +106,7 @@ async function CajaContent({ from, to }: { from: string; to: string }) {
 
             <Link
               href={`/caja/${current.data.id}`}
-              className="flex items-center justify-between gap-3 rounded-[20px] border border-border/60 bg-card px-4 py-3.5 shadow-sm transition-all duration-200 hover:bg-secondary/30 hover:shadow-md active:scale-[0.99]"
+              className="flex items-center justify-between gap-3 rounded-2xl border border-border/60 bg-card px-4 py-3.5 shadow-sm transition-all duration-200 hover:bg-secondary/30 hover:shadow-md active:scale-[0.99]"
             >
               <span className="font-display text-sm font-semibold text-primary">
                 Ver detalle de la sesión
@@ -155,17 +155,17 @@ async function CajaContent({ from, to }: { from: string; to: string }) {
         </div>
       </div>
 
-      <Card className="overflow-hidden rounded-[20px] p-0 shadow-sm">
-        <div className="flex items-center gap-3 p-5 pb-4">
-          <div className="flex size-12 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
-            <Wallet className="size-6 text-primary" />
+      <Card className="overflow-hidden rounded-2xl p-0 shadow-sm">
+        <div className="flex items-center gap-3 p-4 pb-3">
+          <div className="flex size-10 shrink-0 items-center justify-center rounded-2xl bg-primary/10">
+            <Wallet className="size-[18px] text-primary" />
           </div>
           <div className="min-w-0">
-            <h3 className="font-display text-md font-semibold text-foreground">Historial de sesiones</h3>
+            <h3 className="font-display text-base font-semibold text-foreground">Historial de sesiones</h3>
             <p className="text-sm text-muted-foreground">Sesiones registradas en el periodo</p>
           </div>
         </div>
-        <div className={sessions.data.length === 0 ? "px-5 pb-5" : "pb-2"}>
+        <div className={sessions.data.length === 0 ? "px-4 pb-4" : "pb-2"}>
           <SessionsHistory sessions={sessions.data} />
         </div>
       </Card>
@@ -192,7 +192,7 @@ function SessionsHistory({ sessions }: { sessions: CashSession[] }) {
             <Link
               key={session.id}
               href={`/caja/${session.id}`}
-              className="min-w-0 rounded-[20px] border border-border/60 bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.985] active:shadow-sm"
+              className="min-w-0 rounded-2xl border border-border/60 bg-card p-4 shadow-sm transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md active:scale-[0.985] active:shadow-sm"
             >
               <div className="flex min-w-0 items-center justify-between gap-3">
                 <Badge variant={session.status === "open" ? "success" : "secondary"}>
@@ -208,13 +208,13 @@ function SessionsHistory({ sessions }: { sessions: CashSession[] }) {
               <div className="mt-3 grid grid-cols-2 gap-3">
                 <div className="min-w-0">
                   <p className="text-xs text-muted-foreground">Ingresos</p>
-                  <p className="mt-0.5 truncate font-display text-md font-bold text-success">
+                  <p className="mt-0.5 truncate font-display text-base font-bold text-success">
                     {formatMoney(session.income_total)}
                   </p>
                 </div>
                 <div className="min-w-0">
                   <p className="text-xs text-muted-foreground">Egresos</p>
-                  <p className="mt-0.5 truncate font-display text-md font-bold text-destructive">
+                  <p className="mt-0.5 truncate font-display text-base font-bold text-destructive">
                     {formatMoney(session.expense_total)}
                   </p>
                 </div>
@@ -222,7 +222,7 @@ function SessionsHistory({ sessions }: { sessions: CashSession[] }) {
 
               <div className="mt-3 border-t border-border/60 pt-3">
                 <p className="text-xs text-muted-foreground">Balance del turno</p>
-                <p className={cn("mt-0.5 truncate font-display text-md font-bold", diffTone)}>
+                <p className={cn("mt-0.5 truncate font-display text-base font-bold", diffTone)}>
                   {diffLabel}
                 </p>
               </div>
