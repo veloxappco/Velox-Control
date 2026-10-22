@@ -5,6 +5,8 @@
  * tocar el build. Debe ir antes que cualquier otra regla, incluido
  * @import "tailwindcss". */
 @import url("https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap");
+/* Inter: tipografía de la pantalla de login. */
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap");
 @import "tailwindcss";
 @import "tw-animate-css";
 
