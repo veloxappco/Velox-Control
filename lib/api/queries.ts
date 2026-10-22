@@ -16,6 +16,7 @@ import type {
   CashExpenseCategoryBreakdown,
   ExpenseMovement,
   ExpensesReport,
+  OrderDetail,
   PosSaleDetail,
   PosSalesResponse,
   ReportsSalesResponse,
@@ -38,6 +39,9 @@ export const getOrdersSummary = (params: DateRangeParams) =>
 
 export const getOrdersRecent = (params: DateRangeParams) =>
   apiFetch<OrdersListResponse>(ENDPOINTS.orders.recent, { params });
+
+export const getOrder = (id: number | string) =>
+  apiFetch<{ data: OrderDetail }>(ENDPOINTS.orders.detail(id));
 
 export const getOrdersPending = (params: DateRangeParams) =>
   apiFetch<OrdersListResponse>(ENDPOINTS.orders.pending, { params });

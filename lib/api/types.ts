@@ -355,3 +355,25 @@ export interface RemoveItemsPayload {
   all: boolean;
   reason: string;
 }
+
+export interface OrderDetailItem {
+  id: number;
+  product_name: string;
+  quantity: number;
+  unit_price: number;
+  total: number;
+}
+
+export interface OrderDetail {
+  id: number;
+  order_number: string;
+  status: string;
+  customer_name: string | null;
+  payment_method: string | null;
+  subtotal: number;
+  delivery_fee: number;
+  tax: number;
+  total: number;
+  created_at: string;
+  items: OrderDetailItem[];
+}

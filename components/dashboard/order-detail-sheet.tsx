@@ -3,6 +3,7 @@
 import { Phone, Truck, CreditCard, Clock, ChefHat, X } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
+import { OrderItemsSection } from "@/components/dashboard/order-items-section";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
 import {
@@ -71,6 +72,8 @@ function OrderDetailContent({ order }: { order: OrderListItem }) {
           value={order.payment_method ? paymentMethodLabel(order.payment_method) : "—"}
         />
       </div>
+
+      <OrderItemsSection key={order.id} orderId={order.id} status={order.status} />
 
       <div className="flex items-center justify-between rounded-[20px] bg-primary px-4 py-3.5 shadow-sm">
         <span className="text-sm text-white/80">Total del pedido</span>

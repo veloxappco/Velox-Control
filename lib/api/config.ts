@@ -18,6 +18,7 @@ export const ENDPOINTS = {
     summary: "/orders/summary",
     recent: "/orders/recent",
     pending: "/orders/pending",
+    detail: (id: number | string) => `/orders/${id}`,
   },
   posSales: {
     list: "/pos-sales",
