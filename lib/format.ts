@@ -83,6 +83,15 @@ export function monthStartISO(timeZone: string = DEFAULT_TIMEZONE) {
   return `${todayISO(timeZone).slice(0, 8)}01`;
 }
 
+/** Lunes de la semana actual (YYYY-MM-DD) en la zona horaria del negocio. */
+export function weekStartISO(timeZone: string = DEFAULT_TIMEZONE) {
+  const [y, m, d] = todayISO(timeZone).split("-").map(Number);
+  const date = new Date(Date.UTC(y, m - 1, d));
+  const offset = (date.getUTCDay() + 6) % 7; // lunes = 0
+  date.setUTCDate(date.getUTCDate() - offset);
+  return date.toISOString().slice(0, 10);
+}
+
 export function daysAgoISO(days: number, timeZone: string = DEFAULT_TIMEZONE) {
   const d = new Date();
   d.setDate(d.getDate() - days);
