@@ -7,6 +7,7 @@ import { Card } from "@/components/ui/card";
 import { Sheet, SheetContent } from "@/components/ui/sheet";
 import { EmptyState } from "@/components/shared/empty-state";
 import { ChannelBarChart } from "@/components/dashboard/channel-bar-chart";
+import { HourlyBarChart } from "@/components/dashboard/hourly-bar-chart";
 import {
   formatMoney,
   formatNumber,
@@ -66,7 +67,7 @@ export function SalesByDayCard({ data }: { data: SalesSeriesDay[] }) {
     : null;
 
   return (
-    <Card className="rounded-2xl p-4 shadow-sm lg:col-span-3">
+    <Card className="rounded-2xl p-4 shadow-sm">
       <div className="flex items-center gap-3">
         <div className="flex size-10 shrink-0 items-center justify-center rounded-xl bg-accent/10 text-accent">
           <BarChart3 className="size-5" />
@@ -139,6 +140,13 @@ export function SalesByDayCard({ data }: { data: SalesSeriesDay[] }) {
                       </span>
                     </div>
                   )}
+
+                  <div className="flex flex-col gap-2">
+                    <h4 className="font-display text-md font-semibold text-foreground">Ventas por hora</h4>
+                    <div className="rounded-2xl border border-border/60 bg-card p-3">
+                      <HourlyBarChart data={detail.hours} />
+                    </div>
+                  </div>
 
                   <div className="flex flex-col gap-2">
                     <h4 className="font-display text-md font-semibold text-foreground">Medios de pago</h4>

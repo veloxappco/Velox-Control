@@ -1,26 +1,18 @@
 import { Suspense } from "react";
-import {
-  DollarSign,
-  ShoppingBag,
-  Store,
-  ClipboardList,
-  PackageSearch,
-} from "lucide-react";
+import { DollarSign, ShoppingBag, Store, PackageSearch, Receipt } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { StatCard } from "@/components/dashboard/stat-card";
 import { SalesBreakdown } from "@/components/dashboard/sales-breakdown";
 import { SalesByDayCard } from "@/components/dashboard/sales-by-day-card";
-import { HourlyBarChart } from "@/components/dashboard/hourly-bar-chart";
-import { PendingOrdersList } from "@/components/dashboard/pending-orders-list";
+import { CategoryBreakdown } from "@/components/dashboard/category-breakdown";
 import { DateRangeFilter } from "@/components/shared/date-range-filter";
 import { EmptyState } from "@/components/shared/empty-state";
 import { Skeleton } from "@/components/ui/skeleton";
 import {
   getDashboardSummary,
   getReportsSales,
-  getReportsHourlySales,
-  getOrdersPending,
+  getExpensesReport,
   getInventoryAlerts,
 } from "@/lib/api/queries";
 import { formatMoney, formatNumber, todayISO } from "@/lib/format";
@@ -54,14 +46,11 @@ export default async function DashboardPage({ searchParams }: PageProps) {
 }
 
 async function DashboardContent({ from, to }: { from: string; to: string }) {
-  const [summary, sales, hourly, pending, alerts] = await Promise.all([
+  const [summary, sales, expenses, alerts] = await Promise.all([
     getDashboardSummary({ from, to }),
     getReportsSales({ from, to }),
-    getReportsHourlySales({ from, to }),
-    // Traemos hasta 100 (el máximo que permite la API) para que el lazy
-    // load de la tarjeta pueda revelar de a 10 si hay más pedidos sin
-    // entregar.
-    getOrdersPending({ limit: 100 }),
+    // Egresos respeta el filtro; si falla, el resto del resumen sigue cargando.
+    getExpensesReport({ from, to }).catch(() => null),
     getInventoryAlerts({ limit: 6 }),
   ]);
 
@@ -101,33 +90,30 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
 
       <SalesBreakdown sales={summary.sales} />
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
-        <SalesByDayCard data={sales.data} />
+      <SalesByDayCard data={sales.data} />
 
-        <Card className="lg:col-span-2">
-          <CardHeader>
-            <CardTitle className="font-display text-base font-bold text-foreground">
-              Ventas por hora
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <HourlyBarChart data={hourly.data} />
-          </CardContent>
-        </Card>
-      </div>
+      {expenses && (
+        <div className="flex min-w-0 flex-col gap-3">
+          <StatCard
+            label="Egresos"
+            value={formatMoney(expenses.total)}
+            sub={`${formatNumber(expenses.count)} movimiento${expenses.count === 1 ? "" : "s"}${
+              expenses.categories[0] ? ` · mayor: ${expenses.categories[0].category}` : ""
+            }`}
+            icon={Receipt}
+            accent="warning"
+            variant="solid"
+            valueClassName="text-3xl"
+          />
+          <CategoryBreakdown
+            categories={expenses.categories}
+            movements={expenses.movements}
+            total={expenses.total}
+          />
+        </div>
+      )}
 
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-        <Card>
-          <CardHeader className="flex-row items-center justify-between space-y-0">
-            <CardTitle className="flex items-center gap-2 font-display text-base font-bold text-foreground">
-              <ClipboardList className="size-4" /> Pedidos pendientes
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <PendingOrdersList orders={pending.data} />
-          </CardContent>
-        </Card>
-
+      <div className="grid grid-cols-1 gap-4">
         <Card>
           <CardHeader className="flex-row items-center justify-between space-y-0">
             <CardTitle className="flex items-center gap-2 font-display text-base font-bold text-foreground">
@@ -169,10 +155,8 @@ function DashboardSkeleton() {
           <Skeleton className="h-24 rounded-xl" />
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
-        <Skeleton className="h-[340px] rounded-xl lg:col-span-3" />
-        <Skeleton className="h-[340px] rounded-xl lg:col-span-2" />
-      </div>
+      <Skeleton className="h-[340px] rounded-xl" />
+      <Skeleton className="h-48 rounded-xl" />
     </div>
   );
 }
