@@ -18,7 +18,7 @@ function accountTitle(a: PosAccount) {
 // Cuentas abiertas del POS (mesas y para llevar): el administrador puede
 // quitar productos cuando el cajero se lo pide (teléfono / WhatsApp). El POS
 // ve el cambio al actualizar, porque la eliminación se hace en el backend.
-export function PosAccountsModule({ accounts }: { accounts: PosAccount[] }) {
+export function PosAccountsModule({ accounts, embedded = false }: { accounts: PosAccount[]; embedded?: boolean }) {
   const router = useRouter();
   const [selectedId, setSelectedId] = useState<number | null>(null);
 
@@ -27,13 +27,23 @@ export function PosAccountsModule({ accounts }: { accounts: PosAccount[] }) {
   // La cuenta abierta se lee de las props, así tras un refresh se actualiza sola.
   const selected = active.find((a) => a.id === selectedId) ?? null;
 
+  // Dentro de "Ventas POS": sin título propio y, si no hay cuentas abiertas,
+  // no se muestra nada.
+  if (embedded && active.length === 0) return null;
+
   return (
     <div className="flex min-w-0 flex-col gap-4">
-      <div className="flex items-center gap-2">
-        <Armchair className="size-5 shrink-0 text-primary" />
-        <h2 className="font-display text-base font-bold text-foreground">Mesas abiertas</h2>
-        <span className="text-sm text-muted-foreground">({formatNumber(active.length)})</span>
-      </div>
+      {embedded ? (
+        <p className="text-sm font-semibold text-muted-foreground">
+          Abiertas ahora ({formatNumber(active.length)})
+        </p>
+      ) : (
+        <div className="flex items-center gap-2">
+          <Armchair className="size-5 shrink-0 text-primary" />
+          <h2 className="font-display text-base font-bold text-foreground">Mesas abiertas</h2>
+          <span className="text-sm text-muted-foreground">({formatNumber(active.length)})</span>
+        </div>
+      )}
 
       {active.length === 0 ? (
         <EmptyState icon={Armchair} title="No hay cuentas abiertas" />

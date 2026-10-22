@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import { Store } from "lucide-react";
 import { SalesBreakdown } from "@/components/dashboard/sales-breakdown";
 import { ItemRemovalLogs } from "@/components/dashboard/item-removal-logs";
 import { PosAccountsModule } from "@/components/dashboard/pos-accounts-module";
@@ -61,11 +62,19 @@ async function IngresosContent({ from, to }: { from: string; to: string }) {
     <div className="flex min-w-0 flex-col gap-6">
       <SalesBreakdown sales={summary.sales} title="Ingresos por canal" />
 
-      {posAccounts && <PosAccountsModule accounts={posAccounts.data} />}
-
       <OrdersModule orders={ordersInRange} />
 
-      {posSales && <PosSalesModule sales={posSales.data} total={posSales.meta.total} />}
+      {/* Ventas POS: cuentas abiertas ahora (en vivo) + ventas cobradas del periodo */}
+      {(posAccounts || posSales) && (
+        <section className="flex min-w-0 flex-col gap-5">
+          <div className="flex items-center gap-2">
+            <Store className="size-5 shrink-0 text-primary" />
+            <h2 className="font-display text-base font-bold text-foreground">Ventas POS</h2>
+          </div>
+          {posAccounts && <PosAccountsModule accounts={posAccounts.data} embedded />}
+          {posSales && <PosSalesModule sales={posSales.data} total={posSales.meta.total} embedded />}
+        </section>
+      )}
 
       {removalLogs && <ItemRemovalLogs logs={removalLogs.data} total={removalLogs.meta.total} />}
 

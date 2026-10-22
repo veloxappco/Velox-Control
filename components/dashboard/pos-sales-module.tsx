@@ -28,7 +28,15 @@ function saleStatus(status: string): { label: string; variant: "success" | "dest
   return { label: toTitleCase(status), variant: "secondary" };
 }
 
-export function PosSalesModule({ sales, total }: { sales: PosSaleListItem[]; total: number }) {
+export function PosSalesModule({
+  sales,
+  total,
+  embedded = false,
+}: {
+  sales: PosSaleListItem[];
+  total: number;
+  embedded?: boolean;
+}) {
   const router = useRouter();
   const [visibleCount, setVisibleCount] = useState(PAGE_SIZE);
   const [selected, setSelected] = useState<PosSaleListItem | null>(null);
@@ -68,11 +76,15 @@ export function PosSalesModule({ sales, total }: { sales: PosSaleListItem[]; tot
 
   return (
     <div className="flex min-w-0 flex-col gap-4">
-      <div className="flex items-center gap-2">
-        <Store className="size-5 shrink-0 text-primary" />
-        <h2 className="font-display text-base font-bold text-foreground">Ventas POS</h2>
-        <span className="text-sm text-muted-foreground">({formatNumber(total)})</span>
-      </div>
+      {embedded ? (
+        <p className="text-sm font-semibold text-muted-foreground">Cobradas en el periodo ({formatNumber(total)})</p>
+      ) : (
+        <div className="flex items-center gap-2">
+          <Store className="size-5 shrink-0 text-primary" />
+          <h2 className="font-display text-base font-bold text-foreground">Ventas POS</h2>
+          <span className="text-sm text-muted-foreground">({formatNumber(total)})</span>
+        </div>
+      )}
 
       {sales.length === 0 ? (
         <EmptyState icon={Store} title="Sin ventas POS en el periodo" />
