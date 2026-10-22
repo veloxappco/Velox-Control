@@ -18,6 +18,15 @@ export interface RemovableItem {
   notes?: string | null;
 }
 
+/** Notas del producto sin la línea "Variaciones: ..." (esa ya sale como opciones). */
+function observation(notes: string | null | undefined) {
+  if (!notes) return "";
+  return notes
+    .split("\n")
+    .filter((line) => line.trim() && !line.startsWith("Variaciones:"))
+    .join("\n");
+}
+
 // Lista de productos con casillas + motivo + confirmación para que el
 // administrador elimine productos de un pedido o de una venta POS.
 // Compartida por "Ventas POS" y por el detalle de pedidos en línea.
@@ -132,15 +141,31 @@ export function ItemRemovalList({
                   </span>
                 )}
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-display text-base font-semibold text-foreground">{item.product_name}</p>
+                  <div className="flex min-w-0 items-center gap-2">
+                    <p className="truncate font-display text-base font-semibold text-foreground">{item.product_name}</p>
+                    {item.quantity > 1 && (
+                      <span className="shrink-0 rounded-md bg-primary/10 px-1.5 py-0.5 text-xs font-bold text-primary">
+                        ×{formatNumber(item.quantity)}
+                      </span>
+                    )}
+                  </div>
                   <p className="text-sm text-muted-foreground">
                     {formatNumber(item.quantity)} × {formatMoney(item.unit_price)}
                   </p>
                   {item.options_summary && (
                     <p className="mt-0.5 text-xs text-muted-foreground">{item.options_summary}</p>
                   )}
-                  {item.notes && !item.notes.startsWith("Variaciones:") && (
-                    <p className="mt-0.5 text-xs italic text-muted-foreground">{item.notes}</p>
+                  {/* "Variaciones: ..." ya se muestra arriba como opciones; el resto
+                   * (Obs: ..., notas) se muestra tal cual. */}
+                  {observation(item.notes) && (
+                    <p className="mt-0.5 whitespace-pre-line text-xs italic text-muted-foreground">
+                      {observation(item.notes)}
+                    </p>
+                  )}
+                  {item.quantity > 1 && on && (
+                    <p className="mt-1 text-xs font-medium text-destructive">
+                      Esta línea agrupa {formatNumber(item.quantity)} unidades: se eliminarán todas.
+                    </p>
                   )}
                   {item.status_group && (
                     <span
