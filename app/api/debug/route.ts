@@ -14,7 +14,7 @@ import { apiFetch, ApiError } from "@/lib/api/server";
 //
 // Solo GET y solo rutas permitidas. NO ejecuta eliminaciones.
 // BORRAR este archivo cuando termine la integración.
-const ALLOWED = [/^\/pos-sales(\/\d+)?$/, /^\/orders\/\d+$/, /^\/item-removal-logs$/];
+const ALLOWED = [/^\/orders\/recent$/, /^\/pos-sales(\/\d+)?$/, /^\/orders\/\d+$/, /^\/item-removal-logs$/];
 
 export async function GET(request: NextRequest) {
   if (process.env.ENABLE_API_DEBUG !== "1") {
