@@ -71,12 +71,12 @@ function LoginForm() {
           className="relative flex min-h-[40dvh] flex-col justify-center px-7 pb-24 pt-[max(env(safe-area-inset-top),3rem)] text-center text-white"
           style={{ background: "linear-gradient(115deg, #B52FDC 0%, #7A33DA 48%, #5B2ECF 100%)" }}
         >
-          <h1 className="text-[32px] font-semibold leading-[1.15] tracking-tight">
+          <h1 className="text-[38px] font-bold leading-[1.1] tracking-tight">
             Bienvenido,
             <br />
             administrador
           </h1>
-          <p className="mx-auto mt-3 max-w-[17rem] text-[17px] leading-snug text-white/80">
+          <p className="mx-auto mt-4 max-w-[20rem] text-xl leading-snug text-white/85">
             Ingresa a tu panel de gestión gastronómica
           </p>
 
