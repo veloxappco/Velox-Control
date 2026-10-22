@@ -1,6 +1,7 @@
 import type { LucideIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { FitText } from "@/components/shared/fit-text";
 
 type Accent = "primary" | "accent" | "success" | "warning" | "destructive";
 
@@ -88,15 +89,15 @@ export function StatCard({
             >
               {label}
             </p>
-            <p
+            <FitText
               className={cn(
-                "truncate font-display font-bold tracking-tight text-white",
+                "font-display font-bold tracking-tight text-white",
                 compact ? "mt-1 text-lg" : "mt-1.5 text-2xl",
                 valueClassName
               )}
             >
               {value}
-            </p>
+            </FitText>
             {sub && (
               <p
                 className={cn(
@@ -128,15 +129,15 @@ export function StatCard({
           >
             {label}
           </p>
-          <p
+          <FitText
             className={cn(
-              "truncate font-display font-bold tracking-tight",
+              "font-display font-bold tracking-tight",
               compact ? "mt-1 text-lg" : "mt-1.5 text-2xl",
               valueClassName
             )}
           >
             {value}
-          </p>
+          </FitText>
           {sub && (
             <p
               className={cn(

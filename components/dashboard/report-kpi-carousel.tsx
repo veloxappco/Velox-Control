@@ -1,5 +1,6 @@
 import { ChevronsRight } from "lucide-react";
 import { formatMoney, formatNumber } from "@/lib/format";
+import { FitText } from "@/components/shared/fit-text";
 
 export interface ReportKpis {
   income: { total: number; pos: number; online: number };
@@ -14,7 +15,7 @@ function Pill({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0 flex-1 rounded-2xl bg-white/20 px-3.5 py-3">
       <p className="truncate text-xs font-medium text-white/85">{label}</p>
-      <p className="mt-0.5 truncate font-display text-lg font-bold">{value}</p>
+      <FitText className="mt-0.5 font-display text-lg font-bold">{value}</FitText>
     </div>
   );
 }
@@ -31,9 +32,9 @@ function DayCard({
   return (
     <div className={`${CARD} ${className}`}>
       <p className="font-display text-base font-semibold text-white/90">{title}</p>
-      <p className="truncate font-display text-4xl font-bold tracking-tight">
+      <FitText className="font-display text-4xl font-bold tracking-tight">
         {day ? formatMoney(day.total) : "—"}
-      </p>
+      </FitText>
       <div className="flex min-w-0 gap-2">
         <Pill label="Fecha" value={day ? day.label : "—"} />
         <Pill label="Ventas" value={day ? formatNumber(day.count) : "—"} />
@@ -49,9 +50,9 @@ export function ReportKpiCarousel({ kpis }: { kpis: ReportKpis }) {
       <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className={`${CARD} ${w} bg-success`}>
           <p className="font-display text-base font-semibold text-white/90">Total ingresos</p>
-          <p className="truncate font-display text-4xl font-bold tracking-tight">
+          <FitText className="font-display text-4xl font-bold tracking-tight">
             {formatMoney(kpis.income.total)}
-          </p>
+          </FitText>
           <div className="flex min-w-0 gap-2">
             <Pill label="Ventas POS" value={formatMoney(kpis.income.pos)} />
             <Pill label="Pedidos" value={formatMoney(kpis.income.online)} />
@@ -60,9 +61,9 @@ export function ReportKpiCarousel({ kpis }: { kpis: ReportKpis }) {
 
         <div className={`${CARD} ${w} bg-warning`}>
           <p className="font-display text-base font-semibold text-white/90">Egresos</p>
-          <p className="truncate font-display text-4xl font-bold tracking-tight">
+          <FitText className="font-display text-4xl font-bold tracking-tight">
             {formatMoney(kpis.expenses.total)}
-          </p>
+          </FitText>
           <div className="flex min-w-0 gap-2">
             <Pill label="Cajas con egresos" value={formatNumber(kpis.expenses.count)} />
             <Pill

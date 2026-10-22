@@ -1,6 +1,7 @@
 import { Info, ShoppingBag, ShoppingCart, type LucideIcon } from "lucide-react";
 import { Card } from "@/components/ui/card";
 import { cn } from "@/lib/utils";
+import { FitText } from "@/components/shared/fit-text";
 import { formatMoney, formatNumber } from "@/lib/format";
 import type { DashboardSummary } from "@/lib/api/types";
 
@@ -29,9 +30,9 @@ export function SalesBreakdown({
 
       <div className="mt-5 min-w-0">
         <p className="text-xs font-medium text-muted-foreground">Total de ventas</p>
-        <p className="mt-1 truncate font-display text-4xl font-bold tracking-tight text-foreground">
+        <FitText className="mt-1 font-display text-4xl font-bold tracking-tight text-foreground">
           {formatMoney(total)}
-        </p>
+        </FitText>
       </div>
 
       {denom > 0 && (
@@ -107,9 +108,9 @@ function ChannelDetail({
         <p className={cn("truncate font-display text-base font-bold", labelClass)}>{label}</p>
         {/* truncate (nunca break-words): garantiza una sola línea, nunca se
          * corta la cifra a la mitad como pasaba con el salto de palabra. */}
-        <p className="mt-0.5 truncate font-display text-lg font-bold text-foreground">
+        <FitText className="mt-0.5 font-display text-lg font-bold text-foreground">
           {value}
-        </p>
+        </FitText>
         <p className="truncate text-xs text-muted-foreground">{sub}</p>
       </div>
     </div>
