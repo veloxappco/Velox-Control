@@ -413,3 +413,34 @@ export interface PosAccountsResponse {
   data: PosAccount[];
   meta: { current_page: number; last_page: number; per_page: number; total: number };
 }
+
+// ---------- Historial de eliminaciones ----------
+export interface RemovedItemLog {
+  id: number;
+  product_id: number | null;
+  product_name: string;
+  quantity: number;
+  unit_price: number;
+  total: number;
+  status_before: string | null;
+}
+
+export interface ItemRemovalLog {
+  id: number;
+  order_id: number | null;
+  pos_sale_id: number | null;
+  pos_table_order_id: number | null;
+  removed_items: RemovedItemLog[];
+  /** La API los devuelve como texto ("119000.00"). */
+  total_before: string | number;
+  total_after: string | number;
+  reason: string | null;
+  removed_by: { id: number; name: string; email?: string } | null;
+  created_at: string;
+}
+
+export interface ItemRemovalLogsResponse {
+  period: Period;
+  data: ItemRemovalLog[];
+  meta: { current_page: number; last_page: number; per_page: number; total: number };
+}

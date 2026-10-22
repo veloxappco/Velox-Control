@@ -24,6 +24,7 @@ export const ENDPOINTS = {
     list: "/pos-sales",
     detail: (id: number | string) => `/pos-sales/${id}`,
   },
+  itemRemovalLogs: "/item-removal-logs",
   posAccounts: {
     list: "/pos-accounts",
     detail: (id: number | string) => `/pos-accounts/${id}`,
