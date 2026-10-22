@@ -68,15 +68,15 @@ function LoginForm() {
       <div className="flex min-h-dvh w-full max-w-[440px] flex-col bg-white md:min-h-0 md:overflow-hidden md:rounded-[32px] md:shadow-2xl md:shadow-[#6230C9]/20">
         {/* Encabezado: degradado morado + curva blanca orgánica */}
         <header
-          className="relative flex min-h-[40dvh] flex-col justify-center px-7 pb-24 pt-[max(env(safe-area-inset-top),3rem)] text-center text-white"
+          className="relative flex min-h-[28dvh] flex-col justify-center px-7 pb-[88px] pt-[max(env(safe-area-inset-top),2rem)] text-center text-white"
           style={{ background: "linear-gradient(115deg, #B52FDC 0%, #7A33DA 48%, #5B2ECF 100%)" }}
         >
-          <h1 className="text-[38px] font-bold leading-[1.1] tracking-tight">
+          <h1 className="text-[40px] font-bold leading-[1.1] tracking-tight">
             Bienvenido,
             <br />
             administrador
           </h1>
-          <p className="mx-auto mt-4 max-w-[20rem] text-xl leading-snug text-white/85">
+          <p className="mt-3 whitespace-nowrap text-[clamp(12px,3.6vw,14px)] leading-snug text-white/85">
             Ingresa a tu panel de gestión gastronómica
           </p>
 
