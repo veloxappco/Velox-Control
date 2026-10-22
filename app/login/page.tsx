@@ -9,7 +9,7 @@ import { cn } from "@/lib/utils";
 const INTER = 'Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
 
 const FIELD =
-  "h-12 w-full rounded-2xl border border-gray-200 bg-gray-50/70 pl-11 text-[15px] text-gray-900 placeholder:text-gray-400 outline-none transition-all focus:border-[#7739D9] focus:bg-white focus:ring-4 focus:ring-[#7739D9]/15 disabled:opacity-60";
+  "h-[54px] w-full rounded-full border border-[#E6E6F0] bg-[#F9F9FC] pl-[52px] text-base text-gray-900 shadow-[0_1px_2px_rgba(20,20,60,0.04)] placeholder:text-gray-400 outline-none transition-all focus:border-[#6D3BE0] focus:bg-white focus:ring-4 focus:ring-[#6D3BE0]/15 disabled:opacity-60";
 
 function LoginForm() {
   const router = useRouter();
@@ -68,38 +68,45 @@ function LoginForm() {
       <div className="flex min-h-dvh w-full max-w-[440px] flex-col bg-white md:min-h-0 md:overflow-hidden md:rounded-[32px] md:shadow-2xl md:shadow-[#6230C9]/20">
         {/* Encabezado: degradado morado + curva blanca orgánica */}
         <header
-          className="relative px-6 pb-24 pt-[max(env(safe-area-inset-top),3.5rem)] text-center text-white"
-          style={{ background: "linear-gradient(160deg, #A34BE8 0%, #7739D9 55%, #6230C9 100%)" }}
+          className="relative flex min-h-[40dvh] flex-col justify-center px-7 pb-24 pt-[max(env(safe-area-inset-top),3rem)] text-center text-white"
+          style={{ background: "linear-gradient(115deg, #B52FDC 0%, #7A33DA 48%, #5B2ECF 100%)" }}
         >
-          <h1 className="text-[28px] font-semibold leading-tight tracking-tight">Bienvenido, administrador</h1>
-          <p className="mx-auto mt-2 max-w-[18rem] text-[15px] leading-snug text-white/80">
+          <h1 className="text-[32px] font-semibold leading-[1.15] tracking-tight">
+            Bienvenido,
+            <br />
+            administrador
+          </h1>
+          <p className="mx-auto mt-3 max-w-[17rem] text-[17px] leading-snug text-white/80">
             Ingresa a tu panel de gestión gastronómica
           </p>
 
           <svg
             aria-hidden="true"
-            viewBox="0 0 440 80"
+            viewBox="0 0 390 120"
             preserveAspectRatio="none"
-            className="absolute inset-x-0 bottom-[-1px] h-[72px] w-full"
+            className="absolute inset-x-0 bottom-[-1px] h-[120px] w-full"
           >
+            {/* sombra morada oscura a la izquierda */}
+            <path d="M0,50 C25,30 70,26 105,46 C140,66 165,92 230,104 L230,120 L0,120 Z" fill="#3F1DA8" fillOpacity="0.4" />
+            {/* brillo suave a la derecha */}
+            <path d="M200,98 C270,90 330,58 390,50 L390,120 L200,120 Z" fill="#ffffff" fillOpacity="0.08" />
+            {/* curva blanca */}
             <path
-              d="M0,46 C70,12 130,6 205,30 C285,56 360,58 440,24 L440,80 L0,80 Z"
-              fill="white"
-              fillOpacity="0.22"
+              d="M0,80 C18,52 50,32 90,32 C135,32 165,60 218,60 C272,60 302,36 346,37 C372,38 386,54 390,76 L390,120 L0,120 Z"
+              fill="#ffffff"
             />
-            <path d="M0,58 C80,26 150,20 225,42 C300,64 370,62 440,40 L440,80 L0,80 Z" fill="white" />
           </svg>
         </header>
 
         {/* Formulario */}
-        <section className="flex flex-1 flex-col px-6 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-2">
-          <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-5">
+        <section className="flex flex-1 flex-col px-7 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-3">
+          <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
-              <label htmlFor="username" className="text-[13px] font-medium text-gray-700">
+              <label htmlFor="username" className="pl-1 text-base font-semibold text-[#1C1C2E]">
                 Usuario o correo
               </label>
               <div className="relative">
-                <User className="pointer-events-none absolute left-4 top-1/2 size-[18px] -translate-y-1/2 text-[#7739D9]" />
+                <User className="pointer-events-none absolute left-5 top-1/2 size-5 -translate-y-1/2 text-[#6D3BE0]" />
                 <input
                   id="username"
                   name="username"
@@ -129,11 +136,11 @@ function LoginForm() {
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="password" className="text-[13px] font-medium text-gray-700">
+              <label htmlFor="password" className="pl-1 text-base font-semibold text-[#1C1C2E]">
                 Contraseña
               </label>
               <div className="relative">
-                <Lock className="pointer-events-none absolute left-4 top-1/2 size-[18px] -translate-y-1/2 text-[#7739D9]" />
+                <Lock className="pointer-events-none absolute left-5 top-1/2 size-5 -translate-y-1/2 text-[#6D3BE0]" />
                 <input
                   id="password"
                   name="password"
@@ -149,16 +156,16 @@ function LoginForm() {
                     setPassword(e.target.value);
                     if (fieldErrors.password) setFieldErrors((f) => ({ ...f, password: undefined }));
                   }}
-                  className={cn(FIELD, "pr-12", fieldErrors.password && "border-red-400 bg-red-50/40")}
+                  className={cn(FIELD, "pr-14", fieldErrors.password && "border-red-400 bg-red-50/40")}
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
                   aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
                   aria-pressed={showPassword}
-                  className="absolute right-1 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full text-gray-400 outline-none transition-colors hover:text-gray-700 focus-visible:ring-4 focus-visible:ring-[#7739D9]/15"
+                  className="absolute right-2 top-1/2 flex size-11 -translate-y-1/2 items-center justify-center rounded-full text-gray-400 outline-none transition-colors hover:text-gray-700 focus-visible:ring-4 focus-visible:ring-[#7739D9]/15"
                 >
-                  {showPassword ? <EyeOff className="size-[18px]" /> : <Eye className="size-[18px]" />}
+                  {showPassword ? <EyeOff className="size-5" /> : <Eye className="size-5" />}
                 </button>
               </div>
               {fieldErrors.password && (
@@ -182,15 +189,15 @@ function LoginForm() {
             <button
               type="submit"
               disabled={loading}
-              className="flex h-12 w-full items-center justify-center gap-2 rounded-2xl text-[15px] font-medium text-white shadow-lg shadow-[#8439EE]/25 outline-none transition-all hover:shadow-xl hover:shadow-[#8439EE]/30 hover:brightness-105 focus-visible:ring-4 focus-visible:ring-[#7739D9]/30 active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none"
-              style={{ background: "linear-gradient(90deg, #8439EE 0%, #3978F5 100%)" }}
+              className="mt-1 flex h-[60px] w-full items-center justify-center gap-2 rounded-[30px] text-lg font-medium text-white shadow-[0_14px_28px_-10px_rgba(77,90,245,0.55)] outline-none transition-all hover:shadow-[0_18px_32px_-10px_rgba(77,90,245,0.65)] hover:brightness-105 focus-visible:ring-4 focus-visible:ring-[#6D3BE0]/30 active:scale-[0.985] disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none"
+              style={{ background: "linear-gradient(100deg, #6C38F2 0%, #3A7BFB 100%)" }}
             >
               {loading && <Loader2 className="size-4 animate-spin" />}
               {loading ? "Ingresando…" : "Iniciar sesión"}
             </button>
           </form>
 
-          <p className="mt-auto pt-10 text-center text-xs text-gray-500">
+          <p className="mt-auto pt-12 text-center text-[13px] text-gray-500">
             VeloxAdmin © {new Date().getFullYear()} — hecho para tu negocio
           </p>
         </section>
