@@ -35,8 +35,8 @@ export function ItemRemovalLogs({ logs, total }: { logs: ItemRemovalLog[]; total
     <div className="flex min-w-0 flex-col gap-4">
       <div className="flex items-center gap-2">
         <Trash2 className="size-5 shrink-0 text-destructive" />
-        <h2 className="font-display text-[15px] font-bold text-foreground">Productos eliminados</h2>
-        <span className="text-[13px] text-muted-foreground">({formatNumber(total)})</span>
+        <h2 className="font-display text-md font-semibold text-foreground">Productos eliminados</h2>
+        <span className="text-sm text-muted-foreground">({formatNumber(total)})</span>
       </div>
 
       {logs.length === 0 ? (
@@ -56,18 +56,18 @@ export function ItemRemovalLogs({ logs, total }: { logs: ItemRemovalLog[]; total
                   <Trash2 className="size-5 text-destructive" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-display text-[17px] font-extrabold tracking-tight text-foreground">
+                  <p className="truncate font-display text-md font-bold tracking-tight text-foreground">
                     {origin(log)} #{refId(log)}
                   </p>
-                  <p className="mt-0.5 truncate text-[13px] font-medium text-foreground/70">
+                  <p className="mt-0.5 truncate text-sm font-medium text-foreground/70">
                     {formatNumber(n)} producto{n === 1 ? "" : "s"} · {log.removed_by?.name ?? "—"}
                   </p>
-                  <p className="mt-0.5 truncate text-[13px] text-muted-foreground">
+                  <p className="mt-0.5 truncate text-sm text-muted-foreground">
                     {log.reason ? `${log.reason} · ` : ""}
                     {formatDateTime(log.created_at)}
                   </p>
                 </div>
-                <span className="shrink-0 font-display text-[19px] font-extrabold tracking-tight text-destructive">
+                <span className="shrink-0 font-display text-xl font-bold tracking-tight text-destructive">
                   -{formatMoney(removedAmount(log))}
                 </span>
               </button>
@@ -87,41 +87,41 @@ export function ItemRemovalLogs({ logs, total }: { logs: ItemRemovalLog[]; total
           {selected && (
             <div className="flex min-w-0 flex-col gap-5 p-5 pt-8">
               <div className="min-w-0">
-                <p className="text-[11px] text-muted-foreground">{formatDateTime(selected.created_at)}</p>
-                <h3 className="truncate font-display text-[22px] font-extrabold tracking-tight text-foreground">
+                <p className="text-xs text-muted-foreground">{formatDateTime(selected.created_at)}</p>
+                <h3 className="truncate font-display text-2xl font-semibold tracking-tight text-foreground">
                   {origin(selected)} #{refId(selected)}
                 </h3>
-                <p className="mt-1 text-[13px] text-muted-foreground">
+                <p className="mt-1 text-sm text-muted-foreground">
                   Eliminado por <span className="font-semibold text-foreground">{selected.removed_by?.name ?? "—"}</span>
                 </p>
               </div>
 
               <div className="rounded-[20px] bg-destructive px-4 py-4 text-white shadow-sm">
-                <p className="text-[13px] text-white/80">Valor eliminado</p>
-                <p className="font-display text-3xl font-extrabold">{formatMoney(removedAmount(selected))}</p>
-                <p className="mt-1 text-[13px] text-white/85">
+                <p className="text-sm text-white/80">Valor eliminado</p>
+                <p className="font-display text-3xl font-bold">{formatMoney(removedAmount(selected))}</p>
+                <p className="mt-1 text-sm text-white/85">
                   Total: {formatMoney(Number(selected.total_before))} → {formatMoney(Number(selected.total_after))}
                 </p>
               </div>
 
               <div className="rounded-[20px] border border-border/60 p-4 shadow-sm">
-                <p className="text-[11px] text-muted-foreground">Motivo</p>
-                <p className="mt-0.5 text-[15px] font-semibold text-foreground">{selected.reason || "—"}</p>
+                <p className="text-xs text-muted-foreground">Motivo</p>
+                <p className="mt-0.5 text-base font-semibold text-foreground">{selected.reason || "—"}</p>
               </div>
 
               <div className="flex flex-col divide-y divide-border/50 rounded-[20px] border border-border/60 bg-card shadow-sm">
                 {selected.removed_items.map((item, i) => (
                   <div key={`${item.id}-${i}`} className="flex min-w-0 items-center gap-3 px-4 py-3.5">
                     <div className="min-w-0 flex-1">
-                      <p className="truncate font-display text-[15px] font-semibold text-foreground">
+                      <p className="truncate font-display text-base font-semibold text-foreground">
                         {item.product_name}
                       </p>
-                      <p className="text-[13px] text-muted-foreground">
+                      <p className="text-sm text-muted-foreground">
                         {formatNumber(item.quantity)} × {formatMoney(item.unit_price)}
                         {item.status_before && ` · estaba ${item.status_before === "served" ? "servido" : "enviado"}`}
                       </p>
                     </div>
-                    <span className="shrink-0 font-display text-[15px] font-bold text-foreground">
+                    <span className="shrink-0 font-display text-base font-bold text-foreground">
                       {formatMoney(item.total)}
                     </span>
                   </div>

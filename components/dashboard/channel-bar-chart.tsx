@@ -37,11 +37,11 @@ export function ChannelBarChart({ data }: { data: SalesSeriesDay[] }) {
             return (
               <div className="min-w-44 rounded-2xl border border-border/60 bg-card p-3.5 shadow-lg">
                 <p className="text-xs font-medium text-muted-foreground">{d.fullLabel}</p>
-                <p className="mt-0.5 font-display text-xl font-extrabold text-foreground">
+                <p className="mt-0.5 font-display text-xl font-bold text-foreground">
                   {formatMoney(d.total)}
                 </p>
-                <p className="text-[11px] font-medium text-muted-foreground">Venta total</p>
-                <div className="mt-2.5 flex flex-col gap-1.5 border-t border-border/60 pt-2.5 text-sm">
+                <p className="text-xs font-medium text-muted-foreground">Venta total</p>
+                <div className="mt-2.5 flex flex-col gap-1.5 border-t border-border/60 pt-2.5 text-base">
                   <div className="flex items-center justify-between gap-4">
                     <span className="flex items-center gap-1.5 font-medium text-accent">
                       <span className="size-2 rounded-full bg-accent" /> POS

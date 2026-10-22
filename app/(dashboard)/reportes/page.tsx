@@ -39,8 +39,8 @@ export default async function ReportesPage({ searchParams }: PageProps) {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">Reportes</h1>
-          <p className="text-[13px] text-muted-foreground">
+          <h1>Reportes</h1>
+          <p className="text-sm text-muted-foreground">
             Ingresos, egresos, ventas por categoría y medios de pago.
           </p>
         </div>
@@ -77,8 +77,8 @@ function SectionHeader({
         <Icon className="size-6" />
       </div>
       <div className="min-w-0">
-        <h3 className="font-display text-[17px] font-bold text-foreground">{title}</h3>
-        <p className="text-[13px] text-muted-foreground">{subtitle}</p>
+        <h3 className="font-display text-md font-semibold text-foreground">{title}</h3>
+        <p className="text-sm text-muted-foreground">{subtitle}</p>
       </div>
     </div>
   );
@@ -191,14 +191,14 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
                   <div key={m.payment_method} className="flex min-w-0 flex-col gap-2 px-5 py-4">
                     <div className="flex min-w-0 items-center justify-between gap-3">
                       <div className="flex min-w-0 items-center gap-2">
-                        <Badge variant={paymentMethodBadgeVariant(m.payment_method)} className="text-[12px]">
+                        <Badge variant={paymentMethodBadgeVariant(m.payment_method)} className="text-xs">
                           {paymentMethodLabel(m.payment_method)}
                         </Badge>
-                        <span className="truncate text-[13px] text-muted-foreground">
+                        <span className="truncate text-sm text-muted-foreground">
                           {formatNumber(m.transactions)} transacc.
                         </span>
                       </div>
-                      <span className="shrink-0 font-display text-[15px] font-bold text-foreground">
+                      <span className="shrink-0 font-display text-base font-bold text-foreground">
                         {formatMoney(m.net_total)}
                       </span>
                     </div>
@@ -206,7 +206,7 @@ async function ReportesContent({ from, to }: { from: string; to: string }) {
                       <div className="h-2 min-w-0 flex-1 overflow-hidden rounded-full bg-secondary">
                         <div className="h-full rounded-full bg-primary" style={{ width: `${pct}%` }} />
                       </div>
-                      <span className="w-9 shrink-0 text-right text-[11px] font-semibold text-muted-foreground">
+                      <span className="w-9 shrink-0 text-right text-xs font-semibold text-muted-foreground">
                         {pct}%
                       </span>
                     </div>

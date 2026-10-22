@@ -27,19 +27,19 @@ export function OrderCard({ order, onClick }: { order: OrderListItem; onClick?: 
         <Icon className={cn("size-5", colors.text)} />
       </div>
       <div className="min-w-0 flex-1">
-        <p className="truncate font-display text-[19px] font-extrabold tracking-tight text-foreground sm:text-[22px]">
+        <p className="truncate font-display text-xl font-bold tracking-tight text-foreground sm:text-xl">
           {order.order_number}
         </p>
-        <p className="mt-0.5 truncate text-[15px] font-medium text-foreground/70">
+        <p className="mt-0.5 truncate text-base font-medium text-foreground/70">
           {order.customer_name ?? "Cliente sin nombre"}
         </p>
-        <p className="mt-0.5 truncate text-[13px] text-muted-foreground">{formatDateTime(order.created_at)}</p>
+        <p className="mt-0.5 truncate text-sm text-muted-foreground">{formatDateTime(order.created_at)}</p>
       </div>
       <div className="flex shrink-0 flex-col items-end gap-1.5">
-        <span className="font-display text-[19px] font-extrabold tracking-tight text-foreground">
+        <span className="font-display text-xl font-bold tracking-tight text-foreground">
           {formatMoney(order.total)}
         </span>
-        <Badge variant={orderStatusVariant(order.status)} className="text-[12px]">
+        <Badge variant={orderStatusVariant(order.status)} className="text-xs">
           {orderStatusLabel(order.status)}
         </Badge>
       </div>

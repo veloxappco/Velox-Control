@@ -5,11 +5,8 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { Eye, EyeOff, Loader2, Lock, User } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Tipografía propia del login (Inter), sin tocar el resto de la app.
-const INTER = 'Inter, ui-sans-serif, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
-
 const FIELD =
-  "h-[54px] w-full rounded-full border border-[#E6E6F0] bg-[#F9F9FC] pl-[52px] text-base text-gray-900 shadow-[0_1px_2px_rgba(20,20,60,0.04)] placeholder:text-gray-400 outline-none transition-all focus:border-[#6D3BE0] focus:bg-white focus:ring-4 focus:ring-[#6D3BE0]/15 disabled:opacity-60";
+  "h-[54px] w-full rounded-full border border-[#E6E6F0] bg-[#F9F9FC] pl-[52px] text-md text-gray-900 shadow-[0_1px_2px_rgba(20,20,60,0.04)] placeholder:text-gray-400 outline-none transition-all focus:border-[#6D3BE0] focus:bg-white focus:ring-4 focus:ring-[#6D3BE0]/15 disabled:opacity-60";
 
 function LoginForm() {
   const router = useRouter();
@@ -63,7 +60,6 @@ function LoginForm() {
   return (
     <main
       className="flex min-h-dvh justify-center bg-white md:items-center md:bg-[#F1ECFB] md:py-10"
-      style={{ fontFamily: INTER }}
     >
       <div className="flex min-h-dvh w-full max-w-[440px] flex-col bg-white md:min-h-0 md:overflow-hidden md:rounded-[32px] md:shadow-2xl md:shadow-[#6230C9]/20">
         {/* Encabezado: degradado morado + curva blanca orgánica */}
@@ -102,7 +98,7 @@ function LoginForm() {
         <section className="flex flex-1 flex-col px-7 pb-[max(env(safe-area-inset-bottom),1.5rem)] pt-3">
           <form onSubmit={handleSubmit} noValidate className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
-              <label htmlFor="username" className="pl-1 text-base font-semibold text-[#1C1C2E]">
+              <label htmlFor="username" className="pl-1 text-md font-semibold text-[#1C1C2E]">
                 Usuario o correo
               </label>
               <div className="relative">
@@ -129,14 +125,14 @@ function LoginForm() {
                 />
               </div>
               {fieldErrors.username && (
-                <p id="username-error" className="text-[13px] text-red-600">
+                <p id="username-error" className="text-sm text-red-600">
                   {fieldErrors.username}
                 </p>
               )}
             </div>
 
             <div className="flex flex-col gap-2">
-              <label htmlFor="password" className="pl-1 text-base font-semibold text-[#1C1C2E]">
+              <label htmlFor="password" className="pl-1 text-md font-semibold text-[#1C1C2E]">
                 Contraseña
               </label>
               <div className="relative">
@@ -169,7 +165,7 @@ function LoginForm() {
                 </button>
               </div>
               {fieldErrors.password && (
-                <p id="password-error" className="text-[13px] text-red-600">
+                <p id="password-error" className="text-sm text-red-600">
                   {fieldErrors.password}
                 </p>
               )}
@@ -179,7 +175,7 @@ function LoginForm() {
               {error && (
                 <p
                   role="alert"
-                  className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-[13px] leading-snug text-red-700"
+                  className="rounded-2xl border border-red-200 bg-red-50 px-4 py-3 text-sm leading-snug text-red-700"
                 >
                   {error}
                 </p>
@@ -197,7 +193,7 @@ function LoginForm() {
             </button>
           </form>
 
-          <p className="mt-auto pt-12 text-center text-[13px] text-gray-500">
+          <p className="mt-auto pt-12 text-center text-sm text-gray-500">
             VeloxAdmin © {new Date().getFullYear()} — hecho para tu negocio
           </p>
         </section>

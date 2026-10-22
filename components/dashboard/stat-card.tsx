@@ -82,15 +82,15 @@ export function StatCard({
           <div className="min-w-0 flex-1">
             <p
               className={cn(
-                "truncate font-display font-bold text-white/80",
-                compact ? "text-[11px]" : "text-xs"
+                "truncate font-display font-medium text-white/80",
+                compact ? "text-xs" : "text-xs"
               )}
             >
               {label}
             </p>
             <p
               className={cn(
-                "truncate font-display font-extrabold tracking-tight text-white",
+                "truncate font-display font-bold tracking-tight text-white",
                 compact ? "mt-1 text-lg" : "mt-1.5 text-2xl",
                 valueClassName
               )}
@@ -101,7 +101,7 @@ export function StatCard({
               <p
                 className={cn(
                   "truncate font-display font-semibold text-white/75",
-                  compact ? "mt-0.5 text-[11px]" : "mt-1 text-xs"
+                  compact ? "mt-0.5 text-xs" : "mt-1 text-xs"
                 )}
               >
                 {sub}
@@ -122,15 +122,15 @@ export function StatCard({
         <div className="min-w-0 flex-1">
           <p
             className={cn(
-              "truncate font-display font-bold text-muted-foreground",
-              compact ? "text-[11px]" : "text-xs"
+              "truncate font-display font-medium text-muted-foreground",
+              compact ? "text-xs" : "text-xs"
             )}
           >
             {label}
           </p>
           <p
             className={cn(
-              "truncate font-display font-extrabold tracking-tight",
+              "truncate font-display font-bold tracking-tight",
               compact ? "mt-1 text-lg" : "mt-1.5 text-2xl",
               valueClassName
             )}
@@ -141,7 +141,7 @@ export function StatCard({
             <p
               className={cn(
                 "truncate font-display font-semibold text-muted-foreground",
-                compact ? "mt-0.5 text-[11px]" : "mt-1 text-xs"
+                compact ? "mt-0.5 text-xs" : "mt-1 text-xs"
               )}
             >
               {sub}

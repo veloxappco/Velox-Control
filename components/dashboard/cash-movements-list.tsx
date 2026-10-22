@@ -54,14 +54,14 @@ export function CashMovementsList({ movements }: { movements: CashMovement[] }) 
                 )}
               </div>
               <div className="min-w-0 flex-1">
-                <p className="truncate font-display text-[15px] font-semibold text-foreground">
+                <p className="truncate font-display text-base font-semibold text-foreground">
                   {m.category ?? (isIncome ? "Ingreso" : "Egreso")}
                 </p>
-                <p className="mt-0.5 truncate text-[13px] text-muted-foreground">
+                <p className="mt-0.5 truncate text-sm text-muted-foreground">
                   {m.description?.trim() || formatDateTime(m.created_at)}
                 </p>
                 {m.description?.trim() && (
-                  <p className="mt-0.5 truncate text-[11px] text-muted-foreground">
+                  <p className="mt-0.5 truncate text-xs text-muted-foreground">
                     {formatDateTime(m.created_at)}
                   </p>
                 )}
@@ -69,7 +69,7 @@ export function CashMovementsList({ movements }: { movements: CashMovement[] }) 
               <div className="flex shrink-0 flex-col items-end gap-1.5">
                 <span
                   className={cn(
-                    "font-display text-[15px] font-bold",
+                    "font-display text-base font-bold",
                     isIncome ? "text-success" : "text-destructive"
                   )}
                 >
@@ -77,7 +77,7 @@ export function CashMovementsList({ movements }: { movements: CashMovement[] }) 
                   {formatMoney(m.amount)}
                 </span>
                 {m.payment_method && (
-                  <Badge variant={paymentMethodBadgeVariant(m.payment_method)} className="text-[12px]">
+                  <Badge variant={paymentMethodBadgeVariant(m.payment_method)} className="text-xs">
                     {paymentMethodLabel(m.payment_method)}
                   </Badge>
                 )}

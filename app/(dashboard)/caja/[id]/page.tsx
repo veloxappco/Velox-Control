@@ -31,17 +31,17 @@ export default async function CajaSessionPage({ params }: PageProps) {
       <div>
         <Link
           href="/caja"
-          className="flex w-fit items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground"
+          className="flex w-fit items-center gap-1.5 text-sm text-muted-foreground hover:text-foreground"
         >
           <ArrowLeft className="size-4" /> Volver a caja
         </Link>
         <div className="mt-2 flex items-center gap-3">
-          <h1 className="text-xl font-semibold tracking-tight">Sesión #{session.id}</h1>
+          <h1>Sesión #{session.id}</h1>
           <Badge variant={session.status === "open" ? "success" : "secondary"}>
             {session.status === "open" ? "Abierta" : "Cerrada"}
           </Badge>
         </div>
-        <p className="text-[13px] text-muted-foreground">
+        <p className="text-sm text-muted-foreground">
           Abierta {formatDateTime(session.opened_at)}
           {session.closed_at ? ` · Cerrada ${formatDateTime(session.closed_at)}` : ""}
         </p>
@@ -83,8 +83,8 @@ export default async function CajaSessionPage({ params }: PageProps) {
             <Calculator className="size-6 text-primary" />
           </div>
           <div className="min-w-0">
-            <h3 className="font-display text-[17px] font-bold text-foreground">Cuadre de caja</h3>
-            <p className="text-[13px] text-muted-foreground">Solo movimientos en efectivo</p>
+            <h3 className="font-display text-md font-semibold text-foreground">Cuadre de caja</h3>
+            <p className="text-sm text-muted-foreground">Solo movimientos en efectivo</p>
           </div>
         </div>
         <div className="mt-5">
@@ -99,8 +99,8 @@ export default async function CajaSessionPage({ params }: PageProps) {
               <CreditCard className="size-6 text-accent" />
             </div>
             <div className="min-w-0">
-              <h3 className="font-display text-[17px] font-bold text-foreground">Por método de pago</h3>
-              <p className="text-[13px] text-muted-foreground">Ingresos y egresos por método</p>
+              <h3 className="font-display text-md font-semibold text-foreground">Por método de pago</h3>
+              <p className="text-sm text-muted-foreground">Ingresos y egresos por método</p>
             </div>
           </div>
 
@@ -117,25 +117,25 @@ export default async function CajaSessionPage({ params }: PageProps) {
                     key={m.payment_method}
                     className="rounded-[20px] border border-border/60 bg-card p-4 shadow-sm"
                   >
-                    <p className="font-display text-[15px] font-semibold text-foreground">
+                    <p className="font-display text-base font-semibold text-foreground">
                       {paymentMethodLabel(m.payment_method)}
                     </p>
                     <div className="mt-3 grid grid-cols-3 gap-2 text-center">
                       <div className="min-w-0">
-                        <p className="text-[11px] text-muted-foreground">Ingresos</p>
-                        <p className="mt-0.5 truncate font-display text-[13px] font-bold text-success">
+                        <p className="text-xs text-muted-foreground">Ingresos</p>
+                        <p className="mt-0.5 truncate font-display text-sm font-bold text-success">
                           {formatMoney(m.income_total)}
                         </p>
                       </div>
                       <div className="min-w-0">
-                        <p className="text-[11px] text-muted-foreground">Egresos</p>
-                        <p className="mt-0.5 truncate font-display text-[13px] font-bold text-destructive">
+                        <p className="text-xs text-muted-foreground">Egresos</p>
+                        <p className="mt-0.5 truncate font-display text-sm font-bold text-destructive">
                           {formatMoney(m.expense_total)}
                         </p>
                       </div>
                       <div className="min-w-0">
-                        <p className="text-[11px] text-muted-foreground">Neto</p>
-                        <p className="mt-0.5 truncate font-display text-[13px] font-bold text-foreground">
+                        <p className="text-xs text-muted-foreground">Neto</p>
+                        <p className="mt-0.5 truncate font-display text-sm font-bold text-foreground">
                           {formatMoney(m.net_total)}
                         </p>
                       </div>
@@ -179,8 +179,8 @@ export default async function CajaSessionPage({ params }: PageProps) {
               <Tag className="size-6 text-warning" />
             </div>
             <div className="min-w-0">
-              <h3 className="font-display text-[17px] font-bold text-foreground">Egresos por categoría</h3>
-              <p className="text-[13px] text-muted-foreground">Distribución del gasto en la sesión</p>
+              <h3 className="font-display text-md font-semibold text-foreground">Egresos por categoría</h3>
+              <p className="text-sm text-muted-foreground">Distribución del gasto en la sesión</p>
             </div>
           </div>
 
@@ -201,13 +201,13 @@ export default async function CajaSessionPage({ params }: PageProps) {
                       className="rounded-[20px] border border-border/60 bg-card p-4 shadow-sm"
                     >
                       <div className="flex min-w-0 items-center justify-between gap-3">
-                        <span className="min-w-0 truncate font-display text-[15px] font-semibold text-foreground">
+                        <span className="min-w-0 truncate font-display text-base font-semibold text-foreground">
                           {c.category}{" "}
-                          <span className="font-display text-[13px] font-medium text-muted-foreground">
+                          <span className="font-display text-sm font-medium text-muted-foreground">
                             ({c.count})
                           </span>
                         </span>
-                        <span className="shrink-0 font-display text-[15px] font-bold text-foreground">
+                        <span className="shrink-0 font-display text-base font-bold text-foreground">
                           {formatMoney(c.total)}
                         </span>
                       </div>
@@ -218,7 +218,7 @@ export default async function CajaSessionPage({ params }: PageProps) {
                             style={{ width: `${pct}%` }}
                           />
                         </div>
-                        <span className="w-9 shrink-0 text-right text-[11px] font-semibold text-muted-foreground">
+                        <span className="w-9 shrink-0 text-right text-xs font-semibold text-muted-foreground">
                           {pct}%
                         </span>
                       </div>
@@ -257,8 +257,8 @@ export default async function CajaSessionPage({ params }: PageProps) {
             <Wallet className="size-6 text-foreground/70" />
           </div>
           <div className="min-w-0">
-            <h3 className="font-display text-[17px] font-bold text-foreground">Movimientos</h3>
-            <p className="text-[13px] text-muted-foreground">Todos los movimientos de la sesión</p>
+            <h3 className="font-display text-md font-semibold text-foreground">Movimientos</h3>
+            <p className="text-sm text-muted-foreground">Todos los movimientos de la sesión</p>
           </div>
         </div>
         <div

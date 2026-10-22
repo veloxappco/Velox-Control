@@ -20,10 +20,10 @@ export function IngresosTabs({ tabs }: { tabs: TabDef[] }) {
           <TabsTrigger
             key={t.value}
             value={t.value}
-            className="flex-col gap-0 rounded-xl px-1 py-2 text-[13px] leading-tight sm:flex-row sm:gap-1.5"
+            className="flex-col gap-0 rounded-xl px-1 py-2 text-sm leading-tight sm:flex-row sm:gap-1.5"
           >
             <span>{t.label}</span>
-            {t.count !== undefined && <span className="text-[11px] font-medium opacity-80">{t.count}</span>}
+            {t.count !== undefined && <span className="text-xs font-medium opacity-80">{t.count}</span>}
           </TabsTrigger>
         ))}
       </TabsList>

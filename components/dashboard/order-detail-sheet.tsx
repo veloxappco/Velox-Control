@@ -48,13 +48,13 @@ function OrderDetailContent({ order }: { order: OrderListItem }) {
             <Icon className={cn("size-5", colors.text)} />
           </div>
           <div className="min-w-0">
-            <p className="text-[11px] text-muted-foreground">Pedido {order.order_number}</p>
-            <h3 className="truncate font-display text-[22px] font-extrabold tracking-tight text-foreground">
+            <p className="text-xs text-muted-foreground">Pedido {order.order_number}</p>
+            <h3 className="truncate font-display text-2xl font-semibold tracking-tight text-foreground">
               {order.customer_name ?? "Cliente sin nombre"}
             </h3>
           </div>
         </div>
-        <Badge variant={orderStatusVariant(order.status)} className="w-fit text-[12px]">
+        <Badge variant={orderStatusVariant(order.status)} className="w-fit text-xs">
           {orderStatusLabel(order.status)}
         </Badge>
       </div>
@@ -76,8 +76,8 @@ function OrderDetailContent({ order }: { order: OrderListItem }) {
       <OrderItemsSection key={order.id} orderId={order.id} status={order.status} />
 
       <div className="flex items-center justify-between rounded-[20px] bg-primary px-4 py-3.5 shadow-sm">
-        <span className="text-[13px] text-white/80">Total del pedido</span>
-        <span className="font-display text-[17px] font-extrabold text-white">{formatMoney(order.total)}</span>
+        <span className="text-sm text-white/80">Total del pedido</span>
+        <span className="font-display text-md font-bold text-white">{formatMoney(order.total)}</span>
       </div>
     </div>
   );
@@ -88,8 +88,8 @@ function DetailRow({ icon: Icon, label, value }: { icon: LucideIcon; label: stri
     <div className="flex min-w-0 items-center gap-3">
       <Icon className="size-4 shrink-0 text-muted-foreground" />
       <div className="min-w-0">
-        <p className="text-[11px] text-muted-foreground">{label}</p>
-        <p className="truncate text-[13px] font-medium">{value}</p>
+        <p className="text-xs text-muted-foreground">{label}</p>
+        <p className="truncate text-sm font-medium">{value}</p>
       </div>
     </div>
   );
@@ -157,10 +157,10 @@ function OrderTimeline({ order }: { order: OrderListItem }) {
               {!isLast && <span className="my-0.5 w-px flex-1 bg-border" />}
             </div>
             <div className={cn("min-w-0", isLast ? "pb-0" : "pb-4")}>
-              <p className={cn("text-[13px] font-semibold", !done && !step.cancelled && "text-muted-foreground")}>
+              <p className={cn("text-sm font-semibold", !done && !step.cancelled && "text-muted-foreground")}>
                 {step.label}
               </p>
-              <p className="truncate text-[11px] text-muted-foreground">
+              <p className="truncate text-xs text-muted-foreground">
                 {step.at ? formatDateTime(step.at) : step.cancelled ? "—" : "Pendiente"}
               </p>
             </div>

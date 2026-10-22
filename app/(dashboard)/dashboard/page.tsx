@@ -38,8 +38,8 @@ export default async function DashboardPage({ searchParams }: PageProps) {
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">Resumen</h1>
-          <p className="text-[13px] text-muted-foreground">
+          <h1>Resumen</h1>
+          <p className="text-sm text-muted-foreground">
             Vista general del negocio en el periodo seleccionado.
           </p>
         </div>
@@ -104,7 +104,7 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-5">
         <Card className="lg:col-span-3">
           <CardHeader>
-            <CardTitle className="font-display text-[15px] font-bold text-foreground">
+            <CardTitle className="font-display text-base font-bold text-foreground">
               Tendencia de ventas
             </CardTitle>
           </CardHeader>
@@ -119,7 +119,7 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
 
         <Card className="lg:col-span-2">
           <CardHeader>
-            <CardTitle className="font-display text-[15px] font-bold text-foreground">
+            <CardTitle className="font-display text-base font-bold text-foreground">
               Ventas por hora
             </CardTitle>
           </CardHeader>
@@ -132,7 +132,7 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <Card>
           <CardHeader className="flex-row items-center justify-between space-y-0">
-            <CardTitle className="flex items-center gap-2 font-display text-[15px] font-bold text-foreground">
+            <CardTitle className="flex items-center gap-2 font-display text-base font-bold text-foreground">
               <ClipboardList className="size-4" /> Pedidos pendientes
             </CardTitle>
           </CardHeader>
@@ -143,7 +143,7 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
 
         <Card>
           <CardHeader className="flex-row items-center justify-between space-y-0">
-            <CardTitle className="flex items-center gap-2 font-display text-[15px] font-bold text-foreground">
+            <CardTitle className="flex items-center gap-2 font-display text-base font-bold text-foreground">
               <PackageSearch className="size-4" /> Stock bajo
             </CardTitle>
           </CardHeader>
@@ -157,8 +157,8 @@ async function DashboardContent({ from, to }: { from: string; to: string }) {
                 className="flex items-center justify-between rounded-lg border border-border/60 px-3 py-2.5"
               >
                 <div>
-                  <p className="text-[13px] font-medium">{item.name}</p>
-                  <p className="text-[11px] text-muted-foreground capitalize">{item.type === "product" ? "Producto" : "Insumo"}</p>
+                  <p className="text-sm font-medium">{item.name}</p>
+                  <p className="text-xs text-muted-foreground capitalize">{item.type === "product" ? "Producto" : "Insumo"}</p>
                 </div>
                 <Badge variant={item.is_negative ? "destructive" : "warning"}>
                   {formatNumber(item.stock)} / min {formatNumber(item.min_stock)}

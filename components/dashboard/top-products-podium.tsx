@@ -85,16 +85,16 @@ export function TopProductsPodium({ products }: { products: TopProductItem[] }) 
                 <Medal className={cn("size-5", styles.iconText)} />
               </div>
               <div className="min-w-0 flex-1">
-                <p className="truncate font-display text-[17px] font-semibold text-foreground">
+                <p className="truncate font-display text-md font-semibold text-foreground">
                   {product.nombre_producto}
                 </p>
-                <p className="mt-0.5 text-[13px] text-muted-foreground">
+                <p className="mt-0.5 text-sm text-muted-foreground">
                   {formatNumber(product.cantidad_vendida)} unidades
                 </p>
               </div>
               <div
                 className={cn(
-                  "shrink-0 rounded-xl px-3 py-2 font-display text-[17px] font-bold",
+                  "shrink-0 rounded-xl px-3 py-2 font-display text-md font-bold",
                   styles.badgeBg,
                   styles.badgeText
                 )}
@@ -113,7 +113,7 @@ export function TopProductsPodium({ products }: { products: TopProductItem[] }) 
             onClick={() => setShowAll((v) => !v)}
             className="flex items-center justify-between gap-3 rounded-[20px] border border-border/60 bg-card px-4 py-3.5 text-left shadow-sm transition-all duration-200 hover:bg-secondary/30 hover:shadow-md active:scale-[0.99]"
           >
-            <span className="flex items-center gap-2.5 font-display text-[13px] font-semibold text-primary">
+            <span className="flex items-center gap-2.5 font-display text-sm font-semibold text-primary">
               <BarChart3 className="size-4 shrink-0" />
               {showAll ? "Ver menos" : `Ver ranking completo (${rest.length} más)`}
             </span>
@@ -129,18 +129,18 @@ export function TopProductsPodium({ products }: { products: TopProductItem[] }) 
             <div className="flex flex-col divide-y divide-border/50">
               {rest.map((p, i) => (
                 <div key={p.producto_id ?? i} className="flex min-w-0 items-center gap-3 py-4">
-                  <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary text-[15px] font-medium text-foreground/80">
+                  <span className="flex size-9 shrink-0 items-center justify-center rounded-full bg-secondary text-base font-medium text-foreground/80">
                     {i + 4}
                   </span>
                   <div className="min-w-0 flex-1">
-                    <p className="truncate font-display text-[17px] font-semibold text-foreground">
+                    <p className="truncate font-display text-md font-semibold text-foreground">
                       {p.nombre_producto}
                     </p>
-                    <p className="mt-0.5 text-[13px] text-muted-foreground">
+                    <p className="mt-0.5 text-sm text-muted-foreground">
                       {formatNumber(p.cantidad_vendida)} unidades
                     </p>
                   </div>
-                  <span className="shrink-0 font-display text-[17px] font-bold text-foreground">
+                  <span className="shrink-0 font-display text-md font-bold text-foreground">
                     {formatMoney(p.total_vendido)}
                   </span>
                 </div>
@@ -160,8 +160,8 @@ function Header() {
         <Trophy className="size-6 text-primary" />
       </div>
       <div className="min-w-0">
-        <h3 className="font-display text-[17px] font-bold text-foreground">Top de productos</h3>
-        <p className="text-[13px] text-muted-foreground">Los productos más vendidos</p>
+        <h3 className="font-display text-md font-semibold text-foreground">Top de productos</h3>
+        <p className="text-sm text-muted-foreground">Los productos más vendidos</p>
       </div>
     </div>
   );

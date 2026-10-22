@@ -99,9 +99,9 @@ export function ItemRemovalList({
   return (
     <div className="flex min-w-0 flex-col gap-4">
       <div className="flex items-center justify-between">
-        <h4 className="font-display text-[15px] font-bold text-foreground">Productos</h4>
+        <h4 className="font-display text-md font-semibold text-foreground">Productos</h4>
         {selectable.length > 0 && !locked && (
-          <button type="button" onClick={toggleAll} className="font-display text-[13px] font-semibold text-primary active:scale-95">
+          <button type="button" onClick={toggleAll} className="font-display text-sm font-semibold text-primary active:scale-95">
             {allSelected ? "Quitar selección" : "Seleccionar todos"}
           </button>
         )}
@@ -132,20 +132,20 @@ export function ItemRemovalList({
                   </span>
                 )}
                 <div className="min-w-0 flex-1">
-                  <p className="truncate font-display text-[15px] font-semibold text-foreground">{item.product_name}</p>
-                  <p className="text-[13px] text-muted-foreground">
+                  <p className="truncate font-display text-base font-semibold text-foreground">{item.product_name}</p>
+                  <p className="text-sm text-muted-foreground">
                     {formatNumber(item.quantity)} × {formatMoney(item.unit_price)}
                   </p>
                   {item.options_summary && (
-                    <p className="mt-0.5 text-[11px] text-muted-foreground">{item.options_summary}</p>
+                    <p className="mt-0.5 text-xs text-muted-foreground">{item.options_summary}</p>
                   )}
                   {item.notes && !item.notes.startsWith("Variaciones:") && (
-                    <p className="mt-0.5 text-[11px] italic text-muted-foreground">{item.notes}</p>
+                    <p className="mt-0.5 text-xs italic text-muted-foreground">{item.notes}</p>
                   )}
                   {item.status_group && (
                     <span
                       className={cn(
-                        "mt-1.5 inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold",
+                        "mt-1.5 inline-block rounded-full px-2 py-0.5 text-xs font-semibold",
                         item.status_group === "served" ? "bg-success/15 text-success" : "bg-primary/10 text-primary"
                       )}
                     >
@@ -153,7 +153,7 @@ export function ItemRemovalList({
                     </span>
                   )}
                 </div>
-                <span className="shrink-0 font-display text-[15px] font-bold text-foreground">{formatMoney(item.total)}</span>
+                <span className="shrink-0 font-display text-base font-bold text-foreground">{formatMoney(item.total)}</span>
               </button>
             );
           })}
@@ -161,15 +161,15 @@ export function ItemRemovalList({
       )}
 
       {locked && lockedNote && (
-        <div className="rounded-2xl bg-secondary/70 p-3 text-[13px] text-muted-foreground">{lockedNote}</div>
+        <div className="rounded-2xl bg-secondary/70 p-3 text-sm text-muted-foreground">{lockedNote}</div>
       )}
 
       {!locked && items.length > 0 && selectable.length < items.length && (
-        <p className="text-[11px] text-muted-foreground">Los productos servidos no se pueden eliminar.</p>
+        <p className="text-xs text-muted-foreground">Los productos servidos no se pueden eliminar.</p>
       )}
 
       {warning && !locked && (
-        <div className="flex items-start gap-2 rounded-2xl bg-warning/10 p-3 text-[13px] text-warning">
+        <div className="flex items-start gap-2 rounded-2xl bg-warning/10 p-3 text-sm text-warning">
           <AlertTriangle className="mt-0.5 size-4 shrink-0" />
           <p>{warning}</p>
         </div>
@@ -178,7 +178,7 @@ export function ItemRemovalList({
       {message && (
         <div
           className={cn(
-            "rounded-2xl p-3 text-[13px]",
+            "rounded-2xl p-3 text-sm",
             message.kind === "ok" ? "bg-success/10 text-success" : "bg-destructive/10 text-destructive"
           )}
         >
@@ -189,7 +189,7 @@ export function ItemRemovalList({
       {!locked && items.length > 0 && checked.size > 0 && (
         <div className="flex flex-col gap-3 rounded-[20px] border border-border/60 p-4 shadow-sm">
           <label className="flex flex-col gap-1.5">
-            <span className="text-[13px] font-medium text-foreground">Motivo (obligatorio)</span>
+            <span className="text-sm font-medium text-foreground">Motivo (obligatorio)</span>
             <textarea
               value={reason}
               onChange={(e) => {
@@ -199,7 +199,7 @@ export function ItemRemovalList({
               rows={2}
               maxLength={250}
               placeholder="Ej: producto registrado por error"
-              className="w-full resize-none rounded-2xl border border-border bg-card px-3 py-2.5 text-[13px] outline-none focus:border-primary"
+              className="w-full resize-none rounded-2xl border border-border bg-card px-3 py-2.5 text-sm outline-none focus:border-primary"
             />
           </label>
 
@@ -208,7 +208,7 @@ export function ItemRemovalList({
               type="button"
               disabled={!reason.trim() || submitting}
               onClick={() => setConfirming(true)}
-              className="flex h-12 items-center justify-center gap-2 rounded-full bg-destructive font-display text-[13px] font-bold text-white shadow-md shadow-destructive/25 transition-all active:scale-[0.98] disabled:opacity-50"
+              className="flex h-12 items-center justify-center gap-2 rounded-full bg-destructive font-display text-sm font-bold text-white shadow-md shadow-destructive/25 transition-all active:scale-[0.98] disabled:opacity-50"
             >
               <Trash2 className="size-4" />
               {wholeAccount
@@ -217,7 +217,7 @@ export function ItemRemovalList({
             </button>
           ) : (
             <div className="flex flex-col gap-2.5 rounded-2xl bg-destructive/5 p-3">
-              <p className="text-[13px] text-foreground">
+              <p className="text-sm text-foreground">
                 {wholeAccount
                   ? `Se eliminarán todos los productos (${formatMoney(selectedTotal)}) y ${
                       kind === "order" ? "el pedido" : kind === "pos-account" ? "la cuenta" : "la venta"
@@ -230,7 +230,7 @@ export function ItemRemovalList({
                   type="button"
                   disabled={submitting}
                   onClick={() => setConfirming(false)}
-                  className="flex h-11 flex-1 items-center justify-center rounded-full border border-border bg-card font-display text-[13px] font-bold"
+                  className="flex h-11 flex-1 items-center justify-center rounded-full border border-border bg-card font-display text-sm font-bold"
                 >
                   Cancelar
                 </button>
@@ -238,7 +238,7 @@ export function ItemRemovalList({
                   type="button"
                   disabled={submitting}
                   onClick={() => void submit()}
-                  className="flex h-11 flex-1 items-center justify-center gap-2 rounded-full bg-destructive font-display text-[13px] font-bold text-white disabled:opacity-60"
+                  className="flex h-11 flex-1 items-center justify-center gap-2 rounded-full bg-destructive font-display text-sm font-bold text-white disabled:opacity-60"
                 >
                   {submitting ? <Loader2 className="size-4 animate-spin" /> : <Trash2 className="size-4" />}
                   Confirmar

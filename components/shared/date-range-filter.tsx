@@ -70,7 +70,7 @@ export function DateRangeFilter({
                 apply(r.from, r.to);
               }}
               className={cn(
-                "flex h-12 flex-1 items-center justify-center gap-1.5 rounded-full font-display text-sm font-bold transition-all",
+                "flex h-12 flex-1 items-center justify-center gap-1.5 rounded-full font-display text-base font-bold transition-all",
                 active
                   ? "bg-primary text-white shadow-md shadow-primary/25"
                   : "border border-border bg-card text-foreground/70 hover:bg-secondary/50"
@@ -103,7 +103,7 @@ function DateField({ value, onChange }: { value: string; onChange: (value: strin
         type="date"
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        className="w-full min-w-0 border-none bg-transparent p-0 font-display text-sm font-semibold text-foreground outline-none"
+        className="w-full min-w-0 border-none bg-transparent p-0 font-display text-base font-semibold text-foreground outline-none"
       />
     </label>
   );

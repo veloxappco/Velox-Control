@@ -36,8 +36,8 @@ export function OrderItemsSection({ orderId, status }: { orderId: number; status
   if (error && !detail) {
     return (
       <div className="flex flex-col items-center gap-2 rounded-[20px] border border-destructive/30 bg-destructive/5 p-4 text-center">
-        <p className="text-[13px] text-destructive">{error}</p>
-        <button type="button" onClick={() => setTick((t) => t + 1)} className="font-display text-[13px] font-semibold text-primary">
+        <p className="text-sm text-destructive">{error}</p>
+        <button type="button" onClick={() => setTick((t) => t + 1)} className="font-display text-sm font-semibold text-primary">
           Reintentar
         </button>
       </div>
@@ -46,7 +46,7 @@ export function OrderItemsSection({ orderId, status }: { orderId: number; status
 
   if (!detail) {
     return (
-      <div className="flex items-center justify-center gap-2 py-6 text-[13px] text-muted-foreground">
+      <div className="flex items-center justify-center gap-2 py-6 text-sm text-muted-foreground">
         <Loader2 className="size-4 animate-spin" /> Cargando productos…
       </div>
     );

@@ -56,7 +56,7 @@ export function Topbar({
       </div>
 
       <div className="min-w-0 flex-1 text-right md:text-left">
-        <span className="block truncate text-sm text-muted-foreground">
+        <span className="block truncate text-base text-muted-foreground">
           Hola, <span className="font-medium text-foreground">{business.name}</span>
         </span>
       </div>

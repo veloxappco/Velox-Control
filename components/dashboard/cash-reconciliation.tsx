@@ -8,7 +8,7 @@ export function CashReconciliation({ session }: { session: CashSession }) {
   const closed = session.closing_amount !== null;
 
   return (
-    <div className="flex min-w-0 flex-col gap-2.5 text-[13px]">
+    <div className="flex min-w-0 flex-col gap-2.5 text-sm">
       <Row label="Base inicial" value={formatMoney(session.opening_amount)} />
       <Row label="+ Ingresos (Efectivo)" value={formatMoney(income)} tone="success" />
       <Row label="- Egresos (Efectivo)" value={formatMoney(expense)} tone="destructive" />
@@ -52,7 +52,7 @@ function Row({
       <span className={cn("min-w-0 truncate text-muted-foreground", bold && "font-semibold text-foreground")}>
         {label}
       </span>
-      <span className={cn("shrink-0 font-medium", toneClass, bold && "text-[15px] font-semibold")}>
+      <span className={cn("shrink-0 font-medium", toneClass, bold && "text-base font-semibold")}>
         {value}
       </span>
     </div>

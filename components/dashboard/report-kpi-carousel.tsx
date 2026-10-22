@@ -14,7 +14,7 @@ function Pill({ label, value }: { label: string; value: string }) {
   return (
     <div className="min-w-0 flex-1 rounded-2xl bg-white/20 px-3.5 py-3">
       <p className="truncate text-xs font-medium text-white/85">{label}</p>
-      <p className="mt-0.5 truncate font-display text-lg font-extrabold">{value}</p>
+      <p className="mt-0.5 truncate font-display text-lg font-bold">{value}</p>
     </div>
   );
 }
@@ -30,8 +30,8 @@ function DayCard({
 }) {
   return (
     <div className={`${CARD} ${className}`}>
-      <p className="font-display text-sm font-semibold text-white/90">{title}</p>
-      <p className="truncate font-display text-4xl font-extrabold tracking-tight">
+      <p className="font-display text-base font-semibold text-white/90">{title}</p>
+      <p className="truncate font-display text-4xl font-bold tracking-tight">
         {day ? formatMoney(day.total) : "—"}
       </p>
       <div className="flex min-w-0 gap-2">
@@ -48,8 +48,8 @@ export function ReportKpiCarousel({ kpis }: { kpis: ReportKpis }) {
     <div className="flex min-w-0 flex-col gap-2">
       <div className="-mx-4 flex snap-x snap-mandatory gap-3 overflow-x-auto px-4 pb-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
         <div className={`${CARD} ${w} bg-success`}>
-          <p className="font-display text-sm font-semibold text-white/90">Total ingresos</p>
-          <p className="truncate font-display text-4xl font-extrabold tracking-tight">
+          <p className="font-display text-base font-semibold text-white/90">Total ingresos</p>
+          <p className="truncate font-display text-4xl font-bold tracking-tight">
             {formatMoney(kpis.income.total)}
           </p>
           <div className="flex min-w-0 gap-2">
@@ -59,8 +59,8 @@ export function ReportKpiCarousel({ kpis }: { kpis: ReportKpis }) {
         </div>
 
         <div className={`${CARD} ${w} bg-warning`}>
-          <p className="font-display text-sm font-semibold text-white/90">Egresos</p>
-          <p className="truncate font-display text-4xl font-extrabold tracking-tight">
+          <p className="font-display text-base font-semibold text-white/90">Egresos</p>
+          <p className="truncate font-display text-4xl font-bold tracking-tight">
             {formatMoney(kpis.expenses.total)}
           </p>
           <div className="flex min-w-0 gap-2">

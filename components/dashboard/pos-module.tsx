@@ -37,7 +37,7 @@ export function PosModule({
               type="button"
               onClick={() => setView(key)}
               className={cn(
-                "flex items-center gap-1.5 rounded-full border px-3.5 py-2 font-display text-[12px] font-semibold transition-all duration-200",
+                "flex items-center gap-1.5 rounded-full border px-3.5 py-2 font-display text-xs font-semibold transition-all duration-200",
                 active
                   ? "border-transparent bg-primary text-white shadow-md shadow-primary/25"
                   : "border-border bg-card text-foreground/70 hover:bg-secondary/40"

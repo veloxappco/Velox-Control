@@ -23,8 +23,8 @@ export default async function IngresosPage({ searchParams }: PageProps) {
     <div className="flex min-w-0 flex-col gap-6">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
-          <h1 className="text-xl font-semibold tracking-tight">Ingresos</h1>
-          <p className="text-sm text-muted-foreground">
+          <h1>Ingresos</h1>
+          <p className="text-base text-muted-foreground">
             Gestión del día o entre fechas: pedidos, ventas POS y productos eliminados.
           </p>
         </div>
@@ -81,7 +81,7 @@ async function IngresosContent({ from, to }: { from: string; to: string }) {
                   salesTotal={posSales?.meta.total ?? 0}
                 />
               ) : (
-                <p className="text-sm text-muted-foreground">No se pudieron cargar las ventas POS.</p>
+                <p className="text-base text-muted-foreground">No se pudieron cargar las ventas POS.</p>
               ),
           },
           {
@@ -96,7 +96,7 @@ async function IngresosContent({ from, to }: { from: string; to: string }) {
             content: removalLogs ? (
               <ItemRemovalLogs logs={removalLogs.data} total={removalLogs.meta.total} />
             ) : (
-              <p className="text-sm text-muted-foreground">No se pudo cargar el historial.</p>
+              <p className="text-base text-muted-foreground">No se pudo cargar el historial.</p>
             ),
           },
         ]}

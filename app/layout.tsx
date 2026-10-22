@@ -1,4 +1,9 @@
 import type { Metadata, Viewport } from "next";
+// Inter autoalojada (solo latín y los 4 pesos que se usan).
+import "@fontsource/inter/latin-400.css";
+import "@fontsource/inter/latin-500.css";
+import "@fontsource/inter/latin-600.css";
+import "@fontsource/inter/latin-700.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
