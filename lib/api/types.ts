@@ -349,7 +349,7 @@ export interface PosSalesResponse {
 }
 
 export interface RemoveItemsPayload {
-  kind: "pos-sale" | "order";
+  kind: "pos-sale" | "order" | "pos-account";
   id: number;
   item_ids: number[];
   all: boolean;
@@ -376,4 +376,40 @@ export interface OrderDetail {
   total: number;
   created_at: string;
   items: OrderDetailItem[];
+}
+
+// ---------- Cuentas abiertas del POS (mesas / para llevar) ----------
+export interface PosAccountItem {
+  id: number;
+  product_name: string;
+  quantity: number;
+  unit_price: number;
+  total: number;
+  /** pending / sent / ready / served ... */
+  status: string;
+  status_group: "sent" | "served" | string;
+  options: string[];
+  options_summary: string;
+  notes: string | null;
+}
+
+export interface PosAccount {
+  id: number;
+  number: string;
+  /** table | takeaway */
+  type: string;
+  table: string | null;
+  cashier: string | null;
+  /** sent_to_kitchen | paid ... */
+  status: string;
+  payment_status: "paid" | "unpaid" | string;
+  subtotal: number;
+  total: number;
+  opened_at: string;
+  items: PosAccountItem[];
+}
+
+export interface PosAccountsResponse {
+  data: PosAccount[];
+  meta: { current_page: number; last_page: number; per_page: number; total: number };
 }

@@ -17,6 +17,7 @@ import type {
   ExpenseMovement,
   ExpensesReport,
   OrderDetail,
+  PosAccountsResponse,
   PosSaleDetail,
   PosSalesResponse,
   ReportsSalesResponse,
@@ -146,6 +147,10 @@ export const getPosSales = (params: DateRangeParams & { per_page?: number }) =>
 
 export const getPosSale = (id: number | string) =>
   apiFetch<{ data: PosSaleDetail }>(ENDPOINTS.posSales.detail(id));
+
+// ---------- Cuentas abiertas del POS ----------
+export const getPosAccounts = (params: { status?: string; per_page?: number; page?: number }) =>
+  apiFetch<PosAccountsResponse>(ENDPOINTS.posAccounts.list, { params });
 
 // ---------- Reports ----------
 export const getReportsSales = (params: DateRangeParams) =>

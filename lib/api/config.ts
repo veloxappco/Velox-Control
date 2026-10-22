@@ -24,6 +24,10 @@ export const ENDPOINTS = {
     list: "/pos-sales",
     detail: (id: number | string) => `/pos-sales/${id}`,
   },
+  posAccounts: {
+    list: "/pos-accounts",
+    detail: (id: number | string) => `/pos-accounts/${id}`,
+  },
   inventory: {
     alerts: "/inventory/alerts",
     // Ruta real: top-consumed-ingredients (antes asumida como ingredient-consumption)

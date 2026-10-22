@@ -12,6 +12,10 @@ export interface RemovableItem {
   quantity: number;
   unit_price: number;
   total: number;
+  /** Opcionales (cuentas abiertas del POS) */
+  status_group?: string;
+  options_summary?: string;
+  notes?: string | null;
 }
 
 // Lista de productos con casillas + motivo + confirmación para que el
@@ -26,7 +30,7 @@ export function ItemRemovalList({
   voidedNote,
   onChanged,
 }: {
-  kind: "pos-sale" | "order";
+  kind: "pos-sale" | "order" | "pos-account";
   id: number;
   items: RemovableItem[];
   /** Pedido/venta ya anulado: se muestran los productos pero no se editan. */
@@ -125,6 +129,22 @@ export function ItemRemovalList({
                   <p className="text-sm text-muted-foreground">
                     {formatNumber(item.quantity)} × {formatMoney(item.unit_price)}
                   </p>
+                  {item.options_summary && (
+                    <p className="mt-0.5 text-xs text-muted-foreground">{item.options_summary}</p>
+                  )}
+                  {item.notes && !item.notes.startsWith("Variaciones:") && (
+                    <p className="mt-0.5 text-xs italic text-muted-foreground">{item.notes}</p>
+                  )}
+                  {item.status_group && (
+                    <span
+                      className={cn(
+                        "mt-1.5 inline-block rounded-full px-2 py-0.5 text-[11px] font-semibold",
+                        item.status_group === "served" ? "bg-success/15 text-success" : "bg-primary/10 text-primary"
+                      )}
+                    >
+                      {item.status_group === "served" ? "Servido" : "Enviado"}
+                    </span>
+                  )}
                 </div>
                 <span className="shrink-0 font-display text-base font-bold text-foreground">{formatMoney(item.total)}</span>
               </button>
@@ -184,7 +204,9 @@ export function ItemRemovalList({
             <div className="flex flex-col gap-2.5 rounded-2xl bg-destructive/5 p-3">
               <p className="text-sm text-foreground">
                 {allSelected
-                  ? `Se eliminarán todos los productos (${formatMoney(selectedTotal)}) y el ${kind === "order" ? "pedido" : "la venta"} quedará anulado.`
+                  ? `Se eliminarán todos los productos (${formatMoney(selectedTotal)}) y ${
+                      kind === "order" ? "el pedido" : kind === "pos-account" ? "la cuenta" : "la venta"
+                    } quedará anulado/a.`
                   : `Se eliminarán ${checked.size} producto${checked.size === 1 ? "" : "s"} por ${formatMoney(selectedTotal)}.`}{" "}
                 Esta acción queda registrada.
               </p>
