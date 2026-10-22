@@ -103,13 +103,13 @@ export function OrdersModule({ orders }: { orders: OrderListItem[] }) {
               className={cn(
                 "flex h-9 shrink-0 items-center gap-2 rounded-full border px-3.5 text-sm font-medium transition-all duration-200",
                 active
-                  ? "border-foreground bg-foreground text-background shadow-sm"
+                  ? "border-transparent bg-primary text-white shadow-md shadow-primary/25"
                   : "border-border bg-card text-foreground/75 hover:bg-secondary/40"
               )}
             >
               <span className={cn("size-2 shrink-0 rounded-full", dot)} />
               {label}
-              <span className={cn("text-xs", active ? "text-background/70" : "text-muted-foreground")}>{count}</span>
+              <span className={cn("text-xs", active ? "text-white/80" : "text-muted-foreground")}>{count}</span>
             </button>
           );
         })}
